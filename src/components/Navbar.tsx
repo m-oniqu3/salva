@@ -16,7 +16,6 @@ function getRandomUsername() {
 }
 
 async function Navbar() {
-  console.log(`/${getRandomUsername()}`);
   return (
     <header className="flex items-center h-16 border-b-[1px] border-slate-100">
       <nav className="wrapper flex items-center gap-4 md:gap-6 ">

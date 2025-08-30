@@ -2,28 +2,36 @@
 
 import { AddIcon } from "@/components/icons";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 type Props = {
   username: string;
 };
 
 const links = [
-  { name: "Films", href: "films" },
-  { name: "Boards", href: "boards" },
+  { id: 0, name: "Films", href: "films" },
+  { id: 1, name: "Boards", href: "boards" },
 ];
 
 function ProfileNav(props: Props) {
-  const path = usePathname();
-
+  const [activeLink, setActiveLink] = useState(1);
   const { username } = props;
-  console.log(path, username);
+
+  function handleActiveLink(id: number) {
+    setActiveLink(id);
+  }
 
   const renderedLinks = links.map((link) => {
+    const isActive = activeLink === link.id;
+    const stylesForActiveLink = isActive
+      ? "border-black"
+      : "border-transparent";
+
     return (
       <li
-        key={link.name}
-        className="font-medium cursor-pointer tracking-wider border-t-[1.5px] border-black relative -top-[1.5px]"
+        key={link.id}
+        onClick={handleActiveLink.bind(null, link.id)}
+        className={`font-medium cursor-pointer relative -top-[1.5px] border-b-2  ${stylesForActiveLink}`}
       >
         <Link href={`/${username}/${link.href}`}>{link.name}</Link>
       </li>
@@ -33,11 +41,9 @@ function ProfileNav(props: Props) {
   return (
     <header className="h-14 flex items-center">
       <nav className="wrapper flex items-center justify-between ">
-        <ul className="flex gap-2">{renderedLinks}</ul>
+        <ul className="flex gap-4">{renderedLinks}</ul>
 
-        <div>
-          <AddIcon />
-        </div>
+        <AddIcon className="size-6" />
       </nav>
     </header>
   );

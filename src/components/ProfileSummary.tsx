@@ -18,9 +18,9 @@ function ProfileSummary() {
           <h2 className="font-bold text-xl">Alex</h2>
           <p>totally spy!</p>
           <div className="flex items-center gap-1">
-            <p className="font-bold">39 followers</p>
+            <p className="font-semibold">39 followers</p>
             &#xb7;
-            <p className="font-bold">92 following</p>
+            <p className="font-semibold">92 following</p>
           </div>
         </div>
       </article>
