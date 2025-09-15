@@ -1,4 +1,6 @@
+import ModalManager from "@/components/ModalManager";
 import Navbar from "@/components/Navbar";
+import { ModalContextProvider } from "@/context/ModalContext";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
@@ -31,8 +33,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} antialiased `}>
-        <Navbar />
-        {children}
+        <ModalContextProvider>
+          <ModalManager />
+          <Navbar />
+          {children}
+        </ModalContextProvider>
       </body>
     </html>
   );
