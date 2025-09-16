@@ -37,6 +37,7 @@ export default function RootLayout({
           <ModalManager />
           <Navbar />
           {children}
+          <div id="modal" />
         </ModalContextProvider>
       </body>
     </html>

@@ -1,6 +1,9 @@
 "use client";
 
+import { ModalActionTypes } from "@/actions/ModalActions";
 import { AddIcon } from "@/components/icons";
+import { useModal } from "@/context/useModal";
+import { ModalEnum } from "@/types";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -15,6 +18,7 @@ const links = [
 
 function ProfileNav(props: Props) {
   const [activeLink, setActiveLink] = useState(1);
+  const { dispatch } = useModal();
   const { username } = props;
 
   function handleActiveLink(id: number) {
@@ -38,12 +42,21 @@ function ProfileNav(props: Props) {
     );
   });
 
+  function openCreateBoardModal() {
+    dispatch({
+      type: ModalActionTypes.OPEN_MODAL,
+      payload: ModalEnum.CREATE_BOARD_MODAL,
+    });
+  }
+
   return (
     <header className="h-14 flex items-center">
       <nav className="wrapper flex items-center justify-between ">
         <ul className="flex gap-4">{renderedLinks}</ul>
 
-        <AddIcon className="size-6" />
+        <button onClick={openCreateBoardModal} className="cursor-pointer">
+          <AddIcon className="size-6" />
+        </button>
       </nav>
     </header>
   );
