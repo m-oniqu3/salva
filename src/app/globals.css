@@ -23,7 +23,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-size: 0.9rem;
-  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: var(--font-geist-sans);
 }
 
 
@@ -43,5 +43,17 @@ body {
 
   .center {
     @apply flex items-center justify-center gap-1
+  }
+
+  .container {
+    @apply w-full bg-white p-5 mx-auto rounded-lg
+  }
+
+  .input {
+    @apply w-full bg-slate-100 p-2 font-semibold rounded-md focus:outline-none placeholder:text-sm placeholder:font-light
+  }
+
+  .input-error {
+    @apply text-red-500 text-xs font-light h-4
   }
 }

@@ -5,6 +5,7 @@ import { AddIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 type Props = {
@@ -13,20 +14,26 @@ type Props = {
 
 const links = [
   { id: 0, name: "Films", href: "films" },
-  { id: 1, name: "Boards", href: "boards" },
+  { id: 1, name: "Collections", href: "collections" },
 ];
 
 function ProfileNav(props: Props) {
-  const [activeLink, setActiveLink] = useState(1);
+  const [activeLink, setActiveLink] = useState<string>(
+    links.at(1)?.href ?? "collections"
+  );
+
+  const pathname = usePathname();
+  const currentPathname = pathname.split("/").pop() || "";
+
   const { dispatch } = useModal();
   const { username } = props;
 
-  function handleActiveLink(id: number) {
-    setActiveLink(id);
+  function handleActiveLink(href: string) {
+    setActiveLink(href);
   }
 
   const renderedLinks = links.map((link) => {
-    const isActive = activeLink === link.id;
+    const isActive = link.href === currentPathname || activeLink === link.href;
     const stylesForActiveLink = isActive
       ? "border-black"
       : "border-transparent";
@@ -34,8 +41,8 @@ function ProfileNav(props: Props) {
     return (
       <li
         key={link.id}
-        onClick={handleActiveLink.bind(null, link.id)}
-        className={`font-medium cursor-pointer relative -top-[1.5px] border-b-2  ${stylesForActiveLink}`}
+        onClick={handleActiveLink.bind(null, link.href)}
+        className={`font-semibold cursor-pointer relative -top-[1.5px] border-b-2   ${stylesForActiveLink}`}
       >
         <Link href={`/${username}/${link.href}`}>{link.name}</Link>
       </li>

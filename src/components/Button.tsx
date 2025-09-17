@@ -1,22 +1,24 @@
+import { ReactNode } from "react";
+
 type Props = {
-  label: string;
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
+  children: ReactNode;
 };
 
 function Button(props: Props) {
-  const { label, onClick, disabled, className, type = "button" } = props;
+  const { children, onClick, disabled, className, type = "button" } = props;
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`px-3 h-8 rounded-md text-sm font-semibold ${className}`}
+      className={`px-3  rounded-md text-sm font-bold cursor-pointer ${className}`}
     >
-      {label}
+      {children}
     </button>
   );
 }

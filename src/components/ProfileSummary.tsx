@@ -15,12 +15,12 @@ function ProfileSummary() {
         </figure>
 
         <div>
-          <h2 className="font-bold text-xl">Alex</h2>
-          <p>totally spy!</p>
+          <h2 className="font-semibold text-lg">Alex</h2>
+          <p className="text-sm">totally spy!</p>
           <div className="flex items-center gap-1">
-            <p className="font-semibold">39 followers</p>
+            <p className="text-sm">39 followers</p>
             &#xb7;
-            <p className="font-semibold">92 following</p>
+            <p className="tex-sm">92 following</p>
           </div>
         </div>
       </article>

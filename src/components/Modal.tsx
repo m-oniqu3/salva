@@ -19,7 +19,9 @@ function Modal(props: Props) {
         className="fixed p-4 w-full inset-0 z-50 flex items-center justify-center bg-black/50"
         onClick={close}
       >
-        <div onClick={handleEvent}>{children}</div>
+        <div onClick={handleEvent} className="w-full">
+          {children}
+        </div>
       </div>
     </Portal>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { ModalActionTypes } from "@/actions/ModalActions";
+import CreateCollection from "@/components/collection/CreateCollection";
 import Modal from "@/components/Modal";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types";
@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 function ModalManager() {
   const {
     state: { currentModal },
-    dispatch,
+    closeModal,
   } = useModal();
 
   if (!currentModal) return null;
@@ -18,15 +18,11 @@ function ModalManager() {
 
   switch (currentModal) {
     case ModalEnum.CREATE_BOARD_MODAL:
-      ModalContent = <p>hey</p>;
+      ModalContent = <CreateCollection />;
       break;
 
     default:
       return null;
-  }
-
-  function closeModal() {
-    dispatch({ type: ModalActionTypes.CLOSE_MODAL });
   }
 
   return <Modal close={closeModal}>{ModalContent}</Modal>;

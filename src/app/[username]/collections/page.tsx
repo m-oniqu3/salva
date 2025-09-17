@@ -7,8 +7,8 @@ function page() {
       <div className="wrapper flex items-center gap-3">
         <FilterHorizontalIcon className="size-6" />
 
-        <Button label="Secret" className="bg-gray-200" />
-        <Button label="Favourites" className="bg-gray-200" />
+        <Button className="bg-gray-100 h-8">Secret</Button>
+        <Button className="bg-gray-100 h-8">Favorites</Button>
       </div>
     </div>
   );
