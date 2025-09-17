@@ -1,4 +1,4 @@
-import Portal from "@/components/Portal";
+import Portal from "@components/Portal";
 import React from "react";
 
 type Props = {

@@ -1,9 +1,9 @@
 "use client";
 
 import { ModalActionTypes } from "@/actions/ModalActions";
-import { AddIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types";
+import { AddIcon } from "@components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";

@@ -3,8 +3,8 @@ import {
   MenuIcon,
   NotificationIcon,
   UserIcon,
-} from "@/components/icons";
-import Searchbar from "@/components/Searchbar";
+} from "@components/icons";
+import Searchbar from "@components/Searchbar";
 import Link from "next/link";
 
 function getRandomUsername() {

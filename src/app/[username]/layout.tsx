@@ -1,5 +1,5 @@
-import ProfileNav from "@/components/ProfileNav";
-import ProfileSummary from "@/components/ProfileSummary";
+import ProfileNav from "@components/ProfileNav";
+import ProfileSummary from "@components/ProfileSummary";
 import React from "react";
 
 type Props = {

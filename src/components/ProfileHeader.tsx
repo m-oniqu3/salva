@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from "@/components/icons";
+import { ArrowLeftIcon } from "@components/icons";
 import Image from "next/image";
 import Link from "next/link";
 

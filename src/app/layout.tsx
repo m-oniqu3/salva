@@ -1,6 +1,6 @@
 import ModalManager from "@/components/ModalManager";
-import Navbar from "@/components/Navbar";
 import { ModalContextProvider } from "@/context/ModalContext";
+import Navbar from "@components/Navbar";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
