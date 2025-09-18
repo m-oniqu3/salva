@@ -2,7 +2,6 @@
 
 import Button from "@/components/Button";
 import { CloseIcon, LoadingIcon } from "@/components/icons";
-import { useModal } from "@/context/useModal";
 import { CreateCollectionSchema } from "@/utils/validation/CreateCollection";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
@@ -10,8 +9,12 @@ import { useForm } from "react-hook-form";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function CreateCollection() {
-  const { closeModal } = useModal();
+type Props = {
+  closeModal: () => void;
+};
+
+function CreateCollection(props: Props) {
+  const { closeModal } = props;
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
 

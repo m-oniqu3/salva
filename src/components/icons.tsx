@@ -68,35 +68,31 @@ export function MenuIcon({ className }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      width={24}
-      height={24}
-      color={"#000000"}
-      fill={"none"}
+      viewBox="0 0 20 20"
+      fill="currentColor"
       className={className}
     >
       <path
-        d="M4 5L20 5"
-        stroke="#141B34"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M4 12L20 12"
-        stroke="#141B34"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M4 19L20 19"
-        stroke="#141B34"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fillRule="evenodd"
+        d="M2 6.75A.75.75 0 0 1 2.75 6h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 6.75Zm0 6.5a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z"
+        clipRule="evenodd"
       />
     </svg>
+
+    // <svg
+    //   xmlns="http://www.w3.org/2000/svg"
+    //   fill="none"
+    //   viewBox="0 0 24 24"
+    //   strokeWidth={1.5}
+    //   stroke="currentColor"
+    //   className={className}
+    // >
+    //   <path
+    //     strokeLinecap="round"
+    //     strokeLinejoin="round"
+    //     d="M3.75 9h16.5m-16.5 6.75h16.5"
+    //   />
+    // </svg>
   );
 }
 

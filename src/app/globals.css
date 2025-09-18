@@ -8,8 +8,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  /* --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono); */
+  --font-sans: var(--font-funnel-sans);
+  /* --font-mono: var(--font-geist-mono); */
+
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -55,5 +56,12 @@ body {
 
   .input-error {
     @apply text-red-500 text-xs font-light h-4
+  }
+}
+
+
+@layer utilities {
+  .text-sm {
+    @apply text-[0.85rem]
   }
 }

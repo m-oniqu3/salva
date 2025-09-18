@@ -1,8 +1,5 @@
 "use client";
 
-import { ModalActionTypes } from "@/actions/ModalActions";
-import { useModal } from "@/context/useModal";
-import { ModalEnum } from "@/types";
 import { AddIcon } from "@components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,7 +22,7 @@ function ProfileNav(props: Props) {
   const pathname = usePathname();
   const currentPathname = pathname.split("/").pop() || "";
 
-  const { dispatch } = useModal();
+  // const { dispatch } = useModal();
   const { username } = props;
 
   function handleActiveLink(href: string) {
@@ -50,10 +47,10 @@ function ProfileNav(props: Props) {
   });
 
   function openCreateBoardModal() {
-    dispatch({
-      type: ModalActionTypes.OPEN_MODAL,
-      payload: ModalEnum.CREATE_BOARD_MODAL,
-    });
+    // dispatch({
+    //   type: ModalActionTypes.OPEN_MODAL,
+    //   payload: ModalEnum.CREATE_BOARD_MODAL,
+    // });
   }
 
   return (
