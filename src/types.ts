@@ -9,3 +9,9 @@ export type ModalType =
   | ModalEnum.SHOW_BOARDS_MODAL
   | ModalEnum.MOBILE_MENU
   | null;
+
+export enum ContextMenuEnum {
+  PROFILE_MENU = "PROFILE_MENU",
+}
+
+export type ContextMenuType = ContextMenuEnum.PROFILE_MENU | null;

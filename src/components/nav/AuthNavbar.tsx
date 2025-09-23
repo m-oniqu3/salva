@@ -1,5 +1,6 @@
 "use client";
 
+import { ContextMenuActionTypes } from "@/actions/ContextMenuActions";
 import { ModalActionTypes } from "@/actions/ModalActions";
 import Button from "@/components/Button";
 import {
@@ -9,13 +10,15 @@ import {
   MenuIcon,
 } from "@/components/icons";
 import Searchbar from "@/components/Searchbar";
+import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
-import { ModalEnum } from "@/types";
+import { ContextMenuEnum, ModalEnum } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
 function AuthNavbar() {
   const { dispatch } = useModal();
+  const { dispatch: ctxDispatch } = useContextMenu();
 
   function handleMobileMenu() {
     dispatch({
@@ -31,6 +34,29 @@ function AuthNavbar() {
     });
   }
 
+  // Get viewport size
+  // const { innerWidth, innerHeight } = window;
+
+  // const menuWidth = 200; // adjust based on your menu design
+  // const menuHeight = 150;
+
+  function handleContextMenu(e: React.MouseEvent) {
+    //  Clamp X/Y so the menu never overflows the viewport
+    // const x = Math.min(e.pageX, innerWidth - menuWidth);
+    // const y = Math.min(e.pageY, innerHeight - menuHeight);
+    console.log("clicking arrow");
+    const x = e.clientX;
+    const y = e.clientY;
+
+    ctxDispatch({
+      type: ContextMenuActionTypes.OPEN_CONTEXT_MENU,
+      payload: {
+        currentContextMenu: ContextMenuEnum.PROFILE_MENU,
+        position: { x, y },
+      },
+    });
+  }
+
   return (
     <header className="flex items-center h-20">
       <nav className="wrapper flex items-center justify-between gap-6 md:gap-6 ">
@@ -39,7 +65,7 @@ function AuthNavbar() {
             <FilmIcon className="size-5" />
           </Link>
 
-          <Link href={"#"} className="text-sm">
+          <Link href={"#"} className="text-sm font-semibold">
             Discover
           </Link>
         </div>
@@ -59,17 +85,23 @@ function AuthNavbar() {
           </Button>
           <BookmarkIcon className="size-5" />
 
-          <figure>
+          <figure className="size-7 ">
             <Image
               src="https://i.pinimg.com/1200x/ff/02/39/ff02397557d58cfcf8d8529fc152c62e.jpg"
               alt="Clover from totally spies"
-              width="25"
-              height="25"
-              className="rounded-full object-cover size-7"
+              width="100"
+              height="100"
+              className="rounded-full object-cover "
             />
           </figure>
 
-          <ArrowDownIcon className="size-5" />
+          <button
+            type="button"
+            className="cursor-pointer"
+            onClick={handleContextMenu}
+          >
+            <ArrowDownIcon className="size-5" />
+          </button>
         </div>
       </nav>
     </header>

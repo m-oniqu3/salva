@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* --background: #f4f4f4; */
+  --background: rgb(245, 245, 245);
   --foreground: #171717;
 }
 
@@ -62,6 +63,6 @@ body {
 
 @layer utilities {
   .text-sm {
-    @apply text-[0.85rem]
+    @apply text-[0.8rem]
   }
 }

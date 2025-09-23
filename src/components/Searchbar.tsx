@@ -2,10 +2,10 @@ import { SearchIcon } from "@/components/icons";
 
 function Searchbar() {
   return (
-    <form className="relative w-full max-w-sm ">
+    <form className="relative w-full max-w-sm">
       <input
         type="text"
-        className="bg-gray-50 w-full text-sm h-10 rounded-lg px-4 focus:outline-none placeholder:text-sm placeholder:text-gray-500"
+        className="bg-[#e8e7e5] w-full text-sm h-10 rounded-lg px-4 focus:outline-none placeholder:text-gray-500 placeholder:font-medium"
         placeholder="Search..."
       />
 
