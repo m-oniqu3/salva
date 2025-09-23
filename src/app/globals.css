@@ -40,7 +40,7 @@ body {
 
 @layer components {
   .wrapper {
-    @apply w-[90%] mx-auto md:w-[85%]
+    @apply w-[90%] mx-auto
   }
 
   .center {

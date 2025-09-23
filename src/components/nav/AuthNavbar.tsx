@@ -34,25 +34,12 @@ function AuthNavbar() {
     });
   }
 
-  // Get viewport size
-  // const { innerWidth, innerHeight } = window;
-
-  // const menuWidth = 200; // adjust based on your menu design
-  // const menuHeight = 150;
-
   function handleContextMenu(e: React.MouseEvent) {
-    //  Clamp X/Y so the menu never overflows the viewport
-    // const x = Math.min(e.pageX, innerWidth - menuWidth);
-    // const y = Math.min(e.pageY, innerHeight - menuHeight);
-    console.log("clicking arrow");
-    const x = e.clientX;
-    const y = e.clientY;
-
     ctxDispatch({
       type: ContextMenuActionTypes.OPEN_CONTEXT_MENU,
       payload: {
         currentContextMenu: ContextMenuEnum.PROFILE_MENU,
-        position: { x, y },
+        position: { x: 0, y: 30 },
       },
     });
   }

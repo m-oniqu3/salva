@@ -47,7 +47,7 @@ export default async function RootLayout({ children }: LayoutProps) {
 
             {children}
             <div id="modal" />
-            <div id="context-menu" className="relative wrapper" />
+            <div id="context-menu" />
           </ContextMenuProvider>
         </ModalContextProvider>
       </body>

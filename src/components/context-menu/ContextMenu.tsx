@@ -11,19 +11,7 @@ function ContextMenu(props: Props) {
 
   return (
     <Portal selector="#context-menu" close={close}>
-      <div
-        style={{
-          position: "absolute",
-          top: "0px",
-          right: "0px",
-          visibility: "visible",
-          transform: `translate(0, -30px)`,
-          willChange: "transform",
-          zIndex: "50",
-        }}
-      >
-        {children}
-      </div>
+      {children}
     </Portal>
   );
 }
