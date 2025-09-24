@@ -1,4 +1,3 @@
-import useDetectClick from "@/hooks/useDetectClick";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -9,19 +8,53 @@ type Props = {
 };
 
 export default function Portal({ children, selector, close }: Props) {
-  const ref = useRef<HTMLElement | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useDetectClick({
-    ref,
-    closeElement: close,
-    selector,
-  });
+  const portalElement = useRef<HTMLElement | null>(null); // ref to reference an element
+  const [mounted, setMounted] = useState(false); // has ref been populated?
 
   useEffect(() => {
-    ref.current = document.querySelector(selector);
-    setMounted(true);
+    if (!portalElement.current) {
+      const el = document.querySelector(selector) as HTMLElement;
+
+      if (el) {
+        portalElement.current = el;
+        setMounted(true);
+      }
+    }
   }, [selector]);
 
-  return mounted && ref.current ? createPortal(children, ref.current) : null;
+  /**
+   * useEffect(() => {
+    function handleClick(e: Event) {
+      const trgt = e.target;
+      if (trgt && portalElement) {
+        if (trgt !== portalElement.current) { // will need e.stopPropagation in the menu component.. write down why
+          close();
+        }
+      }
+    }
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [close]);
+  */
+
+  useEffect(() => {
+    function handleClick(e: Event) {
+      const trgt = e.target as Node;
+
+      if (trgt && portalElement) {
+        if (!portalElement.current?.contains(trgt)) {
+          // with this approach you dont have to use e.stopPropagation()
+          close();
+        }
+      }
+    }
+
+    document.addEventListener("click", handleClick);
+
+    return () => document.removeEventListener("click", handleClick);
+  }, [close]);
+
+  if (!mounted || !portalElement.current) return null;
+
+  return createPortal(children, portalElement.current);
 }

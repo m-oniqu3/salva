@@ -40,7 +40,7 @@ function CreateCollection(props: Props) {
   }
 
   return (
-    <div className="container max-w-sm">
+    <div className="c-container max-w-sm">
       <header className="relative pb-8 ">
         <h1 className="text-lg font-semibold">Create Collection</h1>
         <p className=" font-light text-sm">

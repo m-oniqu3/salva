@@ -47,7 +47,7 @@ body {
     @apply flex items-center justify-center gap-1
   }
 
-  .container {
+  .c-container {
     @apply w-full bg-white p-5 mx-auto rounded-lg
   }
 

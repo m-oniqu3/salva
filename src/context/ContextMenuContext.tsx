@@ -29,7 +29,6 @@ type ContextProviderProps = {
 export function ContextMenuProvider({ children }: ContextProviderProps) {
   // useReducer hook to manage state with our reducer function and initial state
   const [state, dispatch] = useReducer(contextMenuReducer, initialState);
-  console.log(state);
 
   function closeContextMenu() {
     dispatch({ type: ContextMenuActionTypes.CLOSE_CONTEXT_MENU });

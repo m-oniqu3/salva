@@ -15,10 +15,12 @@ import { useModal } from "@/context/useModal";
 import { ContextMenuEnum, ModalEnum } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
+import { MouseEvent } from "react";
 
 function AuthNavbar() {
   const { dispatch } = useModal();
   const { dispatch: ctxDispatch } = useContextMenu();
+  // const [isOpen, setIsOpen] = useState(false);
 
   function handleMobileMenu() {
     dispatch({
@@ -34,7 +36,9 @@ function AuthNavbar() {
     });
   }
 
-  function handleContextMenu(e: React.MouseEvent) {
+  function handleContextMenu(e: MouseEvent) {
+    e.stopPropagation();
+
     ctxDispatch({
       type: ContextMenuActionTypes.OPEN_CONTEXT_MENU,
       payload: {
@@ -43,13 +47,12 @@ function AuthNavbar() {
       },
     });
   }
-
   return (
     <header className="flex items-center h-20">
       <nav className="wrapper flex items-center justify-between gap-6 md:gap-6 ">
         <div className="flex gap-4 items-center">
           <Link href="/">
-            <FilmIcon className="size-5" />
+            <FilmIcon className="size-7" />
           </Link>
 
           <Link href={"#"} className="text-sm font-semibold">

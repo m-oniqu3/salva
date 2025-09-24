@@ -1,6 +1,7 @@
 function ProfileMenu() {
   return (
     <div
+      onClick={(e) => e.stopPropagation()}
       className="size-48 bg-amber-200"
       style={{
         position: "absolute",

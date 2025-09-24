@@ -6,9 +6,7 @@ type Props = {
   selector: string;
 };
 
-const useDetectClick = (props: Props) => {
-  const { ref, closeElement, selector } = props;
-
+const useDetectClick = ({ ref, closeElement, selector }: Props) => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleClickOutside(event: any) {

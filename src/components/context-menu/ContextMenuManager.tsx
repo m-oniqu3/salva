@@ -10,7 +10,7 @@ import { ReactNode } from "react";
 
 function ContextMenuManager() {
   const {
-    state: { currentContextMenu },
+    state: { currentContextMenu, isOpen },
     closeContextMenu,
   } = useContextMenu();
 
@@ -35,8 +35,12 @@ function ContextMenuManager() {
       return null;
   }
 
+  if (!isOpen) return null;
+
   return (
-    <ContextMenu close={closeContextMenu}>{contextMenuContent}</ContextMenu>
+    <ContextMenu close={closeContextMenu} isOpen={isOpen}>
+      {contextMenuContent}
+    </ContextMenu>
   );
 }
 
