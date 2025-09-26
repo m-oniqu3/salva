@@ -16,19 +16,19 @@ export function FilmIcon({ className }: IconProps) {
       <path
         d="M3.5 10.5H17.9118C19.3676 10.5 20.0955 10.5 20.5477 10.9393C21 11.3787 21 12.0858 21 13.5V15C21 18.2998 21 19.9497 19.9447 20.9749C18.8894 22 17.191 22 13.7941 22H10.7059C7.309 22 5.61055 22 4.55528 20.9749C3.5 19.9497 3.5 18.2998 3.5 15V10.5Z"
         stroke="#141B34"
-        strokeWidth="1.5"
+        strokeWidth="1.2"
       />
       <path
         d="M3.49827 10.5C3.14118 9.14207 2.96264 8.46311 3.00654 7.86611C3.08518 6.79682 3.63742 5.82221 4.50691 5.21816C4.99236 4.88092 5.6587 4.69899 6.99138 4.33514L14.7321 2.22172C15.0767 2.12763 15.2491 2.08058 15.3977 2.05386C17.0504 1.75694 18.6737 2.71192 19.2477 4.31874C19.2993 4.4633 19.3455 4.63888 19.4378 4.99006C19.4642 5.09039 19.4774 5.14056 19.4849 5.18385C19.5682 5.66498 19.3004 6.13757 18.8498 6.30467C18.8093 6.3197 18.7601 6.33314 18.6616 6.36003L3.49827 10.5Z"
         stroke="#141B34"
-        strokeWidth="1.5"
+        strokeWidth="1.2"
       />
-      <path d="M7 10L9 4" stroke="#141B34" strokeWidth="1.5" />
-      <path d="M14 8L16 2" stroke="#141B34" strokeWidth="1.5" />
+      <path d="M7 10L9 4" stroke="#141B34" strokeWidth="1.2" />
+      <path d="M14 8L16 2" stroke="#141B34" strokeWidth="1.2" />
       <path
         d="M8 18H11"
         stroke="#141B34"
-        strokeWidth="1.5"
+        strokeWidth="1.2"
         strokeLinecap="round"
       />
     </svg>
@@ -42,20 +42,22 @@ export function SearchIcon({ className }: IconProps) {
       viewBox="0 0 24 24"
       width={24}
       height={24}
-      color={"#000000"}
+      color="currentColor"
       fill={"none"}
       className={className}
     >
       <path
         d="M17 17L21 21"
-        stroke="#141B34"
+        // stroke="#141B34"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z"
-        stroke="#141B34"
+        // stroke="#141B34"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -68,35 +70,31 @@ export function MenuIcon({ className }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      width={24}
-      height={24}
-      color={"#000000"}
-      fill={"none"}
+      viewBox="0 0 20 20"
+      fill="currentColor"
       className={className}
     >
       <path
-        d="M4 5L20 5"
-        stroke="#141B34"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M4 12L20 12"
-        stroke="#141B34"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M4 19L20 19"
-        stroke="#141B34"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fillRule="evenodd"
+        d="M2 6.75A.75.75 0 0 1 2.75 6h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 6.75Zm0 6.5a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z"
+        clipRule="evenodd"
       />
     </svg>
+
+    // <svg
+    //   xmlns="http://www.w3.org/2000/svg"
+    //   fill="none"
+    //   viewBox="0 0 24 24"
+    //   strokeWidth={1.5}
+    //   stroke="currentColor"
+    //   className={className}
+    // >
+    //   <path
+    //     strokeLinecap="round"
+    //     strokeLinejoin="round"
+    //     d="M3.75 9h16.5m-16.5 6.75h16.5"
+    //   />
+    // </svg>
   );
 }
 
@@ -161,6 +159,210 @@ export function NotificationIcon({ className }: IconProps) {
   );
 }
 
+export function ArrowLeftIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={24}
+      height={24}
+      color={"#000000"}
+      fill={"none"}
+      className={className}
+    >
+      <path
+        d="M3.99982 11.9998L19.9998 11.9998"
+        stroke="#141B34"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.99963 17C8.99963 17 3.99968 13.3176 3.99966 12C3.99965 10.6824 8.99966 7 8.99966 7"
+        stroke="#141B34"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function AddIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={24}
+      height={24}
+      color={"#000000"}
+      fill={"none"}
+      className={className}
+    >
+      <path
+        d="M12.001 5.00003V19.002"
+        stroke="#141B34"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19.002 12.002L4.99998 12.002"
+        stroke="#141B34"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function FilterHorizontalIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+      />
+    </svg>
+  );
+}
+
+export function CloseIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={24}
+      height={24}
+      color={"#000000"}
+      fill={"none"}
+      className={className}
+    >
+      <path
+        d="M18 6L6.00081 17.9992M17.9992 18L6 6.00085"
+        stroke="#141B34"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function LoadingIcon({ className }: IconProps) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      fill="currentColor"
+    >
+      <path
+        d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+        opacity=".25"
+      />
+      <path d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          dur="0.75s"
+          values="0 12 12;360 12 12"
+          repeatCount="indefinite"
+        />
+      </path>
+    </svg>
+  );
+}
+
+export function BookmarkIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={24}
+      height={24}
+      color={"#000000"}
+      fill={"none"}
+      className={className}
+    >
+      <path
+        d="M4 17.9808V9.70753C4 6.07416 4 4.25748 5.17157 3.12874C6.34315 2 8.22876 2 12 2C15.7712 2 17.6569 2 18.8284 3.12874C20 4.25748 20 6.07416 20 9.70753V17.9808C20 20.2867 20 21.4396 19.2272 21.8523C17.7305 22.6514 14.9232 19.9852 13.59 19.1824C12.8168 18.7168 12.4302 18.484 12 18.484C11.5698 18.484 11.1832 18.7168 10.41 19.1824C9.0768 19.9852 6.26947 22.6514 4.77285 21.8523C4 21.4396 4 20.2867 4 17.9808Z"
+        stroke="#141B34"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function ArrowDownIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={24}
+      height={24}
+      color={"#000000"}
+      fill={"none"}
+      className={className}
+    >
+      <path
+        d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"
+        stroke="#141B34"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function MoreHorizontalIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+      />
+    </svg>
+  );
+}
+
+// export function Icon({ className }: IconProps) {
+//   return;
+// }
+// export function Icon({ className }: IconProps) {
+//   return;
+// }
+// export function Icon({ className }: IconProps) {
+//   return;
+// }
+// export function Icon({ className }: IconProps) {
+//   return;
+// }
+// export function Icon({ className }: IconProps) {
+//   return;
+// }
 // export function Icon({ className }: IconProps) {
 //   return;
 // }

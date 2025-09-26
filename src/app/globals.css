@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* --background: #f4f4f4; */
+  --background: rgb(245, 245, 245);
   --foreground: #171717;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-funnel-sans);
+  /* --font-mono: var(--font-geist-mono); */
+
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -22,7 +24,8 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  /* font-family: Arial, Helvetica, sans-serif; */
+  font-size: 0.9rem;
+  font-family: var(--font-geist-sans);
 }
 
 
@@ -31,11 +34,35 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+
   }
 }
 
 @layer components {
   .wrapper {
-    @apply w-[90%] mx-auto md:w-[85%]
+    @apply w-[90%] mx-auto
+  }
+
+  .center {
+    @apply flex items-center justify-center gap-1
+  }
+
+  .c-container {
+    @apply w-full bg-white p-5 mx-auto rounded-lg
+  }
+
+  .input {
+    @apply w-full bg-slate-100 p-2 font-semibold rounded-md focus:outline-none placeholder:text-sm placeholder:font-light
+  }
+
+  .input-error {
+    @apply text-red-500 text-xs font-light h-4
+  }
+}
+
+
+@layer utilities {
+  .text-sm {
+    @apply text-[0.8rem]
   }
 }
