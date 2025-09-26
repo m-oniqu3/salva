@@ -1,7 +1,7 @@
 "use client";
 
-import { ContextMenuActionTypes } from "@/actions/ContextMenuActions";
-import { ModalActionTypes } from "@/actions/ModalActions";
+import { ContextMenuActionEnum } from "@/actions/ContextMenuActions";
+import { ModalActionEnum } from "@/actions/ModalActions";
 import Button from "@/components/Button";
 import {
   ArrowDownIcon,
@@ -24,14 +24,14 @@ function AuthNavbar() {
 
   function handleMobileMenu() {
     dispatch({
-      type: ModalActionTypes.OPEN_MODAL,
+      type: ModalActionEnum.OPEN_MODAL,
       payload: ModalEnum.MOBILE_MENU,
     });
   }
 
   function handleCreateCollection() {
     dispatch({
-      type: ModalActionTypes.OPEN_MODAL,
+      type: ModalActionEnum.OPEN_MODAL,
       payload: ModalEnum.CREATE_BOARD_MODAL,
     });
   }
@@ -40,7 +40,7 @@ function AuthNavbar() {
     e.stopPropagation();
 
     ctxDispatch({
-      type: ContextMenuActionTypes.OPEN_CONTEXT_MENU,
+      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
       payload: {
         currentContextMenu: ContextMenuEnum.PROFILE_MENU,
         position: { x: 0, y: 30 },

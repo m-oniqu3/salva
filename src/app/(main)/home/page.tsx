@@ -1,6 +1,6 @@
 "use client";
 
-import { ContextMenuActionTypes } from "@/actions/ContextMenuActions";
+import { ContextMenuActionEnum } from "@/actions/ContextMenuActions";
 import { AddIcon, MoreHorizontalIcon } from "@/components/icons";
 import ProfileSummary from "@/components/ProfileSummary";
 import { useContextMenu } from "@/context/useContextMenu";
@@ -11,7 +11,7 @@ function HomePage() {
 
   function handleMore() {
     ctxDispatch({
-      type: ContextMenuActionTypes.OPEN_CONTEXT_MENU,
+      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
       payload: {
         currentContextMenu: ContextMenuEnum.EDIT_BOARD_MENU,
         position: { x: 500, y: 15 },
@@ -21,7 +21,7 @@ function HomePage() {
 
   function handleAdd() {
     ctxDispatch({
-      type: ContextMenuActionTypes.OPEN_CONTEXT_MENU,
+      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
       payload: {
         currentContextMenu: ContextMenuEnum.ADD_ELEMENT_MENU,
         position: { x: 500, y: 15 },

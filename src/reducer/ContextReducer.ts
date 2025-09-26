@@ -1,6 +1,6 @@
 import {
+  ContextMenuActionEnum,
   ContextMenuActions,
-  ContextMenuActionTypes,
 } from "@/actions/ContextMenuActions";
 import { ContextMenuType } from "@/types";
 
@@ -21,7 +21,7 @@ export function contextMenuReducer(
   action: ContextMenuActions
 ) {
   switch (action.type) {
-    case ContextMenuActionTypes.OPEN_CONTEXT_MENU:
+    case ContextMenuActionEnum.OPEN_CONTEXT_MENU:
       return {
         ...state,
         currentContextMenu: action.payload.currentContextMenu,
@@ -29,7 +29,7 @@ export function contextMenuReducer(
         isOpen: !state.isOpen,
       };
 
-    case ContextMenuActionTypes.CLOSE_CONTEXT_MENU:
+    case ContextMenuActionEnum.CLOSE_CONTEXT_MENU:
       return {
         ...state,
         currentContextMenu: null,

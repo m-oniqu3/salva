@@ -39,7 +39,7 @@ export default function Portal({ children, selector, close }: Props) {
 
   useEffect(() => {
     function handleClick(e: Event) {
-      const trgt = e.target as Node;
+      const trgt = e.target as Node; // what we clicked on
 
       if (trgt && portalElement) {
         if (!portalElement.current?.contains(trgt)) {

@@ -1,8 +1,8 @@
 "use client";
 
 import {
+  ContextMenuActionEnum,
   ContextMenuActions,
-  ContextMenuActionTypes,
 } from "@/actions/ContextMenuActions";
 import {
   contextMenuReducer,
@@ -31,7 +31,7 @@ export function ContextMenuProvider({ children }: ContextProviderProps) {
   const [state, dispatch] = useReducer(contextMenuReducer, initialState);
 
   function closeContextMenu() {
-    dispatch({ type: ContextMenuActionTypes.CLOSE_CONTEXT_MENU });
+    dispatch({ type: ContextMenuActionEnum.CLOSE_CONTEXT_MENU });
   }
 
   return (

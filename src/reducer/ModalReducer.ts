@@ -1,4 +1,4 @@
-import { ModalActions, ModalActionTypes } from "@/actions/ModalActions";
+import { ModalActionEnum, ModalActions } from "@/actions/ModalActions";
 import { ModalType } from "@/types";
 
 export type State = {
@@ -11,12 +11,12 @@ export const initialState: State = {
 
 export function modalReducer(state: State, action: ModalActions) {
   switch (action.type) {
-    case ModalActionTypes.OPEN_MODAL:
+    case ModalActionEnum.OPEN_MODAL:
       return {
         ...state,
         currentModal: action.payload,
       };
-    case ModalActionTypes.CLOSE_MODAL:
+    case ModalActionEnum.CLOSE_MODAL:
       return {
         ...state,
         currentModal: null,
