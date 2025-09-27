@@ -1,9 +1,13 @@
 "use client";
 
+import { createCollection } from "@/app/actions/create-collection";
 import Button from "@/components/Button";
 import { CloseIcon, LoadingIcon } from "@/components/icons";
-import { CreateCollectionSchema } from "@/utils/validation/CreateCollection";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  NewCollection,
+  NewCollectionSchema,
+} from "@utils/validation/create-collection";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -18,8 +22,8 @@ function CreateCollection(props: Props) {
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
 
-  const form = useForm<CreateCollectionSchema>({
-    resolver: zodResolver(CreateCollectionSchema),
+  const form = useForm<NewCollection>({
+    resolver: zodResolver(NewCollectionSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -27,15 +31,16 @@ function CreateCollection(props: Props) {
     },
   });
 
-  function onSubmitForm(input: CreateCollectionSchema) {
+  function onSubmitForm(input: NewCollection) {
     startCreateCollectionTransition(async () => {
       const formData = new FormData();
       formData.append("name", input.name);
       formData.append("description", input.description || "");
       formData.append("private", input.private ? "true" : "false");
 
-      await delay(500);
       console.log(formData);
+      await delay(500);
+      await createCollection(formData);
     });
   }
 
@@ -62,11 +67,10 @@ function CreateCollection(props: Props) {
           <label htmlFor="name" className="text-sm ">
             Collection Name
           </label>
-
           <input
             {...form.register("name")}
             className="input h-9"
-            placeholder="romance"
+            placeholder="comfort rewatches"
           />
 
           <p className="input-error">{form.formState.errors.name?.message}</p>
@@ -81,7 +85,7 @@ function CreateCollection(props: Props) {
           <textarea
             {...form.register("description")}
             className="input h-20 resize-none"
-            placeholder="my comfort shows."
+            placeholder="movies i throw on when my brain is tired"
           ></textarea>
 
           <p className="input-error">
