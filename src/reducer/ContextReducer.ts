@@ -22,19 +22,21 @@ export function contextMenuReducer(
 ) {
   switch (action.type) {
     case ContextMenuActionEnum.OPEN_CONTEXT_MENU:
-      return {
-        ...state,
-        currentContextMenu: action.payload.currentContextMenu,
-        position: action.payload.position,
-        isOpen: !state.isOpen,
-      };
+      const { currentContextMenu, position } = action.payload;
+
+      if (state.currentContextMenu === currentContextMenu) {
+        return {
+          ...state,
+          currentContextMenu,
+          position,
+          isOpen: !state.isOpen, //toggle it otherwise it stays close after first toggle
+        };
+      } else {
+        return { ...state, currentContextMenu, position, isOpen: true };
+      }
 
     case ContextMenuActionEnum.CLOSE_CONTEXT_MENU:
-      return {
-        ...state,
-        currentContextMenu: null,
-        isOpen: false,
-      };
+      return { ...state, currentContextMenu: null, isOpen: false };
 
     default:
       return state;

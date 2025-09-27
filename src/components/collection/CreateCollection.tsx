@@ -43,9 +43,7 @@ function CreateCollection(props: Props) {
     <div className="c-container max-w-sm">
       <header className="relative pb-8 ">
         <h1 className="text-lg font-semibold">Create Collection</h1>
-        <p className=" font-light text-sm">
-          Create a collection to organize your films.
-        </p>
+        <p className="text-sm">Create a collection to organize your films.</p>
 
         <button
           onClick={closeModal}
@@ -55,7 +53,10 @@ function CreateCollection(props: Props) {
         </button>
       </header>
 
-      <form className="" onSubmit={form.handleSubmit(onSubmitForm)}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(onSubmitForm)}
+      >
         {/* name */}
         <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-sm ">

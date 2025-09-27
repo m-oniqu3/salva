@@ -4,6 +4,7 @@
   /* --background: #f4f4f4; */
   --background: rgb(245, 245, 245);
   --foreground: #171717;
+  --text-small: 0.8rem;
 }
 
 @theme inline {
@@ -38,7 +39,14 @@ body {
   }
 }
 
+@layer utilities {
+  .text-sm {
+    @apply text-[0.8rem]
+  }
+}
+
 @layer components {
+
   .wrapper {
     @apply w-[90%] mx-auto
   }
@@ -52,17 +60,12 @@ body {
   }
 
   .input {
-    @apply w-full bg-slate-100 p-2 font-semibold rounded-md focus:outline-none placeholder:text-sm placeholder:font-light
+    @apply w-full bg-slate-100 p-2 font-medium rounded-md focus:outline-none;
+    font-size: var(--text-small);
   }
 
   .input-error {
-    @apply text-red-500 text-xs font-light h-4
+    @apply text-red-500 text-xs font-semibold h-4
   }
-}
 
-
-@layer utilities {
-  .text-sm {
-    @apply text-[0.8rem]
-  }
 }
