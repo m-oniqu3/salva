@@ -1,8 +1,9 @@
 "use client";
 
-import { createCollection } from "@/app/actions/create-collection";
 import Button from "@/components/Button";
 import { CloseIcon, LoadingIcon } from "@/components/icons";
+import { createCollection } from "@/server-actions/create-collection";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   NewCollection,
@@ -40,7 +41,17 @@ function CreateCollection(props: Props) {
 
       console.log(formData);
       await delay(500);
-      await createCollection(formData);
+      const { data, error } = await createCollection(formData);
+
+      if (error) {
+        console.log(error);
+      }
+
+      if (data) {
+        console.log(data);
+      }
+
+      closeModal();
     });
   }
 
@@ -118,7 +129,6 @@ function CreateCollection(props: Props) {
           >
             {isCreatingCollection ? (
               <div className="flex items-center justify-center gap-2">
-                Creating Collecction
                 <span className="animate-spin text-white">
                   <LoadingIcon className="size-5" />
                 </span>

@@ -1,7 +1,5 @@
 "use client";
 
-import { ContextMenuActionEnum } from "@/actions/ContextMenuActions";
-import { ModalActionEnum } from "@/actions/ModalActions";
 import Button from "@/components/Button";
 import {
   ArrowDownIcon,
@@ -10,6 +8,8 @@ import {
   MenuIcon,
 } from "@/components/icons";
 import Searchbar from "@/components/Searchbar";
+import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
+import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ContextMenuEnum, ModalEnum } from "@/types";

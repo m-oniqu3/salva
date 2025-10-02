@@ -3,12 +3,12 @@
 import {
   ContextMenuActionEnum,
   ContextMenuActions,
-} from "@/actions/ContextMenuActions";
+} from "@/context/actions/ContextMenuActions";
 import {
   contextMenuReducer,
   ContextState,
   initialState,
-} from "@/reducer/ContextReducer";
+} from "@/context/reducer/ContextReducer";
 import { createContext, Dispatch, ReactNode, useReducer } from "react";
 
 type ContextMenuContext = {

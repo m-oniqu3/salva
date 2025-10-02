@@ -1,4 +1,4 @@
-import { ModalActionEnum, ModalActions } from "@/actions/ModalActions";
+import { ModalActionEnum, ModalActions } from "@/context/actions/ModalActions";
 import { ModalType } from "@/types";
 
 export type State = {

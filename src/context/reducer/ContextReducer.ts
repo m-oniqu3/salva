@@ -1,7 +1,7 @@
 import {
   ContextMenuActionEnum,
   ContextMenuActions,
-} from "@/actions/ContextMenuActions";
+} from "@/context/actions/ContextMenuActions";
 import { ContextMenuType } from "@/types";
 
 export type ContextState = {

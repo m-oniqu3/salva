@@ -1,8 +1,8 @@
 "use client";
 
-import { ContextMenuActionEnum } from "@/actions/ContextMenuActions";
 import { AddIcon, MoreHorizontalIcon } from "@/components/icons";
 import ProfileSummary from "@/components/ProfileSummary";
+import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types";
 
