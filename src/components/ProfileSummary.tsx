@@ -1,28 +1,39 @@
+import Button from "@/components/Button";
 import Image from "next/image";
 
-function ProfileSummary() {
+type Props = {
+  username: string;
+};
+
+function ProfileSummary({ username }: Props) {
   return (
     <section className="py-4">
-      <article className="wrapper grid grid-cols-[auto_1fr] gap-4">
+      <article className="wrapper flex flex-col gap-6 place-items-center">
         <figure className="">
           <Image
-            src="https://i.pinimg.com/1200x/ff/02/39/ff02397557d58cfcf8d8529fc152c62e.jpg"
-            alt="Clover from totally spies"
-            width="70"
-            height="70"
-            className="rounded-full object-cover"
+            src="https://i.pinimg.com/736x/64/9b/b6/649bb6629df0875a3e65b2f31f1c40f3.jpg"
+            alt={`${username}'s avatar'`}
+            width="90"
+            height="90"
+            className="rounded-full object-cover size-24"
           />
         </figure>
 
-        <div>
-          <h2 className="font-semibold text-lg">Alex</h2>
-          <p className="text-sm">totally spy!</p>
-          <div className="flex items-center gap-1">
-            <p className="text-sm">39 followers</p>
+        <div className="flex flex-col items-center">
+          <h2 className="font-semibold text-3xl">Hagobi Mines</h2>
+
+          <div className="flex gap-1 font-medium mt-1">
+            <p className="text-zinc-500">@{username}</p>
             &#xb7;
-            <p className="tex-sm">92 following</p>
+            <p className="text-zinc-500">totally spy!</p>
           </div>
+
+          <p className="font-medium text-zinc-500">
+            {username.length} following
+          </p>
         </div>
+
+        <Button className="bg-[#e8e7e5] h-11 px-4">Edit Profile</Button>
       </article>
     </section>
   );

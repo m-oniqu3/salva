@@ -1,7 +1,6 @@
 "use client";
 
 import { AddIcon, MoreHorizontalIcon } from "@/components/icons";
-import ProfileSummary from "@/components/ProfileSummary";
 import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types";
@@ -46,11 +45,6 @@ function HomePage() {
           <MoreHorizontalIcon className="size-5" />
         </button>
       </div>
-
-      <ProfileSummary />
-      <ProfileSummary />
-      <ProfileSummary />
-      <ProfileSummary />
     </div>
   );
 }

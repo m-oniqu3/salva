@@ -20,7 +20,6 @@ import { MouseEvent } from "react";
 function AuthNavbar() {
   const { dispatch } = useModal();
   const { dispatch: ctxDispatch } = useContextMenu();
-  // const [isOpen, setIsOpen] = useState(false);
 
   function handleMobileMenu() {
     dispatch({
@@ -75,15 +74,20 @@ function AuthNavbar() {
           </Button>
           <BookmarkIcon className="size-5" />
 
-          <figure className="size-7 ">
-            <Image
-              src="https://i.pinimg.com/1200x/ff/02/39/ff02397557d58cfcf8d8529fc152c62e.jpg"
-              alt="Clover from totally spies"
-              width="100"
-              height="100"
-              className="rounded-full object-cover "
-            />
-          </figure>
+          <Link
+            href="/hagobi"
+            className="border-black border-2 rounded-full flex items-center justify-center size-9"
+          >
+            <figure className="">
+              <Image
+                src="https://i.pinimg.com/736x/64/9b/b6/649bb6629df0875a3e65b2f31f1c40f3.jpg"
+                alt="Clover from totally spies"
+                width="100"
+                height="100"
+                className="rounded-full object-cover size-7"
+              />
+            </figure>
+          </Link>
 
           <button
             type="button"
