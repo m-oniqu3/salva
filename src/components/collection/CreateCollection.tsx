@@ -12,7 +12,7 @@ import {
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+//const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 type Props = {
   closeModal: () => void;
@@ -37,10 +37,11 @@ function CreateCollection(props: Props) {
       const formData = new FormData();
       formData.append("name", input.name);
       formData.append("description", input.description || "");
-      formData.append("private", input.private ? "true" : "false");
+      formData.append("private", input.private as unknown as string);
 
+      console.log(input.private);
       console.log(formData);
-      await delay(500);
+
       const { data, error } = await createCollection(formData);
 
       if (error) {
@@ -59,7 +60,7 @@ function CreateCollection(props: Props) {
     <div className="c-container max-w-sm">
       <header className="relative pb-8 ">
         <h1 className="text-lg font-semibold">Create Collection</h1>
-        <p className="text-sm">Create a collection to organize your films.</p>
+        <p className="text-sml">Create a collection to organize your films.</p>
 
         <button
           onClick={closeModal}
@@ -75,7 +76,7 @@ function CreateCollection(props: Props) {
       >
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sm ">
+          <label htmlFor="name" className="text-sml ">
             Collection Name
           </label>
           <input
@@ -89,7 +90,7 @@ function CreateCollection(props: Props) {
 
         {/* description */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sm ">
+          <label htmlFor="description" className="text-sml ">
             What is this collection about?
           </label>
 
@@ -112,7 +113,7 @@ function CreateCollection(props: Props) {
             className="size-4 accent-black"
           />
 
-          <label htmlFor="private" className="text-sm h-full mt-0!">
+          <label htmlFor="private" className="text-sml h-full mt-0!">
             Is this collection private?
           </label>
 

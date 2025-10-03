@@ -12,7 +12,8 @@ import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
-import { ContextMenuEnum, ModalEnum } from "@/types";
+import { ContextMenuEnum } from "@/types/context-menu";
+import { ModalEnum } from "@/types/modal";
 import Image from "next/image";
 import Link from "next/link";
 import { MouseEvent } from "react";
@@ -54,8 +55,12 @@ function AuthNavbar() {
             <FilmIcon className="size-7" />
           </Link>
 
-          <Link href={"#"} className="text-sm font-semibold">
+          <Link href={"#"} className="text-sml font-semibold hidden md:grid">
             Discover
+          </Link>
+
+          <Link href={"#"} className="text-sml font-semibold hidden md:grid">
+            Shop
           </Link>
         </div>
 

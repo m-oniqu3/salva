@@ -4,7 +4,7 @@
   /* --background: #f4f4f4; */
   --background: rgb(245, 245, 245);
   --foreground: #171717;
-  --text-small: 0.8rem;
+  --text-smlall: 0.8rem;
 }
 
 @theme inline {
@@ -23,10 +23,11 @@
 } */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  /* background: var(--background); */
+  color: #35373a;
   font-size: 0.9rem;
   font-family: var(--font-geist-sans);
+
 }
 
 
@@ -35,21 +36,21 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    color: rgb(13, 13, 13);
+
 
   }
 }
 
-@layer utilities {
-  .text-sm {
-    @apply text-[0.8rem]
-  }
-}
+
 
 @layer components {
 
   .wrapper {
     @apply w-[90%] mx-auto
+  }
+
+  .text-sml {
+    @apply text-[0.8rem]
   }
 
   .center {
@@ -62,11 +63,22 @@ body {
 
   .input {
     @apply w-full bg-slate-100 p-2 font-medium rounded-md focus:outline-none;
-    font-size: var(--text-small);
+    font-size: var(--text-smlall);
   }
 
   .input-error {
     @apply text-red-500 text-xs font-semibold h-4
   }
 
+  .gray {
+    @apply bg-[#efefef]
+    /* @apply bg-gray-100 */
+  }
+
 }
+
+/* @layer utilities {
+  .text-sml {
+    @apply text-[0.85rem]
+  }
+} */

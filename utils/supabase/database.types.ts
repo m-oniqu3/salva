@@ -17,32 +17,32 @@ export type Database = {
       collections: {
         Row: {
           cover_image: string | null
-          created_at: string | null
+          created_at: string
           description: string | null
-          id: string
-          is_private: boolean | null
+          id: number
+          is_private: boolean
           name: string
-          updated_at: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
           cover_image?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
-          id?: string
-          is_private?: boolean | null
-          name: string
-          updated_at?: string | null
-          user_id: string
+          id?: number
+          is_private?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
         }
         Update: {
           cover_image?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
-          id?: string
-          is_private?: boolean | null
+          id?: number
+          is_private?: boolean
           name?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []

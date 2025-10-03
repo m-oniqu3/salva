@@ -2,7 +2,7 @@ import {
   ContextMenuActionEnum,
   ContextMenuActions,
 } from "@/context/actions/ContextMenuActions";
-import { ContextMenuType } from "@/types";
+import { ContextMenuType } from "@/types/context-menu";
 
 export type ContextState = {
   currentContextMenu: ContextMenuType;

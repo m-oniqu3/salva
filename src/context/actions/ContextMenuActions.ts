@@ -1,4 +1,4 @@
-import { ContextMenuType } from "@/types";
+import { ContextMenuType } from "@/types/context-menu";
 
 export enum ContextMenuActionEnum {
   OPEN_CONTEXT_MENU = "OPEN_CONTEXT_MENU",

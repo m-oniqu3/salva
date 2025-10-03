@@ -3,7 +3,7 @@
 import { AddIcon, MoreHorizontalIcon } from "@/components/icons";
 import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
-import { ContextMenuEnum } from "@/types";
+import { ContextMenuEnum } from "@/types/context-menu";
 
 function HomePage() {
   const { dispatch: ctxDispatch } = useContextMenu();

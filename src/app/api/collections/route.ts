@@ -6,6 +6,7 @@ export async function GET() {
 
   // Get the logged-in user
   const { data } = await supabase.auth.getUser();
+  console.log(data);
 
   if (!data.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

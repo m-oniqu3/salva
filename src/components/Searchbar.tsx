@@ -5,7 +5,7 @@ function Searchbar() {
     <form className="relative w-full max-w-sm">
       <input
         type="text"
-        className="bg-[#e8e7e5] w-full text-sm h-10 rounded-lg px-4 focus:outline-none placeholder:text-gray-500 placeholder:font-medium"
+        className="gray w-full text-sml h-10 rounded-lg px-4 focus:outline-none placeholder:text-gray-500 placeholder:font-medium"
         placeholder="Search..."
       />
 

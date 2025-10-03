@@ -2,7 +2,7 @@
 
 import MobileMenu from "@/components/nav/MobileMenu";
 import { useModal } from "@/context/useModal";
-import { ModalEnum } from "@/types";
+import { ModalEnum } from "@/types/modal";
 import CreateCollection from "@components/collection/CreateCollection";
 import Modal from "@components/Modal";
 import { ReactNode } from "react";

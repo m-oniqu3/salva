@@ -5,7 +5,7 @@ import ContextMenu from "@/components/context-menu/ContextMenu";
 import EditBoardMenu from "@/components/context-menu/EditBoardMenu";
 import ProfileMenu from "@/components/context-menu/ProfileMenu";
 import { useContextMenu } from "@/context/useContextMenu";
-import { ContextMenuEnum } from "@/types";
+import { ContextMenuEnum } from "@/types/context-menu";
 import { ReactNode } from "react";
 
 function ContextMenuManager() {
@@ -38,9 +38,7 @@ function ContextMenuManager() {
   if (!isOpen) return null;
 
   return (
-    <ContextMenu close={closeContextMenu} isOpen={isOpen}>
-      {contextMenuContent}
-    </ContextMenu>
+    <ContextMenu close={closeContextMenu}>{contextMenuContent}</ContextMenu>
   );
 }
 
