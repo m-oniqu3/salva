@@ -14,11 +14,16 @@ import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
+import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { MouseEvent } from "react";
 
-function AuthNavbar() {
+type Props = {
+  user: User | null;
+};
+
+function AuthNavbar({ user }: Props) {
   const { dispatch } = useModal();
   const { dispatch: ctxDispatch } = useContextMenu();
 
@@ -32,7 +37,7 @@ function AuthNavbar() {
   function handleCreateCollection() {
     dispatch({
       type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.CREATE_BOARD_MODAL,
+      payload: ModalEnum.CREATE_COLLECTION_MODAL,
     });
   }
 
@@ -47,6 +52,7 @@ function AuthNavbar() {
       },
     });
   }
+
   return (
     <header className="flex items-center h-20">
       <nav className="wrapper flex items-center justify-between gap-6 md:gap-6 ">
@@ -70,38 +76,47 @@ function AuthNavbar() {
           <MenuIcon className="size-5" />
         </button>
 
-        <div className="hidden md:flex items-center gap-4">
-          <Button
-            onClick={handleCreateCollection}
-            className="bg-black text-white"
-          >
-            Create
-          </Button>
-          <BookmarkIcon className="size-5" />
+        {!user && (
+          <div className="hidden md:flex items-center gap-4">
+            <Button>Log In</Button>
+            <Button className="bg-black text-white">Sign Up</Button>
+          </div>
+        )}
 
-          <Link
-            href="/hagobi"
-            className="border-black border-2 rounded-full flex items-center justify-center size-9"
-          >
-            <figure className="">
-              <Image
-                src="https://i.pinimg.com/736x/64/9b/b6/649bb6629df0875a3e65b2f31f1c40f3.jpg"
-                alt="Clover from totally spies"
-                width="100"
-                height="100"
-                className="rounded-full object-cover size-7"
-              />
-            </figure>
-          </Link>
+        {user && (
+          <div className="hidden md:flex items-center gap-4">
+            <Button
+              onClick={handleCreateCollection}
+              className="bg-black text-white"
+            >
+              Create
+            </Button>
+            <BookmarkIcon className="size-5" />
 
-          <button
-            type="button"
-            className="cursor-pointer"
-            onClick={handleContextMenu}
-          >
-            <ArrowDownIcon className="size-5" />
-          </button>
-        </div>
+            <Link
+              href="/hagobi"
+              className="border-black border-2 rounded-full flex items-center justify-center size-9"
+            >
+              <figure className="">
+                <Image
+                  src="https://i.pinimg.com/736x/64/9b/b6/649bb6629df0875a3e65b2f31f1c40f3.jpg"
+                  alt="Clover from totally spies"
+                  width="100"
+                  height="100"
+                  className="rounded-full object-cover size-7"
+                />
+              </figure>
+            </Link>
+
+            <button
+              type="button"
+              className="cursor-pointer"
+              onClick={handleContextMenu}
+            >
+              <ArrowDownIcon className="size-5" />
+            </button>
+          </div>
+        )}
       </nav>
     </header>
   );

@@ -18,7 +18,7 @@ function ModalManager() {
   let ModalContent: ReactNode = null;
 
   switch (currentModal) {
-    case ModalEnum.CREATE_BOARD_MODAL:
+    case ModalEnum.CREATE_COLLECTION_MODAL:
       ModalContent = <CreateCollection closeModal={closeModal} />;
       break;
 

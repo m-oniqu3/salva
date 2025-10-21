@@ -1,12 +1,27 @@
 import CollectionPreview from "@/components/collection/CollectionPreview";
-import { Collection } from "@/types/collection";
+import { getCollections } from "@utils/api/collections/get-collections";
 
 type Props = {
-  collections: Array<Collection> | null;
-  profile: string;
+  username: string;
 };
 
-function CollectionList({ collections, profile }: Props) {
+async function CollectionList({ username }: Props) {
+  const { data: collections, error } = await getCollections();
+
+  if (error) {
+    // Handle specific error cases
+    if (error.includes("Unauthorized")) {
+      return (
+        <p className="text-red-500">
+          You must be logged in to view collections.
+        </p>
+      );
+    }
+
+    // Generic error fallback
+    return <p className="text-red-500">{error}</p>;
+  }
+
   if (!collections || collections.length == 0) {
     return <p className="wrapper text-center">No collections created yet</p>;
   }
@@ -15,7 +30,7 @@ function CollectionList({ collections, profile }: Props) {
     return (
       <CollectionPreview
         key={item.id}
-        profile={profile}
+        username={username}
         collection={{
           ...item,
           //   cover_image: `https://picsum.photos/id/${item.name.length}/400/600`,
@@ -25,7 +40,7 @@ function CollectionList({ collections, profile }: Props) {
   });
 
   return (
-    <div className="wrapper grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4 ">
+    <div className="wrapper grid items-center justify-center grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
       {previews}
     </div>
   );

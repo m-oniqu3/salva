@@ -42,29 +42,57 @@ export function SearchIcon({ className }: IconProps) {
       viewBox="0 0 24 24"
       width={24}
       height={24}
-      color="currentColor"
+      color={"#000000"}
       fill={"none"}
       className={className}
     >
       <path
         d="M17 17L21 21"
-        // stroke="#141B34"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
+      ></path>
       <path
         d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z"
-        // stroke="#141B34"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
+      ></path>
     </svg>
   );
 }
+// export function SearchIcon({ className }: IconProps) {
+//   return (
+//     <svg
+//       xmlns="http://www.w3.org/2000/svg"
+//       viewBox="0 0 24 24"
+//       width={24}
+//       height={24}
+//       color="currentColor"
+//       fill={"none"}
+//       className={className}
+//     >
+//       <path
+//         d="M17 17L21 21"
+//         // stroke="#141B34"
+//         stroke="currentColor"
+//         strokeWidth="2"
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <path
+//         d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z"
+//         // stroke="#141B34"
+//         stroke="currentColor"
+//         strokeWidth="2"
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//     </svg>
+//   );
+// }
 
 export function MenuIcon({ className }: IconProps) {
   return (

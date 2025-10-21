@@ -81,7 +81,7 @@ function CreateCollection(props: Props) {
           </label>
           <input
             {...form.register("name")}
-            className="input h-9"
+            className="input h-10"
             placeholder="comfort rewatches"
           />
 

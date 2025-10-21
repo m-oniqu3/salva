@@ -1,15 +1,18 @@
 import { Collection } from "@/types/collection";
+import { slugify } from "@utils/validation/slug";
 import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
   collection: Collection;
-  profile: string;
+  username: string;
 };
 
-function CollectionPreview({ collection, profile }: Props) {
+function CollectionPreview({ collection, username }: Props) {
   //https://picsum.photos/id/237/200/300
   const { name, is_private, cover_image } = collection;
+
+  const encodedUrl = slugify(name);
 
   const cover = cover_image ? (
     <Image
@@ -21,11 +24,14 @@ function CollectionPreview({ collection, profile }: Props) {
       className="size-full  object-cover rounded-2xl"
     />
   ) : (
-    <div className="gray size-full rounded-xl" />
+    <div className="gray size-full rounded-2xl" />
   );
 
   return (
-    <Link href={`/${profile}/${name}`} className="flex flex-col gap-2 ">
+    <Link
+      href={`/${username}/${encodedUrl}`}
+      className="flex flex-col gap-2 w-full"
+    >
       <figure className="w-full h-[150px] sm:h-[150px]">{cover}</figure>
 
       <div className="">

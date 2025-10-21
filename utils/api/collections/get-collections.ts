@@ -11,13 +11,9 @@ export async function getCollections(): Promise<
 
     const { data: user, error: userError } = await getUser(supabase);
 
-    if (userError) {
+    if (userError || !user) {
       console.error("Error fetching user:", userError);
-      return { data: null, error: "Failed to fetch user." };
-    }
-
-    if (!user) {
-      return { data: null, error: "Unauthorized: no user found." };
+      return { data: null, error: userError };
     }
 
     const { data: collections, error } = await supabase
