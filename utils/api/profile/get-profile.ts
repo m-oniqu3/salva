@@ -3,14 +3,14 @@ import { Profile } from "@/types/user";
 import { createClient } from "@utils/supabase/server";
 
 export async function getProfile(
-  user: string
+  username: string
 ): Promise<Result<Profile | null>> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("profiles")
     .select()
-    .eq("username", user)
+    .eq("username", username)
     .single();
 
   if (error) {

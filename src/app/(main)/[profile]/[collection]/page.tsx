@@ -1,25 +1,34 @@
 import CollectionSummary from "@/components/collection/CollectionSummary";
+import { findCollection } from "@utils/api/collections/find-collection";
 
 type Props = {
   params: Promise<{ profile: string; collection: string }>;
 };
 
-function unslugify(slug: string) {
-  return slug
-    .replace(/-/g, " ") // replace dashes with spaces
-    .replace(/\s+/g, " ") // clean up extra spaces
-    .trim(); // remove leading/trailing spaces
-}
-
 async function page({ params }: Props) {
-  const { collection } = await params;
-  const decodedCollName = unslugify(collection);
+  const { collection: slug, profile: username } = await params;
 
-  console.log(decodedCollName);
+  //clean up slug;
+  const collection_name = decodeURIComponent(slug);
+
+  console.log(collection_name);
+  const { data: collection, error } = await findCollection(
+    collection_name,
+    username
+  );
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!collection) {
+    return <p>no collection found</p>;
+  }
 
   return (
-    <div>
-      <CollectionSummary collection="" />
+    <div className="py-8">
+      <CollectionSummary summary={collection} />
+      <p>films for collection</p>
     </div>
   );
 }

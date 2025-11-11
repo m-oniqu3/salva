@@ -29,13 +29,15 @@ async function page({ params }: Props) {
   const { data: user } = userDetails;
   const { data: profile } = profileDetails;
 
-  if (!user || !profile) {
+  const userID = user?.id ?? null;
+
+  if (!profile) {
     return <div>Profile does not exist </div>;
   }
 
   return (
     <div className="space-y-16 py-10">
-      <ProfileSummary profile={profile} userID={user.id} />
+      <ProfileSummary profile={profile} userID={userID} />
       <CollectionList username={username} />
     </div>
   );

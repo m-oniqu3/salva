@@ -4,7 +4,7 @@ import Image from "next/image";
 
 type Props = {
   profile: Profile;
-  userID: Profile["user_id"];
+  userID: Profile["user_id"] | null;
 };
 
 function ProfileSummary({ profile, userID }: Props) {

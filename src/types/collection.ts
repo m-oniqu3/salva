@@ -7,3 +7,26 @@ export type Collection = {
   is_private: boolean;
   created_at: string; // ISO date string
 };
+
+export type CollectionPreview = {
+  id: number;
+  name: string;
+  is_private: boolean;
+  cover_image: string | null;
+};
+
+export type CollectionSummary = {
+  user: {
+    id: number;
+    userID: string;
+    username: string;
+    avatar: string | null;
+  };
+
+  collection: {
+    id: number;
+    name: string;
+    is_private: boolean;
+    cover_image: string | null;
+  };
+};

@@ -6,19 +6,11 @@ type Props = {
 };
 
 async function CollectionList({ username }: Props) {
-  const { data: collections, error } = await getCollections();
+  const { data: collections, error } = await getCollections(username);
 
+  //todo : fix this by removing the unauthorized case
   if (error) {
-    // Handle specific error cases
-    if (error.includes("Unauthorized")) {
-      return (
-        <p className="text-red-500">
-          You must be logged in to view collections.
-        </p>
-      );
-    }
-
-    // Generic error fallback
+    console.log(error);
     return <p className="text-red-500">{error}</p>;
   }
 
@@ -26,16 +18,12 @@ async function CollectionList({ username }: Props) {
     return <p className="wrapper text-center">No collections created yet</p>;
   }
 
+  console.log(collections);
+
   const previews = collections.map((item) => {
+    console.log(item);
     return (
-      <CollectionPreview
-        key={item.id}
-        username={username}
-        collection={{
-          ...item,
-          //   cover_image: `https://picsum.photos/id/${item.name.length}/400/600`,
-        }}
-      />
+      <CollectionPreview key={item.id} username={username} preview={item} />
     );
   });
 
