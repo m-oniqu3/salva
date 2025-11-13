@@ -18,10 +18,10 @@ async function CollectionList({ username }: Props) {
     return <p className="wrapper text-center">No collections created yet</p>;
   }
 
-  console.log(collections);
+  // console.log(collections);
 
   const previews = collections.map((item) => {
-    console.log(item);
+    // console.log(item);
     return (
       <CollectionPreview key={item.id} username={username} preview={item} />
     );

@@ -1,4 +1,10 @@
-import { PrivateIcon, UserAddIcon } from "@/components/icons";
+import {
+  AddIcon,
+  MoreHorizontalIcon,
+  PrivateIcon,
+  SparkleIcon,
+  UserAddIcon,
+} from "@/components/icons";
 import type { CollectionSummary } from "@/types/collection";
 import Image from "next/image";
 
@@ -11,7 +17,7 @@ function CollectionSummary({ summary }: Props) {
   } = summary;
 
   return (
-    <section className="flex justify-center items-center text-center">
+    <section className="flex flex-col justify-center items-center text-center">
       <article className="flex flex-col justify-center">
         <h1 className="text-2xl font-semibold">{name}</h1>
 
@@ -57,6 +63,20 @@ function CollectionSummary({ summary }: Props) {
           </div>
         </div>
       </article>
+
+      <div className="flex justify-center gap-4 mt-10">
+        <button className="rounded-full size-10 flex justify-center items-center gray">
+          <SparkleIcon className="size-5" />
+        </button>
+
+        <button className="rounded-full size-10 flex justify-center items-center gray">
+          <AddIcon className="size-5" />
+        </button>
+
+        <button className="rounded-full size-10 flex justify-center items-center gray">
+          <MoreHorizontalIcon className="size-5" />
+        </button>
+      </div>
     </section>
   );
 }

@@ -12,10 +12,7 @@ async function page({ params }: Props) {
   const collection_name = decodeURIComponent(slug);
 
   console.log(collection_name);
-  const { data: collection, error } = await findCollection(
-    collection_name,
-    username
-  );
+  const { data: collection, error } = await findCollection(username, slug);
 
   if (error) {
     return <p>{error}</p>;

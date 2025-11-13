@@ -10,11 +10,9 @@ type Props = {
 function CollectionPreview({ preview, username }: Props) {
   //https://picsum.photos/id/237/200/300
 
-  const { is_private, name, cover_image } = preview;
+  const { is_private, name, cover_image, slug } = preview;
 
-  const encodedUrl = encodeURIComponent(name);
-
-  console.log(encodedUrl);
+  console.log(slug);
 
   const cover = cover_image ? (
     <Image
@@ -23,17 +21,14 @@ function CollectionPreview({ preview, username }: Props) {
       width={100}
       height={50}
       quality={100}
-      className="size-full  object-cover rounded-2xl"
+      className="size-full object-cover rounded-2xl"
     />
   ) : (
     <div className="gray size-full rounded-2xl" />
   );
 
   return (
-    <Link
-      href={`/${username}/${encodedUrl}`}
-      className="flex flex-col gap-2 w-full"
-    >
+    <Link href={`/${username}/${slug}`} className="flex flex-col gap-2 w-full">
       <figure className="w-full h-[150px] sm:h-[150px]">{cover}</figure>
 
       <div className="">

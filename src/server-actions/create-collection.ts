@@ -4,6 +4,7 @@ import getUser from "@/server-actions/get-user";
 import { Collection } from "@/types/collection";
 import { Result } from "@/types/result";
 import { createClient } from "@utils/supabase/server";
+import { slugify } from "@utils/validation/slug";
 import { revalidatePath } from "next/cache";
 
 export async function createCollection(
@@ -17,9 +18,14 @@ export async function createCollection(
       name: formData.get("name") as string,
       description: formData.get("description") as string,
       is_private: formData.get("private") === "true",
+      slug: slugify(formData.get("name") as string),
     };
 
     console.log("Form values:", values);
+
+    const slug = slugify(values.name);
+
+    console.log(slug);
 
     // Get logged-in user
     const { data: user, error: userError } = await getUser(supabase);

@@ -13,6 +13,7 @@ export type CollectionPreview = {
   name: string;
   is_private: boolean;
   cover_image: string | null;
+  slug: string | null;
 };
 
 export type CollectionSummary = {
@@ -28,5 +29,6 @@ export type CollectionSummary = {
     name: string;
     is_private: boolean;
     cover_image: string | null;
+    slug: string | null;
   };
 };

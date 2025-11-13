@@ -7,8 +7,7 @@ import { createClient } from "@utils/supabase/server";
 
 type Response = Promise<Result<CollectionSummary | null>>;
 
-export async function findCollection(name: string, username: string): Response {
-  console.log(name, username);
+export async function findCollection(username: string, slug: string): Response {
   try {
     const supabase = await createClient();
 
@@ -32,9 +31,9 @@ export async function findCollection(name: string, username: string): Response {
 
     const { data, error } = await supabase
       .from("collections")
-      .select("id, name, is_private, cover_image")
-      .ilike("name", name)
+      .select("id, name, is_private, cover_image, slug")
       .eq("user_id", userID)
+      .eq("slug", slug)
       .single();
 
     if (error || !data) {

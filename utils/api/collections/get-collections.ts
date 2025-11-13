@@ -29,7 +29,7 @@ export async function getCollections(username: string): Response {
 
     const { data: collections, error } = await supabase
       .from("collections")
-      .select("id, name, is_private, cover_image")
+      .select("id, name, is_private, cover_image, slug")
       .eq("user_id", profile.user_id)
       .order("created_at", { ascending: false });
 
