@@ -29,7 +29,7 @@ function ProfileSummary({ profile, userID }: Props) {
               alt={`${username}'s avatar'`}
               width="90"
               height="90"
-              className="rounded-full object-cover size-24"
+              className="rounded-full object-cover size-24 gray"
             />
           </figure>
         )}
@@ -41,21 +41,21 @@ function ProfileSummary({ profile, userID }: Props) {
               alt={`${username}'s avatar'`}
               width="90"
               height="90"
-              className="rounded-full object-cover size-24 bg-gray-200  "
+              className="rounded-full object-cover size-24 gray"
             />
           </figure>
         )}
 
         <div className="flex flex-col items-center">
           {firstname && (
-            <h2 className="font-semibold text-lg ">
+            <h2 className="font-semibold text-lg">
               {firstname} {lastname}
             </h2>
           )}
 
           <div className="flex flex-col items-center gap-1 text-sm text-center max-w-72">
             <div className="flex items-center gap-1 text-zinc-500 text-sm font-semibold">
-              <p className=" ">@{username}</p>
+              <p className="">@{username}</p>
               &#xb7;
               <p className="text-zinc-500 font-semibold">
                 {username.length} following

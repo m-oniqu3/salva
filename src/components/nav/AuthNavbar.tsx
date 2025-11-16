@@ -14,16 +14,16 @@ import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
-import { User } from "@supabase/supabase-js";
+import { Profile } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
 import { MouseEvent } from "react";
 
 type Props = {
-  user: User | null;
+  profile: Profile | null;
 };
 
-function AuthNavbar({ user }: Props) {
+function AuthNavbar({ profile }: Props) {
   const { dispatch } = useModal();
   const { dispatch: ctxDispatch } = useContextMenu();
 
@@ -76,14 +76,14 @@ function AuthNavbar({ user }: Props) {
           <MenuIcon className="size-5" />
         </button>
 
-        {!user && (
+        {!profile && (
           <div className="hidden md:flex items-center gap-4">
             <Button>Log In</Button>
             <Button className="bg-black text-white">Sign Up</Button>
           </div>
         )}
 
-        {user && (
+        {profile && (
           <div className="hidden md:flex items-center gap-4">
             <Button
               onClick={handleCreateCollection}
@@ -91,20 +91,33 @@ function AuthNavbar({ user }: Props) {
             >
               Create
             </Button>
+
             <BookmarkIcon className="size-5" />
 
             <Link
-              href="/hagobi"
-              className="border-black border-2 rounded-full flex items-center justify-center size-9"
+              href={`/${profile.username}`}
+              className="border-black border-2 rounded-full flex items-center justify-center size-8"
             >
               <figure className="">
-                <Image
-                  src="https://i.pinimg.com/736x/64/9b/b6/649bb6629df0875a3e65b2f31f1c40f3.jpg"
-                  alt="Clover from totally spies"
-                  width="100"
-                  height="100"
-                  className="rounded-full object-cover size-7"
-                />
+                {profile.avatar && (
+                  <Image
+                    src={profile.avatar}
+                    alt={`${profile.username}'s avatar'`}
+                    width="90"
+                    height="90"
+                    className="rounded-full object-cover size-6 gray"
+                  />
+                )}
+
+                {!profile.avatar && (
+                  <Image
+                    src={`https://avatar.iran.liara.run/username?username=${profile.username}`}
+                    alt={`${profile.username}'s avatar'`}
+                    width="90"
+                    height="90"
+                    className="rounded-full object-cover size-6 gray"
+                  />
+                )}
               </figure>
             </Link>
 

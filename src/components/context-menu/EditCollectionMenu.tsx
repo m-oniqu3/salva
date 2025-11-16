@@ -1,12 +1,12 @@
-function EditBoardMenu() {
+function EditCollectionMenu() {
   return (
     <div
       className="size-48 bg-green-200"
       style={{
         position: "absolute",
-        top: "180px",
-        left: "50%",
-        transform: "translate(-50%, 0px)",
+        top: "300px",
+        left: "55%",
+        transform: "translate(-50%, 0%)",
       }}
     >
       EditBoardMenu
@@ -14,4 +14,4 @@ function EditBoardMenu() {
   );
 }
 
-export default EditBoardMenu;
+export default EditCollectionMenu;

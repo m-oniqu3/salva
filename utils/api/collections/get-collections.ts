@@ -16,7 +16,9 @@ export async function getCollections(username: string): Response {
     const supabase = await createClient();
 
     //get the profile
-    const { data: profile, error: profileError } = await getProfile(username);
+    const { data: profile, error: profileError } = await getProfile({
+      username,
+    });
 
     //handle !user case separately
     if (profileError || !profile) {

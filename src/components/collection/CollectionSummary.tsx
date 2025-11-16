@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AddIcon,
   MoreHorizontalIcon,
@@ -5,7 +7,10 @@ import {
   SparkleIcon,
   UserAddIcon,
 } from "@/components/icons";
+import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
+import { useContextMenu } from "@/context/useContextMenu";
 import type { CollectionSummary } from "@/types/collection";
+import { ContextMenuEnum } from "@/types/context-menu";
 import Image from "next/image";
 
 type Props = { summary: CollectionSummary };
@@ -15,6 +20,28 @@ function CollectionSummary({ summary }: Props) {
     user: { username, avatar },
     collection: { name, is_private: locked },
   } = summary;
+
+  const { dispatch } = useContextMenu();
+
+  function handleMore() {
+    dispatch({
+      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
+      payload: {
+        currentContextMenu: ContextMenuEnum.EDIT_COLLECTION_MENU,
+        position: { x: 500, y: 15 },
+      },
+    });
+  }
+
+  function handleAdd() {
+    dispatch({
+      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
+      payload: {
+        currentContextMenu: ContextMenuEnum.ADD_ELEMENT_MENU,
+        position: { x: 500, y: 15 },
+      },
+    });
+  }
 
   return (
     <section className="flex flex-col justify-center items-center text-center">
@@ -35,7 +62,7 @@ function CollectionSummary({ summary }: Props) {
           <p className="text-sm">@{username}</p>
         </div>
 
-        <div className="flex justify-center mt-2">
+        <div className="flex justify-center mt-2 relative left-2">
           <figure className="">
             {avatar && (
               <Image
@@ -43,7 +70,7 @@ function CollectionSummary({ summary }: Props) {
                 alt={`${username}'s avatar'`}
                 width="90"
                 height="90"
-                className="rounded-full object-cover size-9"
+                className="rounded-full object-cover size-9 gray"
               />
             )}
 
@@ -53,7 +80,7 @@ function CollectionSummary({ summary }: Props) {
                 alt={`${username}'s avatar'`}
                 width="90"
                 height="90"
-                className="rounded-full object-cover size-9 bg-gray-200"
+                className="rounded-full object-cover size-9 gray"
               />
             )}
           </figure>
@@ -64,16 +91,22 @@ function CollectionSummary({ summary }: Props) {
         </div>
       </article>
 
-      <div className="flex justify-center gap-4 mt-10">
+      <div className="flex justify-center gap-2 mt-7">
         <button className="rounded-full size-10 flex justify-center items-center gray">
-          <SparkleIcon className="size-5" />
+          <SparkleIcon className="size-4" />
         </button>
 
-        <button className="rounded-full size-10 flex justify-center items-center gray">
+        <button
+          onClick={handleAdd}
+          className="rounded-full size-10 flex justify-center items-center gray"
+        >
           <AddIcon className="size-5" />
         </button>
 
-        <button className="rounded-full size-10 flex justify-center items-center gray">
+        <button
+          onClick={handleMore}
+          className="rounded-full size-10 flex justify-center items-center gray"
+        >
           <MoreHorizontalIcon className="size-5" />
         </button>
       </div>

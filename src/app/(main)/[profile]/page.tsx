@@ -22,7 +22,7 @@ async function page({ params }: Props) {
   const supabase = await createClient();
 
   const [profileDetails, userDetails] = await Promise.all([
-    getProfile(username),
+    getProfile({ username }),
     getUser(supabase),
   ]);
 

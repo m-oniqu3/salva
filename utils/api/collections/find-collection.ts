@@ -12,7 +12,9 @@ export async function findCollection(username: string, slug: string): Response {
     const supabase = await createClient();
 
     //get the profile
-    const { data: profile, error: profileError } = await getProfile(username);
+    const { data: profile, error: profileError } = await getProfile({
+      username,
+    });
 
     if (profileError || !profile) {
       console.error(

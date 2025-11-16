@@ -79,9 +79,10 @@ function CreateCollection(props: Props) {
           <label htmlFor="name" className="text-sml ">
             Collection Name
           </label>
+
           <input
             {...form.register("name")}
-            className="input h-10"
+            className="input h-9"
             placeholder="comfort rewatches"
           />
 
@@ -90,7 +91,7 @@ function CreateCollection(props: Props) {
 
         {/* description */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sml ">
+          <label htmlFor="description" className="text-sml">
             What is this collection about?
           </label>
 

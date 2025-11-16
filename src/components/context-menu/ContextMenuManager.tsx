@@ -2,7 +2,7 @@
 
 import AddElementMenu from "@/components/context-menu/AddElementMenu";
 import ContextMenu from "@/components/context-menu/ContextMenu";
-import EditBoardMenu from "@/components/context-menu/EditBoardMenu";
+import EditCollectionMenu from "@/components/context-menu/EditCollectionMenu";
 import ProfileMenu from "@/components/context-menu/ProfileMenu";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types/context-menu";
@@ -23,8 +23,8 @@ function ContextMenuManager() {
       contextMenuContent = <ProfileMenu />;
       break;
 
-    case ContextMenuEnum.EDIT_BOARD_MENU:
-      contextMenuContent = <EditBoardMenu />;
+    case ContextMenuEnum.EDIT_COLLECTION_MENU:
+      contextMenuContent = <EditCollectionMenu />;
       break;
 
     case ContextMenuEnum.ADD_ELEMENT_MENU:
