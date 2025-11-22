@@ -33,7 +33,7 @@ export async function findCollection(username: string, slug: string): Response {
 
     const { data, error } = await supabase
       .from("collections")
-      .select("id, name, is_private, cover_image, slug")
+      .select("id, name, is_private, cover_image, slug, description")
       .eq("user_id", userID)
       .eq("slug", slug)
       .single();
@@ -50,8 +50,6 @@ export async function findCollection(username: string, slug: string): Response {
       user: { id, userID, username: user, avatar },
       collection: data,
     };
-
-    console.log(summary);
 
     return { data: summary, error: null };
   } catch (error) {

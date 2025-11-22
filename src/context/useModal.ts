@@ -5,7 +5,9 @@ export function useModal() {
   const context = useContext(ModalContext);
 
   if (!context) {
-    throw new Error("useModal must be used within a ModalProvider");
+    throw new Error(
+      "useModal must be used within a ModalProvider. Ensure your component utilizes the use-client directive."
+    );
   }
 
   return context;

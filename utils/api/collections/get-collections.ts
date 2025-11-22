@@ -1,3 +1,4 @@
+import getUser from "@/server-actions/get-user";
 import { CollectionPreview } from "@/types/collection";
 import { Result } from "@/types/result";
 import { getProfile } from "@utils/api/profile/get-profile";
@@ -15,6 +16,8 @@ export async function getCollections(username: string): Response {
   try {
     const supabase = await createClient();
 
+    const { data: user } = await getUser(supabase);
+
     //get the profile
     const { data: profile, error: profileError } = await getProfile({
       username,
@@ -29,21 +32,28 @@ export async function getCollections(username: string): Response {
       return { data: null, error: profileError ?? "No profile found." };
     }
 
-    const { data: collections, error } = await supabase
+    const canGetPrivateCollection = profile.user_id === user?.id;
+
+    //only get private boards if is current user
+    let query = supabase
       .from("collections")
       .select("id, name, is_private, cover_image, slug")
       .eq("user_id", profile.user_id)
       .order("created_at", { ascending: false });
+
+    //filter out private & public collections
+    if (!canGetPrivateCollection) {
+      query = query.eq("is_private", false);
+    }
+
+    const { data: collections, error } = await query;
 
     if (error) {
       console.error("Error fetching collections:", error.message);
       return { data: null, error: "Failed to fetch collections." };
     }
 
-    return {
-      data: collections,
-      error: null,
-    };
+    return { data: collections, error: null };
   } catch (err) {
     console.error("Unexpected error in getCollections:", err);
     return { data: null, error: "Unexpected error fetching collections." };

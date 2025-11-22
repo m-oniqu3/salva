@@ -20,5 +20,5 @@ export default async function (
 
   console.log("got the user ", data.user.id);
 
-  return { error: null, data: data.user };
+  return { data: data.user, error: null };
 }

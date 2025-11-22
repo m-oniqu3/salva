@@ -3,8 +3,6 @@ import getUser from "@/server-actions/get-user";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 
-import { redirect } from "next/navigation";
-
 type Props = {
   children: React.ReactNode;
 };
@@ -15,25 +13,28 @@ export default async function MainLayout({ children }: Props) {
   const supabase = await createClient();
   const { data: user } = await getUser(supabase);
 
+  console.log(user);
+
   const { data: profile, error } = await getProfile({
     username: null,
     id: user?.id,
   });
 
-  console.log(profile);
+  console.log(profile, error);
 
   //todo : handle error case when there is no profile
 
-  if (error) {
-    return redirect("/");
-  }
+  // if (error) {
+  //   console.log(error);
+  //   redirect("/");
+  // }
 
   return (
-    <>
+    <div>
       {/* Layout UI */}
       {/* Place children where you want to render a page or nested layout */}
       <AuthNavbar profile={profile} />
       <main>{children}</main>
-    </>
+    </div>
   );
 }

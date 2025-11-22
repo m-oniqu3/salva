@@ -1,8 +1,8 @@
 "use client";
 
 import AddElementMenu from "@/components/context-menu/AddElementMenu";
+import CollectionActionsMenu from "@/components/context-menu/CollectionActionsMenu";
 import ContextMenu from "@/components/context-menu/ContextMenu";
-import EditCollectionMenu from "@/components/context-menu/EditCollectionMenu";
 import ProfileMenu from "@/components/context-menu/ProfileMenu";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types/context-menu";
@@ -23,8 +23,10 @@ function ContextMenuManager() {
       contextMenuContent = <ProfileMenu />;
       break;
 
-    case ContextMenuEnum.EDIT_COLLECTION_MENU:
-      contextMenuContent = <EditCollectionMenu />;
+    case ContextMenuEnum.COLLECTION_ACTIONS_MENU:
+      contextMenuContent = (
+        <CollectionActionsMenu closeContextMenu={closeContextMenu} />
+      );
       break;
 
     case ContextMenuEnum.ADD_ELEMENT_MENU:

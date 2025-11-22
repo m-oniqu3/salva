@@ -1,5 +1,6 @@
 "use client";
 
+import EditCollection from "@/components/collection/EditCollection";
 import MobileMenu from "@/components/nav/MobileMenu";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
@@ -20,6 +21,10 @@ function ModalManager() {
   switch (currentModal) {
     case ModalEnum.CREATE_COLLECTION_MODAL:
       ModalContent = <CreateCollection closeModal={closeModal} />;
+      break;
+
+    case ModalEnum.ECM:
+      ModalContent = <EditCollection closeModal={closeModal} />;
       break;
 
     case ModalEnum.MOBILE_MENU:

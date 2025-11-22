@@ -38,12 +38,18 @@ export async function getProfile(props: Props): Response {
       return { data, error };
     }
 
-    return { data: null, error: "No identifier provided" };
+    return null;
   }
   //   return { data: null, error: "No identifier provided" };
   // }
 
-  const { data, error } = await findProfile();
+  const profile = await findProfile();
+
+  if (!profile) {
+    return { data: null, error: "No profile found." };
+  }
+
+  const { data, error } = profile;
 
   if (error) {
     console.error("Error fetching profile data", error);
@@ -51,10 +57,7 @@ export async function getProfile(props: Props): Response {
   }
 
   if (!data) {
-    return {
-      data: null,
-      error: "Could not find profile",
-    };
+    return { data: null, error: "Could not find profile" };
   }
 
   return { data, error: null };

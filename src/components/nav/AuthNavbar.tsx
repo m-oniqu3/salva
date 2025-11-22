@@ -55,10 +55,10 @@ function AuthNavbar({ profile }: Props) {
 
   return (
     <header className="flex items-center h-20">
-      <nav className="wrapper flex items-center justify-between gap-6 md:gap-6 ">
-        <div className="flex gap-4 items-center">
-          <Link href="/">
-            <FilmIcon className="size-7" />
+      <nav className="w-full flex items-center justify-between gap-6 md:gap-6 ">
+        <div className="flex gap-6 items-center">
+          <Link href="/" className="font-extrabold capitalize text-xl relative">
+            <FilmIcon className="size-6 text-neutral-700" />
           </Link>
 
           <Link href={"#"} className="text-sml font-semibold hidden md:grid">

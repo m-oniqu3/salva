@@ -27,7 +27,6 @@ body {
   color: #35373a;
   font-size: 0.9rem;
   font-family: var(--font-geist-sans);
-
 }
 
 
@@ -36,12 +35,8 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-
-
   }
 }
-
-
 
 @layer components {
 
@@ -71,7 +66,8 @@ body {
   }
 
   .gray {
-    @apply bg-[#efefef]
+    @apply bg-[#F5F4F2]
+    /* @apply bg-[#E8E7E5] */
     /* @apply bg-gray-100 */
   }
 

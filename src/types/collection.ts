@@ -30,5 +30,6 @@ export type CollectionSummary = {
     is_private: boolean;
     cover_image: string | null;
     slug: string | null;
+    description: string | null;
   };
 };
