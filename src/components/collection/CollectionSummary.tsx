@@ -11,13 +11,15 @@ import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import type { CollectionSummary } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
+import { User } from "@supabase/supabase-js";
 import Image from "next/image";
+import Link from "next/link";
 
-type Props = { summary: CollectionSummary };
+type Props = { summary: CollectionSummary; user: User | null };
 
-function CollectionSummary({ summary }: Props) {
+function CollectionSummary({ summary, user }: Props) {
   const {
-    user: { username, avatar },
+    user: { username, avatar, firstname },
     collection: { name, is_private: locked, description },
   } = summary;
 
@@ -44,45 +46,49 @@ function CollectionSummary({ summary }: Props) {
   }
 
   return (
-    <section className="flex flex-col justify-center items-center text-center">
-      <article className="flex flex-col justify-center ">
+    <section className="flex flex-col max-w-[450px]">
+      <article className="flex flex-col gap-1">
         <h1 className="font-bold text-lg max-w-lg">{name}</h1>
 
         {description && (
-          <p className="text-zinc-500 leading-5 max-w-[450px] text-center mx-auto">
-            {description}
-          </p>
+          <p className="text-zinc-500 text-sml leading-5">{description}</p>
         )}
 
-        <div className="flex justify-center items-center gap-1 font-semibold text-zinc-500 text-sml mt-2">
-          {locked ? (
-            <p className="flex justify-center gap-1 items-center font-semibold">
+        <div className="flex gap-2 font-semibold text-zinc-500 text-xs mt-1">
+          {locked && (
+            <p className="flex gap-1 font-semibold">
               Private
               <span>
                 <PrivateIcon className="size-4" />
               </span>
             </p>
-          ) : (
-            <p className="font-semibold flex gap-1">
-              <span>{description?.length ? description?.length - 12 : 8}</span>
-              <span>
-                {description?.length === 1 ? "Follower" : "Followers"}
-              </span>
-            </p>
           )}
-          &#xb7;
-          <p className="font-semibold">{description?.length ?? 0} films</p>
+
+          {locked && <span>&#xb7;</span>}
+
+          <p className="">{description?.length ?? 0} films</p>
+
+          <span>&#xb7;</span>
+
+          <p className="font-semibold flex gap-1">
+            <span>{description?.length ? description?.length - 12 : 8}</span>
+            <span>{description?.length === 1 ? "Follower" : "Followers"}</span>
+          </p>
+
+          {!user && <span>&#xb7;</span>}
+
+          {!user && <button className="cursor-pointer">Follow</button>}
         </div>
 
-        <div className="flex justify-center mt-4 relative left-2">
-          <figure className="">
+        <div className="flex gap-3 mt-4">
+          <figure className="flex gap-3 items-center">
             {avatar && (
               <Image
                 src={avatar}
                 alt={`${username}'s avatar'`}
                 width="90"
                 height="90"
-                className="rounded-full object-cover size-9 gray"
+                className="rounded-full object-cover size-8 gray"
               />
             )}
 
@@ -92,37 +98,49 @@ function CollectionSummary({ summary }: Props) {
                 alt={`${username}'s avatar'`}
                 width="90"
                 height="90"
-                className="rounded-full object-cover size-9 gray"
+                className="rounded-full object-cover size-8 gray"
               />
+            )}
+
+            {!user && (
+              <figcaption>
+                By
+                <span>&nbsp;</span>
+                <Link href={"#"} className="font-bold">
+                  {firstname || username}
+                </Link>
+              </figcaption>
             )}
           </figure>
 
-          <div className="gray size-9 flex items-center justify-center rounded-full relative -left-3">
-            <UserAddIcon className="size-4 text-zinc-500" />
-          </div>
+          {user && (
+            <div className="flex gap-3">
+              <div className="gray size-8 flex items-center justify-center rounded-full">
+                <UserAddIcon className="size-3 text-zinc-500" />
+              </div>
+
+              <button className="rounded-full size-8 flex justify-center items-center gray cursor-pointer">
+                <SolidSparkleIcon className="size-3 text-zinc-500" />
+              </button>
+
+              <button
+                onClick={handleAdd}
+                className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
+                name="Collection Actions Menu"
+              >
+                <AddIcon className="size-3 text-zinc-500" />
+              </button>
+
+              <button
+                onClick={handleMore}
+                className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
+              >
+                <MoreHorizontalIcon className="size-3 text-zinc-500" />
+              </button>
+            </div>
+          )}
         </div>
       </article>
-
-      <div className="flex justify-center gap-2 mt-7">
-        <button className="rounded-full size-10 flex justify-center items-center gray cursor-pointer">
-          <SolidSparkleIcon className="size-4 text-zinc-500 " />
-        </button>
-
-        <button
-          onClick={handleAdd}
-          className="rounded-full size-10 flex justify-center items-center gray cursor-pointer"
-          name="Collection Actions Menu"
-        >
-          <AddIcon className="size-4 text-zinc-500 " />
-        </button>
-
-        <button
-          onClick={handleMore}
-          className="rounded-full size-10 flex justify-center items-center gray cursor-pointer"
-        >
-          <MoreHorizontalIcon className="size-4 text-zinc-500 " />
-        </button>
-      </div>
     </section>
   );
 }

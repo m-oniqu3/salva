@@ -1,5 +1,7 @@
 import CollectionSummary from "@/components/collection/CollectionSummary";
+import getUser from "@/server-actions/get-user";
 import { findCollection } from "@utils/api/collections/find-collection";
+import { createClient } from "@utils/supabase/server";
 
 type Props = {
   params: Promise<{ profile: string; collection: string }>;
@@ -7,6 +9,7 @@ type Props = {
 
 async function page({ params }: Props) {
   const { collection: slug, profile: username } = await params;
+  const supabase = await createClient();
 
   //clean up slug;
   const collection_name = decodeURIComponent(slug);
@@ -22,10 +25,14 @@ async function page({ params }: Props) {
     return <p>no collection found</p>;
   }
 
+  const { data: user } = await getUser(supabase);
+
+  //is board private?
+
   return (
-    <div className="py-8">
-      <CollectionSummary summary={collection} />
-      <p>films for collection</p>
+    <div className="py-8 flex flex-col gap-20">
+      <CollectionSummary summary={collection} user={user} />
+      <p className="">films for collection</p>
     </div>
   );
 }

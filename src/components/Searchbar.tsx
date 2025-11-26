@@ -2,7 +2,7 @@ import { SearchIcon, SolidSparkleIcon } from "@/components/icons";
 
 function Searchbar() {
   return (
-    <form className="relative w-full max-w-72 md:max-w-96">
+    <form className="relative w-full max-w-72 md:max-w-96 mx-auto">
       <div className="absolute top-3 left-3 z-10">
         <SolidSparkleIcon className="size-4 text-zinc-400" />
       </div>

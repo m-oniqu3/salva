@@ -29,7 +29,7 @@ export async function findCollection(username: string, slug: string): Response {
       };
     }
 
-    const { id, avatar, username: user, user_id: userID } = profile;
+    const { id, avatar, username: user, user_id: userID, firstname } = profile;
 
     const { data, error } = await supabase
       .from("collections")
@@ -47,7 +47,7 @@ export async function findCollection(username: string, slug: string): Response {
     }
 
     const summary = {
-      user: { id, userID, username: user, avatar },
+      user: { id, userID, username: user, avatar, firstname },
       collection: data,
     };
 

@@ -22,6 +22,7 @@ export type CollectionSummary = {
     userID: string;
     username: string;
     avatar: string | null;
+    firstname: string | null;
   };
 
   collection: {
