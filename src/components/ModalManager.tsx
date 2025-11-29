@@ -1,5 +1,6 @@
 "use client";
 
+import CollectionCoverPicker from "@/components/collection/CollectionCoverPicker";
 import EditCollection from "@/components/collection/EditCollection";
 import MobileMenu from "@/components/nav/MobileMenu";
 import { useModal } from "@/context/useModal";
@@ -25,6 +26,10 @@ function ModalManager() {
 
     case ModalEnum.ECM:
       ModalContent = <EditCollection closeModal={closeModal} />;
+      break;
+
+    case ModalEnum.IPM:
+      ModalContent = <CollectionCoverPicker closeModal={closeModal} />;
       break;
 
     case ModalEnum.MOBILE_MENU:

@@ -2,6 +2,9 @@
 
 import Button from "@/components/Button";
 import { AddIcon, CloseIcon, LoadingIcon } from "@/components/icons";
+import { ModalActionEnum } from "@/context/actions/ModalActions";
+import { useModal } from "@/context/useModal";
+import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { findCollection } from "@utils/api/collections/find-collection";
 import {
@@ -9,7 +12,7 @@ import {
   EditedCollectionSchema,
 } from "@utils/validation/edit-collection";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
@@ -18,29 +21,25 @@ type Props = {
 
 function EditCollection(props: Props) {
   const { closeModal } = props;
+  const { dispatch } = useModal();
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
   const pathname = usePathname();
   console.log(pathname.split("/"));
-  const [username, slug] = pathname.split("/").slice(1);
+  const [username, slug] = pathname.split("/").slice(1) as Array<string | null>;
 
   console.log(username, slug);
 
-  const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const triggerFileInput = () => hiddenFileInputRef.current?.click();
+  // const triggerFileInput = () => hiddenFileInputRef.current?.click();
 
   const form = useForm<EditedCollection>({
     resolver: zodResolver(EditedCollectionSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-    },
+    defaultValues: { name: "", description: "" },
   });
 
   useEffect(() => {
     async function fetchCollection() {
-      let isMounted = true;
+      // let isMounted = true;
 
       try {
         if (!username || !slug) return;
@@ -51,9 +50,9 @@ function EditCollection(props: Props) {
           throw new Error(error);
         }
 
-        if (!isMounted) return;
+        // if (!isMounted) return;
 
-        if (!data?.collection) {
+        if (!data || !data.collection) {
           form.reset({ name: "", description: "" });
           return;
         }
@@ -68,13 +67,20 @@ function EditCollection(props: Props) {
         });
       }
 
-      return () => {
-        isMounted = false; // avoids state updates if component unmounts
-      };
+      // return () => {
+      //   isMounted = false; // avoids state updates if component unmounts
+      // };
     }
 
     fetchCollection();
   }, [form, username, slug]);
+
+  function openImagePickerModal() {
+    dispatch({
+      type: ModalActionEnum.OPEN_MODAL,
+      payload: ModalEnum.IPM,
+    });
+  }
 
   function onSubmitForm(input: EditedCollection) {
     startEditCollectionTransition(async () => {
@@ -114,19 +120,11 @@ function EditCollection(props: Props) {
 
           <button
             type="button"
-            onClick={triggerFileInput}
+            onClick={openImagePickerModal}
             className="gray flex justify-center items-center size-28 rounded-xl gray z-0 cursor-pointer"
           >
             <AddIcon className="size-5 text-neutral-400" />
           </button>
-
-          <input
-            // {...register("image")}
-            ref={hiddenFileInputRef}
-            hidden
-            type="file"
-            // onChange={handleFileChange}
-          />
 
           <p className="input-error"></p>
         </div>

@@ -66,10 +66,8 @@ function CollectionActionsMenu(props: Props) {
 
   // handler
   function handleOptionsClick(key: string) {
-    console.log(key);
     const action = Actions[key];
 
-    console.log(action);
     if (!action) throw Error("No action exists for the given key.");
 
     action(); // safe call
