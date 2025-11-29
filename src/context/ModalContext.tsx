@@ -29,8 +29,6 @@ export function ModalContextProvider({ children }: ContextProviderProps) {
     dispatch({ type: ModalActionEnum.CLOSE_MODAL });
   }
 
-  console.log(state);
-
   return (
     <ModalContext.Provider
       value={{

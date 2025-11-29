@@ -58,7 +58,7 @@ function CreateCollection(props: Props) {
 
   return (
     <div className="c-container max-w-sm">
-      <header className="relative pb-8 ">
+      <header className="relative pb-8">
         <h1 className="text-lg font-semibold">Create Collection</h1>
         <p className="text-sml">Create a collection to organize your films.</p>
 
@@ -66,7 +66,7 @@ function CreateCollection(props: Props) {
           onClick={closeModal}
           className="absolute top-0 right-0 cursor-pointer"
         >
-          <CloseIcon className="w-5 h-5" />
+          <CloseIcon className="size-5" />
         </button>
       </header>
 
@@ -123,7 +123,7 @@ function CreateCollection(props: Props) {
           </p>
         </div>
 
-        <div className=" pt-8">
+        <div className="pt-8">
           <Button
             disabled={isCreatingCollection}
             type="submit"

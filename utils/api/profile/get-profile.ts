@@ -15,8 +15,6 @@ export async function getProfile(props: Props): Response {
 
   const { username, id } = props;
 
-  console.log(props);
-
   async function findProfile() {
     if (username) {
       const { data, error } = await supabase

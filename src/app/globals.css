@@ -4,7 +4,7 @@
   /* --background: #f4f4f4; */
   --background: rgb(245, 245, 245);
   --foreground: #171717;
-  --text-smlall: 0.8rem;
+  --text-small: 0.8rem;
 }
 
 @theme inline {
@@ -58,7 +58,7 @@ body {
 
   .input {
     @apply w-full bg-slate-100 p-2 font-medium rounded-md focus:outline-none;
-    font-size: var(--text-smlall);
+    font-size: var(--text-small);
   }
 
   .input-error {
@@ -67,7 +67,7 @@ body {
 
   .gray {
     @apply bg-[#F5F4F2]
-    /* @apply bg-[#E8E7E5] */
+    /* @apply bg-zinc-100 */
     /* @apply bg-gray-100 */
   }
 

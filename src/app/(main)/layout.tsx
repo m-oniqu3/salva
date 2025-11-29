@@ -13,14 +13,10 @@ export default async function MainLayout({ children }: Props) {
   const supabase = await createClient();
   const { data: user } = await getUser(supabase);
 
-  console.log(user);
-
-  const { data: profile, error } = await getProfile({
+  const { data: profile } = await getProfile({
     username: null,
     id: user?.id,
   });
-
-  console.log(profile, error);
 
   //todo : handle error case when there is no profile
 

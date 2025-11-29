@@ -11,10 +11,6 @@ async function page({ params }: Props) {
   const { collection: slug, profile: username } = await params;
   const supabase = await createClient();
 
-  //clean up slug;
-  const collection_name = decodeURIComponent(slug);
-
-  console.log(collection_name);
   const { data: collection, error } = await findCollection(username, slug);
 
   if (error) {

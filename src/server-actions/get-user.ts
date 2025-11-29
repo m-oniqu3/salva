@@ -18,7 +18,7 @@ export default async function (
     return { data: null, error: "No user found." };
   }
 
-  console.log("got the user ", data.user.id);
+  // console.log("got the user ", data.user.id);
 
   return { data: data.user, error: null };
 }
