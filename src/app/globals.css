@@ -57,7 +57,7 @@ body {
   }
 
   .input {
-    @apply w-full bg-slate-100 p-2 font-medium rounded-md focus:outline-none;
+    @apply w-full bg-slate-100 p-2 font-medium rounded-md focus:outline-none text-neutral-700;
     font-size: var(--text-small);
   }
 

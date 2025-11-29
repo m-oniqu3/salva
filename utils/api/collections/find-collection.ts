@@ -9,6 +9,8 @@ type Response = Promise<Result<CollectionSummary | null>>;
 
 export async function findCollection(username: string, slug: string): Response {
   try {
+    if (!username || !slug) return { data: null, error: "Missing identifier." };
+
     const supabase = await createClient();
 
     //get the profile

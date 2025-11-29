@@ -87,7 +87,7 @@ function AuthNavbar({ profile }: Props) {
           <div className="hidden md:flex items-center gap-4">
             <Button
               onClick={handleCreateCollection}
-              className="bg-black text-white"
+              className="bg-neutral-700 text-white"
             >
               Create
             </Button>
