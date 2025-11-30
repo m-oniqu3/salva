@@ -1,5 +1,6 @@
 "use client";
 
+import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import {
   ArrowDownIcon,
@@ -15,7 +16,6 @@ import { useModal } from "@/context/useModal";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
-import Image from "next/image";
 import Link from "next/link";
 import { MouseEvent } from "react";
 
@@ -94,32 +94,17 @@ function AuthNavbar({ profile }: Props) {
 
             <BookmarkIcon className="size-5" />
 
-            <Link
-              href={`/${profile.username}`}
-              className="border-black border-2 rounded-full flex items-center justify-center size-8"
-            >
-              <figure className="">
-                {profile.avatar && (
-                  <Image
-                    src={profile.avatar}
-                    alt={`${profile.username}'s avatar'`}
-                    width="90"
-                    height="90"
-                    className="rounded-full object-cover size-6 gray"
-                  />
-                )}
-
-                {!profile.avatar && (
-                  <Image
-                    src={`https://avatar.iran.liara.run/username?username=${profile.username}`}
-                    alt={`${profile.username}'s avatar'`}
-                    width="90"
-                    height="90"
-                    className="rounded-full object-cover size-6 gray"
-                  />
-                )}
-              </figure>
-            </Link>
+            <div className="border-neutral-700 border-2 rounded-full flex items-center justify-center size-8">
+              <Avatar
+                avatar={profile.avatar}
+                username={profile.username}
+                className={"gray size-6 rounded-full"}
+                fallback={{
+                  className:
+                    "font-bold text-xs bg-neutral-600 text-neutral-100",
+                }}
+              />
+            </div>
 
             <button
               type="button"

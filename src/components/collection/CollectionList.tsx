@@ -28,7 +28,7 @@ async function CollectionList({ username }: Props) {
   });
 
   return (
-    <div className="wrapper grid items-center justify-center grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
+    <div className=" grid items-center justify-center grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
       {previews}
     </div>
   );

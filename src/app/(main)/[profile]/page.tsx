@@ -36,7 +36,7 @@ async function page({ params }: Props) {
   }
 
   return (
-    <div className="space-y-16 py-10">
+    <div className="flex flex-col gap-10 py-10">
       <ProfileSummary profile={profile} userID={userID} />
       <CollectionList username={username} />
     </div>

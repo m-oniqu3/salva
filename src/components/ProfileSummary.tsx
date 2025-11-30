@@ -1,6 +1,5 @@
-import Button from "@/components/Button";
+import Avatar from "@/components/Avatar";
 import { Profile } from "@/types/user";
-import Image from "next/image";
 
 type Props = {
   profile: Profile;
@@ -17,58 +16,56 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
-  const isAuth = profileID === userID;
+  const isOwner = profileID === userID;
 
   return (
-    <section className="py-4">
-      <article className="wrapper flex flex-col gap-4 place-items-center">
-        {avatar && (
-          <figure className="">
-            <Image
-              src={avatar}
-              alt={`${username}'s avatar'`}
-              width="90"
-              height="90"
-              className="rounded-full object-cover size-24 gray"
-            />
-          </figure>
-        )}
+    <section className="py-4 max-w-[450px]">
+      <article className="flex flex-col gap-2">
+        <Avatar
+          avatar={avatar}
+          username={username}
+          className={"gray rounded-2xl size-[70px]"}
+          fallback={{
+            className: "text-3xl font-semibold bg-neutral-700 text-neutral-100",
+            chars: 2,
+          }}
+        />
 
-        {!avatar && (
-          <figure className="">
-            <Image
-              src={`https://avatar.iran.liara.run/username?username=${username}`}
-              alt={`${username}'s avatar'`}
-              width="90"
-              height="90"
-              className="rounded-full object-cover size-24 gray"
-            />
-          </figure>
-        )}
-
-        <div className="flex flex-col items-center">
+        <div className="mt-2">
           {firstname && (
-            <h2 className="font-semibold text-lg">
+            <h2 className="font-bold text-xl capitalize text-neutral-700">
               {firstname} {lastname}
             </h2>
           )}
 
-          <div className="flex flex-col items-center gap-1 text-sm text-center max-w-72">
-            <div className="flex items-center gap-1 text-zinc-500 text-sm font-semibold">
-              <p className="">@{username}</p>
-              &#xb7;
-              <p className="text-zinc-500 font-semibold">
-                {username.length} following
-              </p>
-            </div>
-
-            {bio && <p className="text-zinc-500 leading-5">{bio}</p>}
-          </div>
+          {!firstname && username && (
+            <h2 className="font-bold text-xl text-neutral-700">{username}</h2>
+          )}
         </div>
 
-        <div className="mt-2">
-          {isAuth && <Button className="gray">Edit Profile</Button>}
-          {!isAuth && <Button className="gray">Follow</Button>}
+        {bio && <p className="text-zinc-500 leading-5 text-[13px]">{bio}</p>}
+
+        <div className="flex gap-2 font-semibold text-neutral-600 text-sml">
+          <p className="">@{username}</p>
+
+          <span>&#xb7;</span>
+
+          <p>{username.length} Following</p>
+
+          {bio && <span>&#xb7;</span>}
+
+          <p className="font-semibold flex gap-1">
+            <span>{bio?.length ? bio?.length - 12 : 8}</span>
+            <span>{bio?.length === 1 ? "Follower" : "Followers"}</span>
+          </p>
+
+          {!isOwner && <span>&#xb7;</span>}
+
+          {!isOwner && <button className="cursor-pointer">Follow</button>}
+
+          {isOwner && <span> &#xb7;</span>}
+
+          {isOwner && <button className="cursor-pointer">Edit Profile</button>}
         </div>
       </article>
     </section>

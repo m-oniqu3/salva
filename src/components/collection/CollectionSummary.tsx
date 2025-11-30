@@ -1,5 +1,6 @@
 "use client";
 
+import Avatar from "@/components/Avatar";
 import {
   AddIcon,
   MoreHorizontalIcon,
@@ -12,7 +13,6 @@ import { useContextMenu } from "@/context/useContextMenu";
 import type { CollectionSummary } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { User } from "@supabase/supabase-js";
-import Image from "next/image";
 import Link from "next/link";
 
 type Props = { summary: CollectionSummary; user: User | null };
@@ -27,6 +27,7 @@ function CollectionSummary({ summary, user }: Props) {
 
   const { dispatch } = useContextMenu();
 
+  //todo: better function names for handlemore & handle add
   function handleMore() {
     dispatch({
       type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
@@ -83,28 +84,16 @@ function CollectionSummary({ summary, user }: Props) {
         </div>
 
         <div className="flex gap-3 mt-4">
-          <figure className="flex gap-3 items-center">
-            <Link href={`/${username}`}>
-              {avatar && (
-                <Image
-                  src={avatar}
-                  alt={`${username}'s avatar'`}
-                  width="90"
-                  height="90"
-                  className="rounded-full object-cover size-8 gray"
-                />
-              )}
-
-              {!avatar && (
-                <Image
-                  src={`https://avatar.iran.liara.run/username?username=${username}`}
-                  alt={`${username}'s avatar'`}
-                  width="90"
-                  height="90"
-                  className="rounded-full object-cover size-8 gray"
-                />
-              )}
-            </Link>
+          <div className="flex gap-3 items-center">
+            <Avatar
+              avatar={avatar}
+              username={username}
+              className={"gray size-8 rounded-full"}
+              fallback={{
+                className: "font-bold text-sml bg-neutral-600 text-neutral-100",
+                chars: 1,
+              }}
+            />
 
             {!isOwner && (
               <figcaption className="text-sml">
@@ -115,16 +104,16 @@ function CollectionSummary({ summary, user }: Props) {
                 </Link>
               </figcaption>
             )}
-          </figure>
+          </div>
 
           {isOwner && (
             <div className="flex gap-3">
               <div className="gray size-8 flex items-center justify-center rounded-full">
-                <UserAddIcon className="size-3 text-zinc-500" />
+                <UserAddIcon className="size-3 text-neutral-500" />
               </div>
 
               <button className="rounded-full size-8 flex justify-center items-center gray cursor-pointer">
-                <SolidSparkleIcon className="size-3 text-zinc-500" />
+                <SolidSparkleIcon className="size-3 text-neutral-500" />
               </button>
 
               <button
@@ -132,14 +121,14 @@ function CollectionSummary({ summary, user }: Props) {
                 className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
                 name="Collection Actions Menu"
               >
-                <AddIcon className="size-3 text-zinc-500" />
+                <AddIcon className="size-3 text-neutral-500" />
               </button>
 
               <button
                 onClick={handleMore}
                 className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
               >
-                <MoreHorizontalIcon className="size-3 text-zinc-500" />
+                <MoreHorizontalIcon className="size-3 text-neutral-500" />
               </button>
             </div>
           )}
