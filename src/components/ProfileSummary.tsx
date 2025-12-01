@@ -20,27 +20,22 @@ function ProfileSummary({ profile, userID }: Props) {
 
   return (
     <section className="py-4 max-w-[450px]">
-      <article className="flex flex-col gap-2">
+      <article className="flex flex-col gap-1">
         <Avatar
           avatar={avatar}
           username={username}
-          className={"gray rounded-2xl size-[70px]"}
-          fallback={{
-            className: "text-3xl font-semibold bg-neutral-700 text-neutral-100",
-            chars: 2,
-          }}
+          className={"size-[70px] rounded-full text-2xl"}
         />
 
-        <div className="mt-2">
-          {firstname && (
-            <h2 className="font-bold text-xl capitalize text-neutral-700">
-              {firstname} {lastname}
-            </h2>
-          )}
-
-          {!firstname && username && (
-            <h2 className="font-bold text-xl text-neutral-700">{username}</h2>
-          )}
+        <div className="mt-3">
+          <h2 className="font-semibold text-lg capitalize text-neutral-700">
+            {firstname && (
+              <span>
+                {firstname} {lastname}
+              </span>
+            )}
+            {!firstname && username && <span>{username}</span>}
+          </h2>
         </div>
 
         {bio && <p className="text-zinc-500 leading-5 text-[13px]">{bio}</p>}

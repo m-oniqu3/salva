@@ -12,8 +12,6 @@ function CollectionPreview({ preview, username }: Props) {
 
   const { is_private, name, cover_image, slug } = preview;
 
-  console.log(slug);
-
   const cover = cover_image ? (
     <Image
       src={cover_image as string}

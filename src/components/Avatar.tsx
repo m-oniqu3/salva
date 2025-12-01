@@ -20,15 +20,15 @@ type Props<T> = {
 };
 
 function Avatar<T>(props: Props<T>) {
-  const { avatar, username, className = "", image, fallback } = props;
+  const { avatar, username, className } = props;
+
+  //username initials (characters)
+  const chars = username.at(0);
 
   return (
-    <Link
-      href={`/${username}`}
-      className={`relative overflow-hidden ${className}`}
-    >
+    <Link href={`/${username}`} className={`overflow-hidden ${className}`}>
       {avatar && (
-        <figure className={`size-full ${image?.className || ""}`}>
+        <figure>
           <Image
             src={avatar}
             alt={`${username}'s avatar'`}
@@ -40,16 +40,25 @@ function Avatar<T>(props: Props<T>) {
       )}
 
       {!avatar && (
-        <div
-          className={`size-full flex items-center justify-center uppercase ${
-            fallback?.className || ""
-          }`}
+        <span
+          className="size-full grid place-items-center uppercase bg-[#ffccb3] text-[#a55833]"
+          style={{ fontSize: "inherit" }}
         >
-          {username.slice(0, fallback?.chars || 1)}
-        </div>
+          {chars}
+        </span>
       )}
     </Link>
   );
 }
 
 export default Avatar;
+
+/**
+ * <div
+          className={`size-full flex items-center justify-center uppercase ${
+            fallback?.className || ""
+          }`}
+        >
+          {username.slice(0, fallback?.chars || 1)}
+        </div>
+ */

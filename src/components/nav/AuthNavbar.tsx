@@ -98,11 +98,7 @@ function AuthNavbar({ profile }: Props) {
               <Avatar
                 avatar={profile.avatar}
                 username={profile.username}
-                className={"gray size-6 rounded-full"}
-                fallback={{
-                  className:
-                    "font-bold text-xs bg-neutral-600 text-neutral-100",
-                }}
+                className={"size-6 rounded-full text-[12px]"}
               />
             </div>
 

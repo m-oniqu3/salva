@@ -88,11 +88,7 @@ function CollectionSummary({ summary, user }: Props) {
             <Avatar
               avatar={avatar}
               username={username}
-              className={"gray size-8 rounded-full"}
-              fallback={{
-                className: "font-bold text-sml bg-neutral-600 text-neutral-100",
-                chars: 1,
-              }}
+              className={"size-8 rounded-full"}
             />
 
             {!isOwner && (
