@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const CreateCollectionSchema = z.object({
+export const NewCollectionSchema = z.object({
   name: z
     .string({ message: "Name is required" })
     .min(3, "Name should be at least 3 characters"),
@@ -12,4 +12,4 @@ export const CreateCollectionSchema = z.object({
   private: z.boolean().optional(),
 });
 
-export type CreateCollectionSchema = z.infer<typeof CreateCollectionSchema>;
+export type NewCollection = z.infer<typeof NewCollectionSchema>;

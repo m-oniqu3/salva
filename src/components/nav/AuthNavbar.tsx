@@ -1,7 +1,6 @@
 "use client";
 
-import { ContextMenuActionEnum } from "@/actions/ContextMenuActions";
-import { ModalActionEnum } from "@/actions/ModalActions";
+import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import {
   ArrowDownIcon,
@@ -10,17 +9,23 @@ import {
   MenuIcon,
 } from "@/components/icons";
 import Searchbar from "@/components/Searchbar";
+import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
+import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
-import { ContextMenuEnum, ModalEnum } from "@/types";
-import Image from "next/image";
+import { ContextMenuEnum } from "@/types/context-menu";
+import { ModalEnum } from "@/types/modal";
+import { Profile } from "@/types/user";
 import Link from "next/link";
 import { MouseEvent } from "react";
 
-function AuthNavbar() {
+type Props = {
+  profile: Profile | null;
+};
+
+function AuthNavbar({ profile }: Props) {
   const { dispatch } = useModal();
   const { dispatch: ctxDispatch } = useContextMenu();
-  // const [isOpen, setIsOpen] = useState(false);
 
   function handleMobileMenu() {
     dispatch({
@@ -32,7 +37,7 @@ function AuthNavbar() {
   function handleCreateCollection() {
     dispatch({
       type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.CREATE_BOARD_MODAL,
+      payload: ModalEnum.CREATE_COLLECTION_MODAL,
     });
   }
 
@@ -47,18 +52,29 @@ function AuthNavbar() {
       },
     });
   }
+
   return (
     <header className="flex items-center h-20">
-      <nav className="wrapper flex items-center justify-between gap-6 md:gap-6 ">
-        <div className="flex gap-4 items-center">
-          <Link href="/">
-            <FilmIcon className="size-7" />
+      <nav className="w-full flex items-center justify-between gap-6 md:gap-6">
+        <ul className="flex gap-6 items-center">
+          <Link href="/" className="font-extrabold capitalize text-xl relative">
+            <FilmIcon className="size-6 text-black" />
           </Link>
 
-          <Link href={"#"} className="text-sm font-semibold">
+          <Link
+            href={"#"}
+            className="text-zinc-600 text-sml font-semibold hidden md:grid"
+          >
             Discover
           </Link>
-        </div>
+
+          <Link
+            href={"#"}
+            className="text-zinc-600 text-sml font-semibold hidden md:grid"
+          >
+            Shop
+          </Link>
+        </ul>
 
         <Searchbar />
 
@@ -66,33 +82,40 @@ function AuthNavbar() {
           <MenuIcon className="size-5" />
         </button>
 
-        <div className="hidden md:flex items-center gap-4">
-          <Button
-            onClick={handleCreateCollection}
-            className="bg-black text-white"
-          >
-            Create
-          </Button>
-          <BookmarkIcon className="size-5" />
+        {!profile && (
+          <div className="hidden md:flex items-center gap-4">
+            <Button>Log In</Button>
+            <Button className="bg-black text-white">Sign Up</Button>
+          </div>
+        )}
 
-          <figure className="size-7 ">
-            <Image
-              src="https://i.pinimg.com/1200x/ff/02/39/ff02397557d58cfcf8d8529fc152c62e.jpg"
-              alt="Clover from totally spies"
-              width="100"
-              height="100"
-              className="rounded-full object-cover "
+        {profile && (
+          <div className="hidden md:flex items-center gap-4">
+            <Button
+              onClick={handleCreateCollection}
+              className="bg-black text-white"
+            >
+              Create
+            </Button>
+
+            <BookmarkIcon className="size-4" />
+
+            {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
+            <Avatar
+              avatar={profile.avatar}
+              username={profile.username}
+              className={"size-7 rounded-full text-[12px]"}
             />
-          </figure>
 
-          <button
-            type="button"
-            className="cursor-pointer"
-            onClick={handleContextMenu}
-          >
-            <ArrowDownIcon className="size-5" />
-          </button>
-        </div>
+            <button
+              type="button"
+              className="cursor-pointer"
+              onClick={handleContextMenu}
+            >
+              <ArrowDownIcon className="size-4" />
+            </button>
+          </div>
+        )}
       </nav>
     </header>
   );

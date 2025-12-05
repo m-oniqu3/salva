@@ -1,10 +1,9 @@
 "use client";
 
-import { ContextMenuActionEnum } from "@/actions/ContextMenuActions";
 import { AddIcon, MoreHorizontalIcon } from "@/components/icons";
-import ProfileSummary from "@/components/ProfileSummary";
+import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
-import { ContextMenuEnum } from "@/types";
+import { ContextMenuEnum } from "@/types/context-menu";
 
 function HomePage() {
   const { dispatch: ctxDispatch } = useContextMenu();
@@ -46,11 +45,6 @@ function HomePage() {
           <MoreHorizontalIcon className="size-5" />
         </button>
       </div>
-
-      <ProfileSummary />
-      <ProfileSummary />
-      <ProfileSummary />
-      <ProfileSummary />
     </div>
   );
 }

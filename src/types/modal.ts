@@ -1,0 +1,9 @@
+export enum ModalEnum {
+  CREATE_COLLECTION_MODAL = "CREATE_COLLECTION_MODAL",
+  ECM = "EDIT_COLLECTION_MODAL",
+  IPM = "IMAGE_PICKER_MODAL",
+  SHOW_BOARDS_MODAL = "SHOW_BOARDS_MODAL",
+  MOBILE_MENU = "MOBILE_MENU",
+}
+
+export type ModalType = ModalEnum | null;

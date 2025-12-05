@@ -1,4 +1,4 @@
-import { ModalType } from "@/types";
+import { ModalType } from "@/types/modal";
 
 export enum ModalActionEnum {
   OPEN_MODAL = "OPEN_MODAL",

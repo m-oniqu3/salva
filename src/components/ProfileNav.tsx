@@ -49,7 +49,7 @@ function ProfileNav(props: Props) {
   function openCreateBoardModal() {
     // dispatch({
     //   type: ModalActionTypes.OPEN_MODAL,
-    //   payload: ModalEnum.CREATE_BOARD_MODAL,
+    //   payload: ModalEnum.CREATE_COLLECTION_MODAL,
     // });
   }
 

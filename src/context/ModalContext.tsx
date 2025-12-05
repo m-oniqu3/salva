@@ -1,13 +1,18 @@
 "use client";
 
-import { ModalActionEnum, ModalActions } from "@/actions/ModalActions";
-import { initialState, modalReducer, State } from "@/reducer/ModalReducer";
+import { ModalActionEnum, ModalActions } from "@/context/actions/ModalActions";
+import {
+  initialState,
+  modalReducer,
+  State,
+} from "@/context/reducer/ModalReducer";
 import { createContext, Dispatch, ReactNode, useReducer } from "react";
 
 type ModalContextType = {
   state: State;
   dispatch: Dispatch<ModalActions>;
   closeModal: () => void;
+  stopPropagation(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
 };
 
 export const ModalContext = createContext<ModalContextType | null>(null);
@@ -25,12 +30,17 @@ export function ModalContextProvider({ children }: ContextProviderProps) {
     dispatch({ type: ModalActionEnum.CLOSE_MODAL });
   }
 
+  function stopPropagation(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+    e.stopPropagation();
+  }
+
   return (
     <ModalContext.Provider
       value={{
         dispatch,
         state,
         closeModal,
+        stopPropagation,
       }}
     >
       {children}

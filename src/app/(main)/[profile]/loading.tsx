@@ -9,7 +9,7 @@ export default function Loading() {
         {/* Spinner */}
         <div className="size-6 animate-spin rounded-full border-2 border-gray-300 border-t-black"></div>
         {/* Text */}
-        <p className="mt-4 text-gray-600 text-sm">Loading...</p>
+        <p className="mt-4 text-gray-600 text-sml">Loading...</p>
       </div>
     </div>
   );

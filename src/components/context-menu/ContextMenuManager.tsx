@@ -1,11 +1,11 @@
 "use client";
 
 import AddElementMenu from "@/components/context-menu/AddElementMenu";
+import CollectionActionsMenu from "@/components/context-menu/CollectionActionsMenu";
 import ContextMenu from "@/components/context-menu/ContextMenu";
-import EditBoardMenu from "@/components/context-menu/EditBoardMenu";
 import ProfileMenu from "@/components/context-menu/ProfileMenu";
 import { useContextMenu } from "@/context/useContextMenu";
-import { ContextMenuEnum } from "@/types";
+import { ContextMenuEnum } from "@/types/context-menu";
 import { ReactNode } from "react";
 
 function ContextMenuManager() {
@@ -23,8 +23,10 @@ function ContextMenuManager() {
       contextMenuContent = <ProfileMenu />;
       break;
 
-    case ContextMenuEnum.EDIT_BOARD_MENU:
-      contextMenuContent = <EditBoardMenu />;
+    case ContextMenuEnum.COLLECTION_ACTIONS_MENU:
+      contextMenuContent = (
+        <CollectionActionsMenu closeContextMenu={closeContextMenu} />
+      );
       break;
 
     case ContextMenuEnum.ADD_ELEMENT_MENU:
@@ -38,9 +40,7 @@ function ContextMenuManager() {
   if (!isOpen) return null;
 
   return (
-    <ContextMenu close={closeContextMenu} isOpen={isOpen}>
-      {contextMenuContent}
-    </ContextMenu>
+    <ContextMenu close={closeContextMenu}>{contextMenuContent}</ContextMenu>
   );
 }
 
