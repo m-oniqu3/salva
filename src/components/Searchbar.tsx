@@ -1,20 +1,20 @@
-import { SearchIcon, SolidSparkleIcon } from "@/components/icons";
+import { FilmIcon, SearchIcon } from "@/components/icons";
 
 function Searchbar() {
   return (
-    <form className="relative w-full max-w-72 md:max-w-80 lg:max-w-96 mx-auto">
-      <div className="absolute top-[14px] left-4 z-10 ">
-        <SolidSparkleIcon className="size-[16px] text-gray-500 animate-pulse" />
+    <form className="relative w-full max-w-72 md:max-w-80 lg:max-w-sm mx-auto">
+      <div className="absolute top-[15px] left-5 z-10 ">
+        <FilmIcon className="size-[23px] text-neutral-400 animate-pulse" />
       </div>
 
       <input
         type="text"
-        className="gray w-full text-sml h-11 rounded-[14px] pl-11 px-4 font-medium text-gray-700 focus:outline-none placeholder:text-gray-500"
+        className="gray w-full text-sml rounded-full p-4 px-8 pl-14 font-medium focus:outline-none"
         placeholder="Search..."
       />
 
-      <div className="absolute top-[14px] right-4 z-10 cursor-pointer">
-        <SearchIcon className="size-[15px] text-gray-500" />
+      <div className="absolute top-[18px] right-5 z-10 cursor-pointer">
+        <SearchIcon className="size-4 text-neutral-400" />
       </div>
     </form>
   );

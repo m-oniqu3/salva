@@ -21,7 +21,7 @@ type Props = {
 
 function EditCollection(props: Props) {
   const { closeModal } = props;
-  const { dispatch } = useModal();
+  const { dispatch, stopPropagation } = useModal();
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
   const pathname = usePathname();
@@ -93,11 +93,9 @@ function EditCollection(props: Props) {
   }
 
   return (
-    <div className="c-container max-w-sm">
-      <header className="relative pb-8">
-        <h1 className="text-lg font-semibold text-neutral-700">
-          Edit Collection
-        </h1>
+    <div className="c-container max-w-sm mx-auto" onClick={stopPropagation}>
+      <header className="relative pb-10">
+        <h1 className="text-lg font-semibold text-black">Edit Collection</h1>
         <p className="text-sml">Edit your collection.</p>
 
         <button
@@ -114,14 +112,14 @@ function EditCollection(props: Props) {
       >
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-neutral-700">
+          <label htmlFor="name" className="text-sml text-black">
             Collection Cover
           </label>
 
           <button
             type="button"
             onClick={openImagePickerModal}
-            className="gray flex justify-center items-center size-28 rounded-xl gray z-0 cursor-pointer"
+            className="gray flex justify-center items-center size-24 rounded-lg gray z-0 cursor-pointer"
           >
             <AddIcon className="size-5 text-neutral-400" />
           </button>
@@ -131,7 +129,7 @@ function EditCollection(props: Props) {
 
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-neutral-700">
+          <label htmlFor="name" className="text-sml text-black">
             Collection Name
           </label>
 
@@ -146,7 +144,7 @@ function EditCollection(props: Props) {
 
         {/* description */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sml text-neutral-700">
+          <label htmlFor="description" className="text-sml text-black">
             What is this collection about?
           </label>
 
@@ -165,7 +163,7 @@ function EditCollection(props: Props) {
           <Button
             disabled={isEditingCollection}
             type="submit"
-            className="bg-neutral-700 text-white rounded-md w-full h-9"
+            className="bg-black text-white rounded-md w-full h-9"
           >
             {isEditingCollection ? (
               <div className="flex items-center justify-center gap-2">

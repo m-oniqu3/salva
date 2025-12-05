@@ -4,8 +4,8 @@ module.exports = {
         extend: {
             fontSize: {
                 'sm': '0.8rem',
-
             }
+
         },
     },
 };

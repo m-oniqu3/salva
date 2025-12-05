@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+
+
+## Notifications
+https://supabase.com/docs/guides/realtime
+
 ## Getting Started
 
 First, run the development server:

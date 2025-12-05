@@ -26,7 +26,10 @@ function Avatar<T>(props: Props<T>) {
   const chars = username.at(0);
 
   return (
-    <Link href={`/${username}`} className={`overflow-hidden ${className}`}>
+    <Link
+      href={`/${username}`}
+      className={`flex items-center justify-center overflow-hidden ${className}`}
+    >
       {avatar && (
         <figure>
           <Image
@@ -41,7 +44,7 @@ function Avatar<T>(props: Props<T>) {
 
       {!avatar && (
         <span
-          className="size-full grid place-items-center uppercase bg-[#ffccb3] text-[#a55833]"
+          className="size-full grid place-items-center uppercase text-[#ffffff] bg-[#dec5da]"
           style={{ fontSize: "inherit" }}
         >
           {chars}

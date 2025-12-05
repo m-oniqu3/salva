@@ -56,19 +56,25 @@ function AuthNavbar({ profile }: Props) {
   return (
     <header className="flex items-center h-20">
       <nav className="w-full flex items-center justify-between gap-6 md:gap-6">
-        <div className="flex gap-6 items-center">
+        <ul className="flex gap-6 items-center">
           <Link href="/" className="font-extrabold capitalize text-xl relative">
-            <FilmIcon className="size-6 text-neutral-700" />
+            <FilmIcon className="size-6 text-black" />
           </Link>
 
-          <Link href={"#"} className="text-sml font-semibold hidden md:grid">
+          <Link
+            href={"#"}
+            className="text-zinc-600 text-sml font-semibold hidden md:grid"
+          >
             Discover
           </Link>
 
-          <Link href={"#"} className="text-sml font-semibold hidden md:grid">
+          <Link
+            href={"#"}
+            className="text-zinc-600 text-sml font-semibold hidden md:grid"
+          >
             Shop
           </Link>
-        </div>
+        </ul>
 
         <Searchbar />
 
@@ -87,27 +93,26 @@ function AuthNavbar({ profile }: Props) {
           <div className="hidden md:flex items-center gap-4">
             <Button
               onClick={handleCreateCollection}
-              className="bg-neutral-700 text-white"
+              className="bg-black text-white"
             >
               Create
             </Button>
 
-            <BookmarkIcon className="size-5" />
+            <BookmarkIcon className="size-4" />
 
-            <div className="border-neutral-700 border-2 rounded-full flex items-center justify-center size-8">
-              <Avatar
-                avatar={profile.avatar}
-                username={profile.username}
-                className={"size-6 rounded-full text-[12px]"}
-              />
-            </div>
+            {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
+            <Avatar
+              avatar={profile.avatar}
+              username={profile.username}
+              className={"size-7 rounded-full text-[12px]"}
+            />
 
             <button
               type="button"
               className="cursor-pointer"
               onClick={handleContextMenu}
             >
-              <ArrowDownIcon className="size-5" />
+              <ArrowDownIcon className="size-4" />
             </button>
           </div>
         )}

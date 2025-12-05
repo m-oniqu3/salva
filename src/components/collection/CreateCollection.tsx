@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import { CloseIcon, LoadingIcon } from "@/components/icons";
+import { useModal } from "@/context/useModal";
 import { createCollection } from "@/server-actions/create-collection";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +21,7 @@ type Props = {
 
 function CreateCollection(props: Props) {
   const { closeModal } = props;
+  const { stopPropagation } = useModal();
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
 
@@ -57,14 +59,14 @@ function CreateCollection(props: Props) {
   }
 
   return (
-    <div className="c-container max-w-sm">
-      <header className="relative pb-8">
+    <div className="c-container max-w-sm" onClick={stopPropagation}>
+      <header className="relative pb-12">
         <h1 className="text-lg font-semibold">Create Collection</h1>
         <p className="text-sml">Create a collection to organize your films.</p>
 
         <button
           onClick={closeModal}
-          className="absolute top-0 right-0 cursor-pointer"
+          className="absolute -top-2 -right-3 cursor-pointer"
         >
           <CloseIcon className="size-5" />
         </button>
@@ -127,7 +129,7 @@ function CreateCollection(props: Props) {
           <Button
             disabled={isCreatingCollection}
             type="submit"
-            className="bg-black text-white rounded-md w-full h-9"
+            className="bg-black text-white rounded-lg w-full h-9"
           >
             {isCreatingCollection ? (
               <div className="flex items-center justify-center gap-2">

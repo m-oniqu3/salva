@@ -15,6 +15,8 @@ function ModalManager() {
     closeModal,
   } = useModal();
 
+  console.log("MM", currentModal, closeModal);
+
   if (!currentModal) return null;
 
   let ModalContent: ReactNode = null;
