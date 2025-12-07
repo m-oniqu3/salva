@@ -20,15 +20,15 @@ function ProfileSummary({ profile, userID }: Props) {
 
   return (
     <section className="py-4 max-w-[450px]">
-      <article className="flex flex-col gap-2">
+      <article className="flex flex-col gap-1">
         <Avatar
           avatar={avatar}
           username={username}
-          className={"size-16 rounded-full text-xl"}
+          className={"size-12 rounded-full text-xl"}
         />
 
-        <div className="mt-6">
-          <h2 className="font-semibold text-lg capitalize text-black">
+        <div className="mt-4">
+          <h2 className="font-semibold text-lg capitalize text-neutral-800">
             {firstname && (
               <span>
                 {firstname} {lastname}
@@ -40,7 +40,7 @@ function ProfileSummary({ profile, userID }: Props) {
 
         {bio && <p className="text-zinc-500 leading-5 text-[13px]">{bio}</p>}
 
-        <div className="flex gap-2 font-semibold text-black text-xs">
+        <div className="flex gap-2 font-semibold text-neutral-800 text-xs">
           <p className="">@{username}</p>
 
           <span>&#xb7;</span>

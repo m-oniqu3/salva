@@ -58,7 +58,7 @@ function AuthNavbar({ profile }: Props) {
       <nav className="w-full flex items-center justify-between gap-6 md:gap-6">
         <ul className="flex gap-6 items-center">
           <Link href="/" className="font-extrabold capitalize text-xl relative">
-            <FilmIcon className="size-6 text-black" />
+            <FilmIcon className="size-6 text-neutral-800" />
           </Link>
 
           <Link
@@ -85,7 +85,7 @@ function AuthNavbar({ profile }: Props) {
         {!profile && (
           <div className="hidden md:flex items-center gap-4">
             <Button>Log In</Button>
-            <Button className="bg-black text-white">Sign Up</Button>
+            <Button className="bg-neutral-800 text-white">Sign Up</Button>
           </div>
         )}
 
@@ -93,7 +93,7 @@ function AuthNavbar({ profile }: Props) {
           <div className="hidden md:flex items-center gap-4">
             <Button
               onClick={handleCreateCollection}
-              className="bg-black text-white"
+              className="bg-neutral-800 text-white"
             >
               Create
             </Button>

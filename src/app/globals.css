@@ -67,7 +67,7 @@ body {
   }
 
   .input {
-    @apply w-full bg-[#F5F4F2] px-3 py-3 font-medium rounded-md focus:outline-none text-black;
+    @apply w-full bg-[#F5F4F2] px-3 py-3 font-medium rounded-md focus:outline-none text-neutral-800;
     font-size: var(--text-small);
   }
 

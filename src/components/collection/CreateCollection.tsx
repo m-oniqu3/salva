@@ -129,7 +129,7 @@ function CreateCollection(props: Props) {
           <Button
             disabled={isCreatingCollection}
             type="submit"
-            className="bg-black text-white rounded-lg w-full h-9"
+            className="bg-neutral-800 text-white rounded-lg w-full h-9"
           >
             {isCreatingCollection ? (
               <div className="flex items-center justify-center gap-2">
