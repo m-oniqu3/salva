@@ -5,6 +5,7 @@ import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
+import { toggleFollowUser } from "@utils/api/user/follow-user";
 
 type Props = {
   profile: Profile;
@@ -23,17 +24,26 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
-  const isOwner = profileID === userID;
+  // Is the current user viewing their own profile?
+  const iseViewingSelf = profileID === userID;
 
+  /**
+   * Handles following or unfollowing a user.
+   *
+   * Uses the `userID` to determine is a current user is present. (Is there a session present? Is the user logged in?)
+   *
+   * Follow the target user if logged in, otherwise prompt the user to log in.
+   */
   function handleFollowUser() {
-    console.log(userID);
+    // If no user, prompt user to log in
     if (!userID) {
-      console.log("no user id in hfu");
-      dispatch({
+      return dispatch({
         type: ModalActionEnum.OPEN_MODAL,
         payload: ModalEnum.A,
       });
     }
+
+    toggleFollowUser(profile.user_id);
   }
 
   return (
@@ -72,17 +82,19 @@ function ProfileSummary({ profile, userID }: Props) {
             <span>{bio?.length === 1 ? "Follower" : "Followers"}</span>
           </p>
 
-          {!isOwner && <span>&#xb7;</span>}
+          {!iseViewingSelf && <span>&#xb7;</span>}
 
-          {!isOwner && (
+          {!iseViewingSelf && (
             <button onClick={handleFollowUser} className="cursor-pointer">
               Follow
             </button>
           )}
 
-          {isOwner && <span> &#xb7;</span>}
+          {iseViewingSelf && <span> &#xb7;</span>}
 
-          {isOwner && <button className="cursor-pointer">Edit Profile</button>}
+          {iseViewingSelf && (
+            <button className="cursor-pointer">Edit Profile</button>
+          )}
         </div>
       </article>
     </section>

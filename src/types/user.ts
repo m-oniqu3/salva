@@ -8,3 +8,10 @@ export type Profile = {
   bio: string | null;
   created_at: string;
 };
+
+export type UserFollow = {
+  id: number;
+  user_id: string;
+  target_id: string;
+  created_at: string;
+};
