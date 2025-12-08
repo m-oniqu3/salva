@@ -1,9 +1,8 @@
-import Button from "@/components/Button";
 import CollectionSummary from "@/components/collection/CollectionSummary";
+import ErrorState from "@/components/ErrorState";
 import getUser from "@/server-actions/get-user";
 import { findCollection } from "@utils/api/collections/find-collection";
 import { createClient } from "@utils/supabase/server";
-import Link from "next/link";
 
 type Props = {
   params: Promise<{ profile: string; collection: string }>;
@@ -25,24 +24,26 @@ async function page({ params }: Props) {
 
   const { data: user } = await getUser(supabase);
 
-  //is board private?
   const {
     user: { userID },
     collection: { is_private },
   } = collection;
 
-  // it's a different user & the collection is public
-  const isAccessible = userID != user?.id && !is_private;
+  //is board private?
+  const isPublicCollection = !is_private;
+  const isCollectionOwner = user?.id === userID && is_private;
+
+  // the collection is public or the collection is private and the current user owns it
+  const isAccessible = isPublicCollection || isCollectionOwner;
 
   if (!isAccessible) {
     return (
-      <article>
-        <p>this page is not available </p>
-        <Link href={"/"}>
-          {" "}
-          <Button>Home</Button>
-        </Link>
-      </article>
+      <ErrorState
+        title="This page is not available."
+        message="Sorry, you can't access this."
+        link="/"
+        label="Home"
+      />
     );
   }
 
