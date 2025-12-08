@@ -1,4 +1,9 @@
+"use client";
+
 import Avatar from "@/components/Avatar";
+import { ModalActionEnum } from "@/context/actions/ModalActions";
+import { useModal } from "@/context/useModal";
+import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
 
 type Props = {
@@ -7,6 +12,8 @@ type Props = {
 };
 
 function ProfileSummary({ profile, userID }: Props) {
+  const { dispatch } = useModal();
+
   const {
     user_id: profileID,
     firstname,
@@ -17,6 +24,17 @@ function ProfileSummary({ profile, userID }: Props) {
   } = profile;
 
   const isOwner = profileID === userID;
+
+  function handleFollowUser() {
+    console.log(userID);
+    if (!userID) {
+      console.log("no user id in hfu");
+      dispatch({
+        type: ModalActionEnum.OPEN_MODAL,
+        payload: ModalEnum.A,
+      });
+    }
+  }
 
   return (
     <section className="py-4 max-w-[450px]">
@@ -56,7 +74,11 @@ function ProfileSummary({ profile, userID }: Props) {
 
           {!isOwner && <span>&#xb7;</span>}
 
-          {!isOwner && <button className="cursor-pointer">Follow</button>}
+          {!isOwner && (
+            <button onClick={handleFollowUser} className="cursor-pointer">
+              Follow
+            </button>
+          )}
 
           {isOwner && <span> &#xb7;</span>}
 
