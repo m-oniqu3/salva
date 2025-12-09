@@ -87,6 +87,9 @@ export async function toggleFollowUser(targetUserID: string): Response {
     };
   }
 
+  // Revalidate profile page cache
+  // revalidatePath("/[profile]", "page");
+
   console.log("Successfully followed user.", toggleFollowUser.name);
   return { data: follow, error: null };
 }

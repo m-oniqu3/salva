@@ -31,15 +31,13 @@ function Avatar<T>(props: Props<T>) {
       className={`flex items-center justify-center overflow-hidden ${className}`}
     >
       {avatar && (
-        <figure>
-          <Image
-            src={avatar}
-            alt={`${username}'s avatar'`}
-            width="90"
-            height="90"
-            className="object-cover"
-          />
-        </figure>
+        <Image
+          src={avatar}
+          alt={`${username}'s avatar'`}
+          width="90"
+          height="90"
+          className="object-cover"
+        />
       )}
 
       {!avatar && (

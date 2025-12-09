@@ -53,7 +53,7 @@ body {
   }
 
   .c-container {
-    @apply bg-white p-6 rounded-xl w-full
+    @apply bg-neutral-50 p-6 rounded-xl w-full
   }
 
   .dark {

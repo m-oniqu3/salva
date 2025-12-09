@@ -15,3 +15,9 @@ export type UserFollow = {
   target_id: string;
   created_at: string;
 };
+
+export type UserFollowings = {
+  followers: number;
+  following: number;
+  isFollowing: boolean;
+};

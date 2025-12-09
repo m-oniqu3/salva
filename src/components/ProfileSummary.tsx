@@ -3,6 +3,7 @@
 import Avatar from "@/components/Avatar";
 import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
+import useFollow from "@/hooks/useFollow";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
 import { toggleFollowUser } from "@utils/api/user/follow-user";
@@ -24,8 +25,15 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
+  const { data, refresh } = useFollow(userID, profileID);
+  const { followers, following, isFollowing } = data ?? {
+    followers: 0,
+    following: 0,
+    isFollowing: false,
+  };
+
   // Is the current user viewing their own profile?
-  const iseViewingSelf = profileID === userID;
+  const isViewingSelf = profileID === userID;
 
   /**
    * Handles following or unfollowing a user.
@@ -34,7 +42,8 @@ function ProfileSummary({ profile, userID }: Props) {
    *
    * Follow the target user if logged in, otherwise prompt the user to log in.
    */
-  function handleFollowUser() {
+  async function handleFollowUser() {
+    console.log("handling follow user");
     // If no user, prompt user to log in
     if (!userID) {
       return dispatch({
@@ -43,7 +52,8 @@ function ProfileSummary({ profile, userID }: Props) {
       });
     }
 
-    toggleFollowUser(profile.user_id);
+    const { error } = await toggleFollowUser(profile.user_id);
+    if (!error) refresh(); // re-fetch follow counts
   }
 
   return (
@@ -73,26 +83,26 @@ function ProfileSummary({ profile, userID }: Props) {
 
           <span>&#xb7;</span>
 
-          <p>{username.length}&nbsp;Following</p>
-
-          {bio && <span>&#xb7;</span>}
-
           <p className="font-semibold flex gap-1">
-            <span>{bio?.length ? bio?.length - 12 : 8}</span>
-            <span>{bio?.length === 1 ? "Follower" : "Followers"}</span>
+            <span>{followers}</span>
+            <span>{followers === 1 ? "Follower" : "Followers"}</span>
           </p>
 
-          {!iseViewingSelf && <span>&#xb7;</span>}
+          <span>&#xb7;</span>
 
-          {!iseViewingSelf && (
+          <p>{following}&nbsp;Following</p>
+
+          {!isViewingSelf && <span>&#xb7;</span>}
+
+          {!isViewingSelf && (
             <button onClick={handleFollowUser} className="cursor-pointer">
-              Follow
+              {isFollowing && userID ? "Following" : "Follow"}
             </button>
           )}
 
-          {iseViewingSelf && <span> &#xb7;</span>}
+          {isViewingSelf && <span> &#xb7;</span>}
 
-          {iseViewingSelf && (
+          {isViewingSelf && (
             <button className="cursor-pointer">Edit Profile</button>
           )}
         </div>
