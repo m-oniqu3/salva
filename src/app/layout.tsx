@@ -2,6 +2,7 @@ import ContextMenuManager from "@/components/context-menu/ContextMenuManager";
 import ModalManager from "@/components/ModalManager";
 import { ContextMenuProvider } from "@/context/ContextMenuContext";
 import { ModalContextProvider } from "@/context/ModalContext";
+import Provider from "@/context/Provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -40,16 +41,17 @@ export default async function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased wrapper`}>
-        <ModalContextProvider>
-          <ContextMenuProvider>
-            <ModalManager />
-            <ContextMenuManager />
-
-            {children}
-            <div id="modal" />
-            <div id="context-menu" />
-          </ContextMenuProvider>
-        </ModalContextProvider>
+        <Provider>
+          <ModalContextProvider>
+            <ContextMenuProvider>
+              <ModalManager />
+              <ContextMenuManager />
+              {children}
+              <div id="modal" />
+              <div id="context-menu" />
+            </ContextMenuProvider>
+          </ModalContextProvider>
+        </Provider>
       </body>
     </html>
   );

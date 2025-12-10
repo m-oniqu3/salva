@@ -1,34 +1,32 @@
 "use client";
 
-import { UserFollowings } from "@/types/user";
+import { useQuery } from "@tanstack/react-query";
 import { getIsFollowing } from "@utils/api/user/find-following";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 
 function useFollow(userID: string | null, targetUserID: string) {
-  const [data, setData] = useState<UserFollowings | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [result, setResult] = useState<UserFollowings | null>(null);
 
   const fetchFollowStates = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await getIsFollowing(userID, targetUserID);
+    const { data, error } = await getIsFollowing(userID, targetUserID);
 
-      if (error) throw new Error(error);
+    if (error) throw new Error(error);
 
-      setData(data);
-    } catch (error: unknown) {
-      setError(error as unknown as string);
-    } finally {
-      setIsLoading(false);
-    }
+    if (!data) return null;
+
+    return data;
   }, [userID, targetUserID]);
+
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ["follow-states"],
+    queryFn: fetchFollowStates,
+  });
 
   useEffect(() => {
     fetchFollowStates();
   }, [fetchFollowStates]);
 
-  return { isLoading, data, error, refresh: fetchFollowStates };
+  return { isLoading, data, error, refetch };
 }
 
 export default useFollow;

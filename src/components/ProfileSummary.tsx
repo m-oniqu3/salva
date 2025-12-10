@@ -25,7 +25,7 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
-  const { data, refresh } = useFollow(userID, profileID);
+  const { data, refetch } = useFollow(userID, profileID);
   const { followers, following, isFollowing } = data ?? {
     followers: 0,
     following: 0,
@@ -53,7 +53,7 @@ function ProfileSummary({ profile, userID }: Props) {
     }
 
     const { error } = await toggleFollowUser(profile.user_id);
-    if (!error) refresh(); // re-fetch follow counts
+    if (!error) refetch(); // re-fetch follow counts
   }
 
   return (

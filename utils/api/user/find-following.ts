@@ -46,7 +46,7 @@ export async function getIsFollowing(
     ]);
 
   // Destructure each query result
-  const { count: followerCount, error: followerError } = followerResponse;
+  const {  count: followerCount, error: followerError } = followerResponse;
   const { count: followingCount, error: followingError } = followingResponse;
 
   // isFollowingCheck may be null if user isn't logged in
@@ -81,9 +81,6 @@ export async function getIsFollowing(
   const followers = followerCount ?? 0;
   const following = followingCount ?? 0;
   const isFollowing = Boolean(isFollowingData);
-
-  // Revalidate profile page cache
-  //   revalidatePath("/[profile]", "page");
 
   return {
     data: { followers, following, isFollowing },
