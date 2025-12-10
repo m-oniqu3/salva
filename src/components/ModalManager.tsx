@@ -1,5 +1,6 @@
 "use client";
 
+import Prompt from "@/components/auth/Prompt";
 import CollectionCoverPicker from "@/components/collection/CollectionCoverPicker";
 import EditCollection from "@/components/collection/EditCollection";
 import MobileMenu from "@/components/nav/MobileMenu";
@@ -7,6 +8,7 @@ import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import CreateCollection from "@components/collection/CreateCollection";
 import Modal from "@components/Modal";
+
 import { ReactNode } from "react";
 
 function ModalManager() {
@@ -24,6 +26,10 @@ function ModalManager() {
   switch (currentModal) {
     case ModalEnum.CREATE_COLLECTION_MODAL:
       ModalContent = <CreateCollection closeModal={closeModal} />;
+      break;
+
+    case ModalEnum.A:
+      ModalContent = <Prompt closeModal={closeModal} />;
       break;
 
     case ModalEnum.ECM:

@@ -95,7 +95,9 @@ function EditCollection(props: Props) {
   return (
     <div className="c-container max-w-sm mx-auto" onClick={stopPropagation}>
       <header className="relative pb-10">
-        <h1 className="text-lg font-semibold text-black">Edit Collection</h1>
+        <h1 className="text-lg font-semibold text-neutral-800">
+          Edit Collection
+        </h1>
         <p className="text-sml">Edit your collection.</p>
 
         <button
@@ -112,7 +114,7 @@ function EditCollection(props: Props) {
       >
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-black">
+          <label htmlFor="name" className="text-sml text-neutral-800">
             Collection Cover
           </label>
 
@@ -129,7 +131,7 @@ function EditCollection(props: Props) {
 
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-black">
+          <label htmlFor="name" className="text-sml text-neutral-800">
             Collection Name
           </label>
 
@@ -144,7 +146,7 @@ function EditCollection(props: Props) {
 
         {/* description */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sml text-black">
+          <label htmlFor="description" className="text-sml text-neutral-800">
             What is this collection about?
           </label>
 
@@ -163,7 +165,7 @@ function EditCollection(props: Props) {
           <Button
             disabled={isEditingCollection}
             type="submit"
-            className="bg-black text-white rounded-md w-full h-9"
+            className="bg-neutral-800 text-white rounded-md w-full h-9"
           >
             {isEditingCollection ? (
               <div className="flex items-center justify-center gap-2">

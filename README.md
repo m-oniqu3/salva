@@ -2,8 +2,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 
 
-## Notifications
+### Notifications
 https://supabase.com/docs/guides/realtime
+
+https://makerkit.dev/blog/tutorials/real-time-notifications-supabase-nextjs
+
+
+
+### Avatar
+https://avatar-placeholder.iran.liara.run/document/name/#more-option
+
 
 ## Getting Started
 

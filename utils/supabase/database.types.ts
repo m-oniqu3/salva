@@ -50,6 +50,27 @@ export type Database = {
         }
         Relationships: []
       }
+      "follow-users": {
+        Row: {
+          created_at: string
+          id: number
+          target_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          target_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          target_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar: string | null

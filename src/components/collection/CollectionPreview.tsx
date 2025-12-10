@@ -26,13 +26,13 @@ function CollectionPreview({ preview, username }: Props) {
   );
 
   return (
-    <Link href={`/${username}/${slug}`} className="flex flex-col gap-2 w-full">
-      <figure className="w-full h-[180px]">{cover}</figure>
+    <Link href={`/${username}/${slug}`} className="flex flex-col gap-2">
+      <figure className="h-32 w-full">{cover}</figure>
 
       <div className="">
-        <h3 className="font-semibold line-clamp-1 w-full text-sm">{name}</h3>
+        <h3 className="font-semibold line-clamp-1 w-full text-sml">{name}</h3>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center font-semibold gap-1">
           <p className="text-xs font-medium text-zinc-500">
             {name.length.toString().padStart(2, "0")} elements
           </p>
@@ -40,7 +40,7 @@ function CollectionPreview({ preview, username }: Props) {
           {is_private && (
             <p className="flex items-center gap-1">
               <span className="text-zinc-500">&#xb7;</span>
-              <span className="text-zinc-500 text-xs font-medium">Private</span>
+              <span className="text-zinc-500 text-xs">Private</span>
             </p>
           )}
         </div>

@@ -51,13 +51,13 @@ function CollectionSummary({ summary, user }: Props) {
   return (
     <section className="flex flex-col max-w-[450px]">
       <article className="flex flex-col gap-1">
-        <h1 className="font-bold text-lg max-w-lg text-black">{name}</h1>
+        <h1 className="font-bold text-lg max-w-lg text-neutral-800">{name}</h1>
 
         {description && (
           <p className="text-zinc-500 text-[13px] leading-5">{description}</p>
         )}
 
-        <div className="flex gap-2 font-semibold text-xs mt-1 text-black">
+        <div className="flex gap-2 font-semibold text-xs mt-1 text-neutral-800">
           {locked && (
             <p className="flex gap-1 font-semibold">
               Private
@@ -78,9 +78,13 @@ function CollectionSummary({ summary, user }: Props) {
             <span>{description?.length === 1 ? "Follower" : "Followers"}</span>
           </p>
 
-          {!isOwner && <span>&#xb7;</span>}
+          {!isOwner && (
+            <div className="flex gap-1">
+              <span>&#xb7;</span>
 
-          {!isOwner && <button className="cursor-pointer">Follow</button>}
+              <button className="cursor-pointer">Follow</button>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-3 mt-4">
@@ -105,11 +109,11 @@ function CollectionSummary({ summary, user }: Props) {
           {isOwner && (
             <div className="flex gap-3">
               <div className="gray size-8 flex items-center justify-center rounded-full">
-                <UserAddIcon className="size-3 text-black/60" />
+                <UserAddIcon className="size-3 text-neutral-800/60" />
               </div>
 
               <button className="rounded-full size-8 flex justify-center items-center gray cursor-pointer">
-                <SolidSparkleIcon className="size-3 text-black/60" />
+                <SolidSparkleIcon className="size-3 text-neutral-800/60" />
               </button>
 
               <button
@@ -117,14 +121,14 @@ function CollectionSummary({ summary, user }: Props) {
                 className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
                 name="Collection Actions Menu"
               >
-                <AddIcon className="size-3 text-black/60" />
+                <AddIcon className="size-3 text-neutral-800/60" />
               </button>
 
               <button
                 onClick={handleMore}
                 className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
               >
-                <MoreHorizontalIcon className="size-3 text-black/60" />
+                <MoreHorizontalIcon className="size-3 text-neutral-800/60" />
               </button>
             </div>
           )}
