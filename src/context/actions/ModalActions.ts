@@ -1,4 +1,4 @@
-import { ModalType } from "@/types/modal";
+import { Modal } from "@/types/modal";
 
 export enum ModalActionEnum {
   OPEN_MODAL = "OPEN_MODAL",
@@ -7,7 +7,7 @@ export enum ModalActionEnum {
 
 export type OpenModalAction = {
   type: ModalActionEnum.OPEN_MODAL;
-  payload: ModalType;
+  payload: Modal;
 };
 
 export type CloseModalAction = {

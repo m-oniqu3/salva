@@ -15,7 +15,7 @@ async function CollectionList({ username }: Props) {
   }
 
   if (!collections || collections.length == 0) {
-    return <p className="wrapper text-center">No collections created yet</p>;
+    return <p className="">No collections created yet.</p>;
   }
 
   // console.log(collections);

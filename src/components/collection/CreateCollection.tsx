@@ -59,7 +59,7 @@ function CreateCollection(props: Props) {
   }
 
   return (
-    <div className="c-container max-w-sm" onClick={stopPropagation}>
+    <div className="panel max-w-sm" onClick={stopPropagation}>
       <header className="relative pb-12">
         <h1 className="text-lg font-semibold">Create Collection</h1>
         <p className="text-sml">Create a collection to organize your films.</p>

@@ -13,6 +13,9 @@ https://makerkit.dev/blog/tutorials/real-time-notifications-supabase-nextjs
 https://avatar-placeholder.iran.liara.run/document/name/#more-option
 
 
+https://movie-reel.netlify.app/
+
+
 ## Getting Started
 
 First, run the development server:

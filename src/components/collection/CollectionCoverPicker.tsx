@@ -27,7 +27,7 @@ function CollectionCoverPicker(props: Props) {
   }
 
   return (
-    <div className="c-container max-w-sm">
+    <div className="panel max-w-sm">
       <header className="relative pb-8">
         <h1 className="text-lg font-semibold text-neutral-800">
           Update Collection Cover

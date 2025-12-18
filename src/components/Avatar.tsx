@@ -5,22 +5,11 @@ import { HTMLAttributes } from "react";
 type Props<T> = {
   avatar: string | null;
   username: string;
-  className: HTMLAttributes<T> | string | null;
-
-  image?: {
-    className?: HTMLAttributes<T> | string | null;
-  };
-
-  fallback?: {
-    className?: HTMLAttributes<T> | string | null;
-    chars?: 1 | 2;
-    background?: string | null;
-    color?: string | null;
-  };
+  className?: HTMLAttributes<T> | string | null;
 };
 
 function Avatar<T>(props: Props<T>) {
-  const { avatar, username, className } = props;
+  const { avatar, username, className = "" } = props;
 
   //username initials (characters)
   const chars = username.at(0);
@@ -36,7 +25,7 @@ function Avatar<T>(props: Props<T>) {
           alt={`${username}'s avatar'`}
           width="90"
           height="90"
-          className="object-cover"
+          className="size-full object-cover"
         />
       )}
 

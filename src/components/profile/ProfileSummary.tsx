@@ -3,7 +3,7 @@
 import Avatar from "@/components/Avatar";
 import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
-import useFollow from "@/hooks/useFollow";
+import useFollowStates from "@/hooks/useFollowStates";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
 import { toggleFollowUser } from "@utils/api/user/follow-user";
@@ -25,12 +25,14 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
-  const { data, refetch } = useFollow(userID, profileID);
+  const { data, refetch } = useFollowStates(userID, profileID);
   const { followers, following, isFollowing } = data ?? {
     followers: 0,
     following: 0,
     isFollowing: false,
   };
+
+  const isLoggedIn = Boolean(userID);
 
   // Is the current user viewing their own profile?
   const isViewingSelf = profileID === userID;
@@ -48,12 +50,26 @@ function ProfileSummary({ profile, userID }: Props) {
     if (!userID) {
       return dispatch({
         type: ModalActionEnum.OPEN_MODAL,
-        payload: ModalEnum.A,
+        payload: {
+          type: ModalEnum.A,
+        },
       });
     }
 
     const { error } = await toggleFollowUser(profile.user_id);
     if (!error) refetch(); // re-fetch follow counts
+  }
+
+  function handleViewFollowers() {
+    if (!followers) return;
+
+    dispatch({
+      type: ModalActionEnum.OPEN_MODAL,
+      payload: {
+        type: ModalEnum.F,
+        payload: { userID, targetUserID: profileID },
+      },
+    });
   }
 
   return (
@@ -62,10 +78,10 @@ function ProfileSummary({ profile, userID }: Props) {
         <Avatar
           avatar={avatar}
           username={username}
-          className={"size-12 rounded-full text-xl"}
+          className={"size-10 rounded-full text-xl"}
         />
 
-        <div className="mt-4">
+        <div className="mt-2">
           <h2 className="font-semibold text-lg capitalize text-neutral-800">
             {firstname && (
               <span>
@@ -78,15 +94,18 @@ function ProfileSummary({ profile, userID }: Props) {
 
         {bio && <p className="text-zinc-500 leading-5 text-[13px]">{bio}</p>}
 
-        <div className="flex gap-2 font-semibold text-neutral-800 text-xs">
+        <div className="flex flex-wrap gap-2 font-semibold text-neutral-800 text-xs">
           <p className="">@{username}</p>
 
           <span>&#xb7;</span>
 
-          <p className="font-semibold flex gap-1">
+          <button
+            onClick={handleViewFollowers}
+            className="font-semibold flex gap-1"
+          >
             <span>{followers}</span>
             <span>{followers === 1 ? "Follower" : "Followers"}</span>
-          </p>
+          </button>
 
           <span>&#xb7;</span>
 
@@ -100,7 +119,7 @@ function ProfileSummary({ profile, userID }: Props) {
             </button>
           )}
 
-          {isViewingSelf && <span> &#xb7;</span>}
+          {isViewingSelf && <span>&#xb7;</span>}
 
           {isViewingSelf && (
             <button className="cursor-pointer">Edit Profile</button>

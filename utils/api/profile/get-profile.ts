@@ -8,7 +8,7 @@ type Props = {
   id?: User["id"] | null;
 };
 
-type Response = Promise<Result<Profile | null>>;
+type Response = Result<Profile | null>;
 
 export async function getProfile(props: Props): Response {
   const supabase = await createClient();

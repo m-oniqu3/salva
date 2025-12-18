@@ -52,8 +52,8 @@ body {
     @apply flex items-center justify-center gap-1
   }
 
-  .c-container {
-    @apply bg-neutral-50 p-6 rounded-xl w-full
+  .panel {
+    @apply bg-white h-9/12 p-6 rounded-3xl w-full
   }
 
   .dark {
@@ -75,8 +75,10 @@ body {
     @apply text-red-500 text-xs font-semibold h-4
   }
 
+}
 
-
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
 
 /* @layer utilities {

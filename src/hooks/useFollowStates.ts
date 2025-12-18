@@ -1,14 +1,14 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getIsFollowing } from "@utils/api/user/find-following";
+import { findFollowing } from "@utils/api/user/find-following";
 import { useCallback, useEffect } from "react";
 
-function useFollow(userID: string | null, targetUserID: string) {
+function useFollowStates(userID: string | null, targetUserID: string) {
   // const [result, setResult] = useState<UserFollowings | null>(null);
 
   const fetchFollowStates = useCallback(async () => {
-    const { data, error } = await getIsFollowing(userID, targetUserID);
+    const { data, error } = await findFollowing(userID, targetUserID);
 
     if (error) throw new Error(error);
 
@@ -17,9 +17,11 @@ function useFollow(userID: string | null, targetUserID: string) {
     return data;
   }, [userID, targetUserID]);
 
+  // Only fetch if targetUserID is present
   const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["follow-states"],
+    queryKey: ["follow-states", targetUserID],
     queryFn: fetchFollowStates,
+    enabled: Boolean(targetUserID),
   });
 
   useEffect(() => {
@@ -29,4 +31,4 @@ function useFollow(userID: string | null, targetUserID: string) {
   return { isLoading, data, error, refetch };
 }
 
-export default useFollow;
+export default useFollowStates;

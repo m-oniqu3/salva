@@ -4,14 +4,23 @@ import { Result } from "@/types/result";
 import { UserFollowings } from "@/types/user";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Promise<Result<UserFollowings | null>>;
+type Response = Result<UserFollowings | null>;
 
 //target user should come from the profile
-export async function getIsFollowing(
+export async function findFollowing(
   userID: string | null,
-  targetUserID: string
+  targetUserID: string | null
 ): Response {
   const supabase = await createClient();
+
+  if (!targetUserID)
+    return {
+      data: null,
+      error:
+        "Missing identifier. TargetUserID is missing." +
+        "Function " +
+        findFollowing.name,
+    };
 
   // Get the follower count.
   // How many people/users follow the target user?
@@ -46,7 +55,7 @@ export async function getIsFollowing(
     ]);
 
   // Destructure each query result
-  const {  count: followerCount, error: followerError } = followerResponse;
+  const { count: followerCount, error: followerError } = followerResponse;
   const { count: followingCount, error: followingError } = followingResponse;
 
   // isFollowingCheck may be null if user isn't logged in

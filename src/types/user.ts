@@ -21,3 +21,12 @@ export type UserFollowings = {
   following: number;
   isFollowing: boolean;
 };
+
+export type Follower = {
+  id: number;
+  user_id: string;
+  username: string;
+  firstname: string | null;
+  lastname: string | null;
+  avatar: string | null;
+};

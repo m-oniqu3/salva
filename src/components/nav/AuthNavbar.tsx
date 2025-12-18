@@ -30,14 +30,14 @@ function AuthNavbar({ profile }: Props) {
   function handleMobileMenu() {
     dispatch({
       type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.MOBILE_MENU,
+      payload: { type: ModalEnum.MM },
     });
   }
 
   function handleCreateCollection() {
     dispatch({
       type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.CREATE_COLLECTION_MODAL,
+      payload: { type: ModalEnum.CCM },
     });
   }
 

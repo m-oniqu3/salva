@@ -5,7 +5,7 @@ import { Result } from "@/types/result";
 import { UserFollow } from "@/types/user";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Promise<Result<UserFollow | null>>;
+type Response = Result<UserFollow | null>;
 
 /**
  *

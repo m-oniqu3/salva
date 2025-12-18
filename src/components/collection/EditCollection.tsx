@@ -19,6 +19,8 @@ type Props = {
   closeModal: () => void;
 };
 
+// todo: put something in State here for the modal, similar to Followers Modal & State
+
 function EditCollection(props: Props) {
   const { closeModal } = props;
   const { dispatch, stopPropagation } = useModal();
@@ -78,7 +80,9 @@ function EditCollection(props: Props) {
   function openImagePickerModal() {
     dispatch({
       type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.IPM,
+      payload: {
+        type: ModalEnum.IPM,
+      },
     });
   }
 
@@ -93,7 +97,8 @@ function EditCollection(props: Props) {
   }
 
   return (
-    <div className="c-container max-w-sm mx-auto" onClick={stopPropagation}>
+    <div className="panel max-w-sm mx-auto" onClick={stopPropagation}>
+      P
       <header className="relative pb-10">
         <h1 className="text-lg font-semibold text-neutral-800">
           Edit Collection
@@ -107,7 +112,6 @@ function EditCollection(props: Props) {
           <CloseIcon className="size-5" />
         </button>
       </header>
-
       <form
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmitForm)}

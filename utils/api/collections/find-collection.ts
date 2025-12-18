@@ -5,7 +5,7 @@ import { Result } from "@/types/result";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Promise<Result<CollectionSummary | null>>;
+type Response = Result<CollectionSummary | null>;
 
 export async function findCollection(username: string, slug: string): Response {
   try {

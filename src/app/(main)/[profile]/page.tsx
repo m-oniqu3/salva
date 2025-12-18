@@ -1,5 +1,5 @@
 import CollectionList from "@/components/collection/CollectionList";
-import ProfileSummary from "@/components/ProfileSummary";
+import ProfileSummary from "@/components/profile/ProfileSummary";
 import getUser from "@/server-actions/get-user";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";

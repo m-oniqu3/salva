@@ -4,51 +4,50 @@ import Prompt from "@/components/auth/Prompt";
 import CollectionCoverPicker from "@/components/collection/CollectionCoverPicker";
 import EditCollection from "@/components/collection/EditCollection";
 import MobileMenu from "@/components/nav/MobileMenu";
+import Followers from "@/components/profile/Followers";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import CreateCollection from "@components/collection/CreateCollection";
 import Modal from "@components/Modal";
 
-import { ReactNode } from "react";
-
 function ModalManager() {
   const {
-    state: { currentModal },
+    state: { modal },
     closeModal,
   } = useModal();
 
-  console.log("MM", currentModal, closeModal);
+  console.log("MM", modal, closeModal);
 
-  if (!currentModal) return null;
+  const renderedModal = (() => {
+    if (!modal || !modal.type) return null;
 
-  let ModalContent: ReactNode = null;
+    switch (modal.type) {
+      case ModalEnum.CCM:
+        return <CreateCollection closeModal={closeModal} />;
 
-  switch (currentModal) {
-    case ModalEnum.CREATE_COLLECTION_MODAL:
-      ModalContent = <CreateCollection closeModal={closeModal} />;
-      break;
+      case ModalEnum.A:
+        return <Prompt closeModal={closeModal} />;
 
-    case ModalEnum.A:
-      ModalContent = <Prompt closeModal={closeModal} />;
-      break;
+      case ModalEnum.F:
+        return <Followers closeModal={closeModal} />;
 
-    case ModalEnum.ECM:
-      ModalContent = <EditCollection closeModal={closeModal} />;
-      break;
+      case ModalEnum.ECM:
+        return <EditCollection closeModal={closeModal} />;
 
-    case ModalEnum.IPM:
-      ModalContent = <CollectionCoverPicker closeModal={closeModal} />;
-      break;
+      case ModalEnum.IPM:
+        return <CollectionCoverPicker closeModal={closeModal} />;
 
-    case ModalEnum.MOBILE_MENU:
-      ModalContent = <MobileMenu closeModal={closeModal} />;
-      break;
+      case ModalEnum.MM:
+        return <MobileMenu closeModal={closeModal} />;
 
-    default:
-      return null;
-  }
+      default:
+        return null;
+    }
+  })();
 
-  return <Modal close={closeModal}>{ModalContent}</Modal>;
+  if (!renderedModal) return null;
+
+  return <Modal close={closeModal}>{renderedModal}</Modal>;
 }
 
 export default ModalManager;

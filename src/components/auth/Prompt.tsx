@@ -12,7 +12,7 @@ function Prompt(props: Props) {
   const { stopPropagation } = useModal();
 
   return (
-    <div className="c-container max-w-sm mx-auto" onClick={stopPropagation}>
+    <div className="panel max-w-sm mx-auto" onClick={stopPropagation}>
       <header className="relative pb-10">
         <h1 className="text-lg font-semibold text-neutral-800">Join Salva</h1>
         <p className="text-sml">Welcome</p>
