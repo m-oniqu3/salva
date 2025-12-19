@@ -6,6 +6,7 @@ import { useModal } from "@/context/useModal";
 import useFollowStates from "@/hooks/useFollowStates";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
+import { useQueryClient } from "@tanstack/react-query";
 import { toggleFollowUser } from "@utils/api/user/follow-user";
 
 type Props = {
@@ -25,6 +26,7 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
+  const queryClient = useQueryClient();
   const { data, refetch } = useFollowStates(userID, profileID);
   const { followers, following, isFollowing } = data ?? {
     followers: 0,
@@ -56,8 +58,14 @@ function ProfileSummary({ profile, userID }: Props) {
       });
     }
 
+    // Toggle follow user & re-fetch follow counts
     const { error } = await toggleFollowUser(profile.user_id);
-    if (!error) refetch(); // re-fetch follow counts
+    if (!error) refetch();
+
+    // Invalidate the query that gets the follower information
+    queryClient.invalidateQueries({
+      queryKey: ["get-followers", profile.user_id],
+    });
   }
 
   function handleViewFollowers() {
@@ -113,18 +121,22 @@ function ProfileSummary({ profile, userID }: Props) {
 
           <button>{following}&nbsp;Following</button>
 
-          {!isUserViewingSelf && <span>&#xb7;</span>}
-
           {!isUserViewingSelf && (
-            <button onClick={handleFollowUser} className="cursor-pointer">
-              {isFollowing && userID ? "Following" : "Follow"}
-            </button>
+            <>
+              <span>&#xb7;</span>
+
+              <button onClick={handleFollowUser} className="cursor-pointer">
+                {isFollowing && userID ? "Following" : "Follow"}
+              </button>
+            </>
           )}
 
-          {isUserViewingSelf && <span>&#xb7;</span>}
-
           {isUserViewingSelf && (
-            <button className="cursor-pointer">Edit Profile</button>
+            <>
+              <span>&#xb7;</span>
+
+              <button className="cursor-pointer">Edit Profile</button>
+            </>
           )}
         </div>
       </article>

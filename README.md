@@ -12,8 +12,27 @@ https://makerkit.dev/blog/tutorials/real-time-notifications-supabase-nextjs
 ### Avatar
 https://avatar-placeholder.iran.liara.run/document/name/#more-option
 
-
 https://movie-reel.netlify.app/
+
+### Temp Code
+```ts
+// Invalidate the query that gets the follower information
+    queryClient.setQueryData(
+      ["get-followers", id],
+      (previousData: Array<Follower>) => {
+        if (!previousData) return previousData;
+
+        // flip the `isFollowedByViewer` state
+        return previousData.map((follower) => {
+          if (follower.id === id) {
+            return { ...follower, isFollowedByViewer: !isFollowedByViewer };
+          }
+
+          return follower;
+        });
+      }
+    );
+```
 
 
 ## Getting Started

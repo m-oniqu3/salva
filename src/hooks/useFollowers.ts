@@ -2,6 +2,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getFollowers } from "@utils/api/user/get-followers";
 
 function useFollowers(targetUserID: string) {
+  console.log("calling useFollowers", targetUserID);
+
   const {
     isLoading,
     error,
@@ -9,6 +11,8 @@ function useFollowers(targetUserID: string) {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
+    isRefetching,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ["get-followers", targetUserID],
     queryFn: ({ pageParam }) => getFollowers({ targetUserID, page: pageParam }),
@@ -22,6 +26,7 @@ function useFollowers(targetUserID: string) {
     enabled: Boolean(targetUserID),
   });
 
+  console.log("called useFollowers and got some data");
   const profiles = data?.pages
     ? data.pages.flatMap((cur) => {
         if (!cur.data) return [];
@@ -36,6 +41,8 @@ function useFollowers(targetUserID: string) {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
+    isRefetching,
+    refetch,
   };
 }
 

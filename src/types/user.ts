@@ -24,7 +24,7 @@ export type UserFollowings = {
 
 export type Follower = {
   id: string;
-  isUserFollowing: boolean;
+  isFollowedByViewer: boolean;
   profile: {
     id: number;
     user_id: string;

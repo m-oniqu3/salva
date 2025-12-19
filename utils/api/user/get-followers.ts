@@ -101,7 +101,7 @@ export async function getFollowers(props: Props): Response {
   const followers = targetUserResponse.data.map((user) => {
     return {
       id: user.user_id,
-      isUserFollowing: usersFollowersIDs.has(user.user_id),
+      isFollowedByViewer: usersFollowersIDs.has(user.user_id),
       profile: user.profiles,
     };
   });
