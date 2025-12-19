@@ -1,22 +1,29 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
-import { ChevronRightIcon } from "@/components/icons";
+import Button from "@/components/Button";
 import { useModal } from "@/context/useModal";
 import { Follower } from "@/types/user";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  profile: Follower;
+  follower: Follower;
 };
 
 function FollowerPreview(props: Props) {
-  const {
-    profile: { id, avatar, username, firstname, lastname },
-  } = props;
-
   const { closeModal } = useModal();
   const router = useRouter();
+
+  if (!props.follower.profile) return null;
+
+  const {
+    follower: {
+      profile: { id, avatar, username, firstname, lastname },
+      isUserFollowing,
+    },
+  } = props;
+
+  console.log(props.follower);
 
   function handleClick() {
     router.push("/" + username);
@@ -24,10 +31,10 @@ function FollowerPreview(props: Props) {
   }
 
   return (
-    <button
+    <div
       onClick={handleClick}
       key={id}
-      className="h-[72px] w-full grid grid-cols-[60px_auto_25px] place-items-center px-8 cursor-pointer no-scrollbar hover:bg-zinc-50"
+      className="h-[72px] w-full grid grid-cols-[60px_auto_60px] place-items-center px-8 cursor-pointer no-scrollbar hover:bg-zinc-50"
     >
       <div className="mr-auto">
         <Avatar
@@ -38,14 +45,18 @@ function FollowerPreview(props: Props) {
       </div>
 
       <div className="w-full flex flex-col items-start ">
-        <p className="font-semibold line-clamp-1">@{username}</p>
-        <p className="text-sml text-zinc-500 font-semibold capitalize line-clamp-1">
+        <p className="font-semibold capitalize line-clamp-1">
           {firstname} {lastname}
+        </p>
+        <p className="text-sml font-semibold text-zinc-500 line-clamp-1">
+          @{username} {isUserFollowing}
         </p>
       </div>
 
-      <ChevronRightIcon className="size-4" />
-    </button>
+      <Button className=" bg-neutral-800 text-white">
+        {isUserFollowing ? "Following" : "Follow"}
+      </Button>
+    </div>
   );
 }
 

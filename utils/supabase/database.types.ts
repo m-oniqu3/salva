@@ -69,36 +69,51 @@ export type Database = {
           target_id?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "follow-users_target_id_fkey1"
+            columns: ["target_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "follow-users_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       profiles: {
         Row: {
-          avatar: string | null
-          bio: string | null
+          avatar: string
+          bio: string
           created_at: string
-          firstname: string | null
+          firstname: string
           id: number
-          lastname: string | null
+          lastname: string
           user_id: string
           username: string
         }
         Insert: {
-          avatar?: string | null
-          bio?: string | null
+          avatar?: string
+          bio?: string
           created_at?: string
-          firstname?: string | null
+          firstname?: string
           id?: number
-          lastname?: string | null
+          lastname?: string
           user_id?: string
           username?: string
         }
         Update: {
-          avatar?: string | null
-          bio?: string | null
+          avatar?: string
+          bio?: string
           created_at?: string
-          firstname?: string | null
+          firstname?: string
           id?: number
-          lastname?: string | null
+          lastname?: string
           user_id?: string
           username?: string
         }

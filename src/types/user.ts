@@ -2,10 +2,10 @@ export type Profile = {
   id: number;
   user_id: string;
   username: string;
-  firstname: string | null;
-  lastname: string | null;
-  avatar: string | null;
-  bio: string | null;
+  firstname: string;
+  lastname: string;
+  avatar: string;
+  bio: string;
   created_at: string;
 };
 
@@ -23,10 +23,14 @@ export type UserFollowings = {
 };
 
 export type Follower = {
-  id: number;
-  user_id: string;
-  username: string;
-  firstname: string | null;
-  lastname: string | null;
-  avatar: string | null;
+  id: string;
+  isUserFollowing: boolean;
+  profile: {
+    id: number;
+    user_id: string;
+    avatar: string;
+    username: string;
+    firstname: string;
+    lastname: string;
+  } | null;
 };

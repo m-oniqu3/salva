@@ -71,11 +71,11 @@ function Followers(props: Props) {
             isLoadingMoreData={isFetchingNextPage}
             fetchMoreData={() => hasNextPage && fetchNextPage()}
           >
-            <>
-              {data.map((profile) => (
-                <FollowerPreview key={profile.id} profile={profile} />
+            <li>
+              {data.map((follower) => (
+                <FollowerPreview key={follower.id} follower={follower} />
               ))}
-            </>
+            </li>
           </InfiniteScroll>
         )}
       </article>

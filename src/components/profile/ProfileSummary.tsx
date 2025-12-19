@@ -35,7 +35,7 @@ function ProfileSummary({ profile, userID }: Props) {
   const isLoggedIn = Boolean(userID);
 
   // Is the current user viewing their own profile?
-  const isViewingSelf = profileID === userID;
+  const isUserViewingSelf = profileID === userID;
 
   /**
    * Handles following or unfollowing a user.
@@ -72,6 +72,8 @@ function ProfileSummary({ profile, userID }: Props) {
     });
   }
 
+  function handleViewFollowing() {}
+
   return (
     <section className="py-4 max-w-[450px]">
       <article className="flex flex-col gap-1">
@@ -94,7 +96,7 @@ function ProfileSummary({ profile, userID }: Props) {
 
         {bio && <p className="text-zinc-500 leading-5 text-[13px]">{bio}</p>}
 
-        <div className="flex flex-wrap gap-2 font-semibold text-neutral-800 text-xs">
+        <div className="flex flex-wrap gap-2 mt-1 font-semibold text-neutral-800 text-xs">
           <p className="">@{username}</p>
 
           <span>&#xb7;</span>
@@ -109,19 +111,19 @@ function ProfileSummary({ profile, userID }: Props) {
 
           <span>&#xb7;</span>
 
-          <p>{following}&nbsp;Following</p>
+          <button>{following}&nbsp;Following</button>
 
-          {!isViewingSelf && <span>&#xb7;</span>}
+          {!isUserViewingSelf && <span>&#xb7;</span>}
 
-          {!isViewingSelf && (
+          {!isUserViewingSelf && (
             <button onClick={handleFollowUser} className="cursor-pointer">
               {isFollowing && userID ? "Following" : "Follow"}
             </button>
           )}
 
-          {isViewingSelf && <span>&#xb7;</span>}
+          {isUserViewingSelf && <span>&#xb7;</span>}
 
-          {isViewingSelf && (
+          {isUserViewingSelf && (
             <button className="cursor-pointer">Edit Profile</button>
           )}
         </div>

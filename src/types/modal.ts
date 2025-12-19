@@ -13,22 +13,22 @@ type ModalState<K extends ModalEnum, P = undefined> = {
   payload?: P | null;
 };
 
-export type CreateCollectionModal = ModalState<ModalEnum.CCM, null>;
+type CreateCollectionModal = ModalState<ModalEnum.CCM, null>;
 
-export type EditCollectionModal = ModalState<ModalEnum.ECM, null>;
+type EditCollectionModal = ModalState<ModalEnum.ECM, null>;
 
-export type ImagePickerModal = ModalState<ModalEnum.IPM, null>;
+type ImagePickerModal = ModalState<ModalEnum.IPM, null>;
 
-export type AuthModal = ModalState<ModalEnum.A>;
+type AuthModal = ModalState<ModalEnum.A>;
 
-export type FollowersModal = ModalState<
+type FollowersModal = ModalState<
   ModalEnum.F,
   { userID: string | null; targetUserID: string }
 >;
 
-export type MobileMenuModal = ModalState<ModalEnum.MM>;
+type MobileMenuModal = ModalState<ModalEnum.MM>;
 
-export type FollowingModal = ModalState<ModalEnum.FL>;
+type FollowingModal = ModalState<ModalEnum.FL>;
 
 export type Modal =
   | CreateCollectionModal
@@ -36,4 +36,5 @@ export type Modal =
   | ImagePickerModal
   | AuthModal
   | FollowersModal
+  | FollowingModal
   | MobileMenuModal;

@@ -59,21 +59,21 @@ function CreateCollection(props: Props) {
   }
 
   return (
-    <div className="panel max-w-sm" onClick={stopPropagation}>
-      <header className="relative pb-12">
+    <div className="panel flex flex-col max-w-sm" onClick={stopPropagation}>
+      <header className="relative  pb-12">
         <h1 className="text-lg font-semibold">Create Collection</h1>
         <p className="text-sml">Create a collection to organize your films.</p>
 
         <button
           onClick={closeModal}
-          className="absolute -top-2 -right-3 cursor-pointer"
+          className="absolute top-0 right-0 cursor-pointer"
         >
           <CloseIcon className="size-5" />
         </button>
       </header>
 
       <form
-        className="flex flex-col gap-4"
+        className="relative flex flex-col gap-4 h-full"
         onSubmit={form.handleSubmit(onSubmitForm)}
       >
         {/* name */}
@@ -125,7 +125,7 @@ function CreateCollection(props: Props) {
           </p>
         </div>
 
-        <div className="pt-8">
+        <div className="absolute bottom-0 w-full">
           <Button
             disabled={isCreatingCollection}
             type="submit"

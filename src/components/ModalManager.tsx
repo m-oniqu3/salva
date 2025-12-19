@@ -5,6 +5,7 @@ import CollectionCoverPicker from "@/components/collection/CollectionCoverPicker
 import EditCollection from "@/components/collection/EditCollection";
 import MobileMenu from "@/components/nav/MobileMenu";
 import Followers from "@/components/profile/Followers";
+import Following from "@/components/profile/Following";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import CreateCollection from "@components/collection/CreateCollection";
@@ -30,6 +31,9 @@ function ModalManager() {
 
       case ModalEnum.F:
         return <Followers closeModal={closeModal} />;
+
+      case ModalEnum.FL:
+        return <Following closeModal={closeModal} />;
 
       case ModalEnum.ECM:
         return <EditCollection closeModal={closeModal} />;
