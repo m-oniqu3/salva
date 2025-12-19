@@ -32,5 +32,5 @@ export type Follower = {
     username: string;
     firstname: string;
     lastname: string;
-  } | null;
+  };
 };

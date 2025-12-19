@@ -16,8 +16,8 @@ type Props = {
 
 /**
  *
- * Get followers for the giver user (target user)
- * Find out if the user (auth user) is following any of the given user's followers
+ * Get followers for the giver user (target user).
+ * Find out if the user (auth user) is following any of the given user's (target user) followers.
  */
 export async function getFollowers(props: Props): Response {
   const { targetUserID, page, limit } = props;
@@ -34,28 +34,36 @@ export async function getFollowers(props: Props): Response {
   const supabase = await createClient();
   const [start, end] = calculateRange(page, limit ?? 10);
 
-  const { data: user } = await getUser(supabase);
-
   // Get IDs for followers of the target user
   const followersForTargetUserQuery = supabase
-    .from("follow-users")
-    .select("user_id")
+    .from("follow_users")
+    .select(
+      ` user_id,
+        profiles!user_id(
+        id,
+        user_id,
+        avatar,
+        username,
+        firstname,
+        lastname 
+        )
+      `
+    )
     .eq("target_id", targetUserID)
     .order("created_at", { ascending: false })
     .range(start, end);
 
-  // Get all the people that the logged in user is following
+  const { data: user } = await getUser(supabase);
+
+  // Get users that the auth user is following
   const followersForUserQuery = user
-    ? supabase.from("follow-users").select("user_id").eq("user_id", user.id)
+    ? supabase.from("follow_users").select("target_id").eq("user_id", user.id)
     : null;
 
   const [targetUserResponse, userResponse] = await Promise.all([
     followersForTargetUserQuery,
     followersForUserQuery,
   ]);
-
-  // const { data: followerIDsForUser, error: followerIDsForUserError } =
-  //   userResponse ?? { data: null, error: null };
 
   if (targetUserResponse.error) {
     console.error(
@@ -84,40 +92,31 @@ export async function getFollowers(props: Props): Response {
     return { data: null, error: "No followers found for the target user." };
   }
 
-  const followerIDs = targetUserResponse.data.map((user) => user.user_id);
-
-  // Get the profile data for all the target user's followers
-  const { data: profiles, error: profilesError } = await supabase
-    .from("profiles")
-    .select("id, user_id, avatar, username, firstname, lastname ")
-    .in("user_id", followerIDs);
-
-  if (profilesError) {
-    console.error("Error fetching profile data", profilesError);
-    return { data: null, error: "Could not find profiles." };
-  }
-
-  if (!profiles) {
-    return { data: null, error: "No profiles found." };
-  }
-
-  // Follower IDs for the auth user's followers
-  const followerIDsFromUser = new Set(
-    userResponse && userResponse.data.map((user) => user.user_id)
+  // User IDs that the auth user is following
+  const usersFollowersIDs = new Set(
+    userResponse?.data.map((user) => user.target_id) ?? []
   );
 
-  console.log(followerIDsFromUser);
-
-  const profileByUserId = new Map(profiles.map((p) => [p.user_id, p]));
-
-  // Follower IDs for the target user - array
-  const followers = followerIDs.map((id) => {
+  // Follower information for the target user
+  const followers = targetUserResponse.data.map((user) => {
     return {
-      id,
-      isUserFollowing: followerIDsFromUser.has(id),
-      profile: profileByUserId.get(id) ?? null,
+      id: user.user_id,
+      isUserFollowing: usersFollowersIDs.has(user.user_id),
+      profile: user.profiles,
     };
   });
 
+  if (user) pinUserToTop(followers, user.id);
+
   return { data: followers, error: null };
+}
+
+// Shift the auth user to the top of the array
+function pinUserToTop(followers: Array<Follower>, userID: string) {
+  const index = followers.findIndex((follower) => follower.id === userID);
+
+  if (index > -1) {
+    const [authUser] = followers.splice(index, 1);
+    followers.unshift(authUser);
+  }
 }

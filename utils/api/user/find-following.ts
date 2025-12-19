@@ -25,14 +25,14 @@ export async function findFollowing(
   // Get the follower count.
   // How many people/users follow the target user?
   const targetFollowerCountQuery = supabase
-    .from("follow-users")
+    .from("follow_users")
     .select("*", { count: "exact", head: true })
     .eq("target_id", targetUserID);
 
   // Get the following count.
   // How many people/users is the target user following?
   const targetFollowingCountQuery = supabase
-    .from("follow-users")
+    .from("follow_users")
     .select("*", { count: "exact", head: true })
     .eq("user_id", targetUserID);
 
@@ -40,7 +40,7 @@ export async function findFollowing(
   // Is the target being followed by the current user or not?
   const userIsFollowingQuery = userID
     ? supabase
-        .from("follow-users")
+        .from("follow_users")
         .select("*")
         .eq("user_id", userID)
         .eq("target_id", targetUserID)

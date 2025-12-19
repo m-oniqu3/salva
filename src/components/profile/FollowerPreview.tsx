@@ -2,11 +2,13 @@
 
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
+import { ChevronRightIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { Follower } from "@/types/user";
 import { useRouter } from "next/navigation";
 
 type Props = {
+  userID?: string | null;
   follower: Follower;
 };
 
@@ -14,21 +16,22 @@ function FollowerPreview(props: Props) {
   const { closeModal } = useModal();
   const router = useRouter();
 
-  if (!props.follower.profile) return null;
-
   const {
+    userID,
     follower: {
-      profile: { id, avatar, username, firstname, lastname },
+      id,
+      profile: { avatar, username, firstname, lastname },
       isUserFollowing,
     },
   } = props;
-
-  console.log(props.follower);
 
   function handleClick() {
     router.push("/" + username);
     closeModal();
   }
+
+  // User isn't supposed to be able to follow themselves
+  const canFollow = userID !== id;
 
   return (
     <div
@@ -53,9 +56,13 @@ function FollowerPreview(props: Props) {
         </p>
       </div>
 
-      <Button className=" bg-neutral-800 text-white">
-        {isUserFollowing ? "Following" : "Follow"}
-      </Button>
+      {canFollow && (
+        <Button className=" bg-neutral-800 text-white">
+          {isUserFollowing ? "Following" : "Follow"}
+        </Button>
+      )}
+
+      {!canFollow && <ChevronRightIcon className="size-4" />}
     </div>
   );
 }

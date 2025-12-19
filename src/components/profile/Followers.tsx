@@ -73,7 +73,11 @@ function Followers(props: Props) {
           >
             <li>
               {data.map((follower) => (
-                <FollowerPreview key={follower.id} follower={follower} />
+                <FollowerPreview
+                  key={follower.id}
+                  userID={payload?.userID}
+                  follower={follower}
+                />
               ))}
             </li>
           </InfiniteScroll>

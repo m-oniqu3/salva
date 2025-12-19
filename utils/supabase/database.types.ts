@@ -50,7 +50,7 @@ export type Database = {
         }
         Relationships: []
       }
-      "follow-users": {
+      follow_users: {
         Row: {
           created_at: string
           id: number
@@ -70,13 +70,6 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "follow-users_target_id_fkey1"
-            columns: ["target_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["user_id"]
-          },
           {
             foreignKeyName: "follow-users_user_id_fkey1"
             columns: ["user_id"]

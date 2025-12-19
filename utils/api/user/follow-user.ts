@@ -28,7 +28,7 @@ export async function toggleFollowUser(targetUserID: string): Response {
 
   // Is the target user is already being followed by the current user?
   const { data: followed, error: followedErr } = await supabase
-    .from("follow-users")
+    .from("follow_users")
     .select("*")
     .eq("user_id", user.id)
     .eq("target_id", targetUserID)
@@ -49,7 +49,7 @@ export async function toggleFollowUser(targetUserID: string): Response {
   // If target user is already being followed , unfollow the target user.
   if (followed) {
     const { error } = await supabase
-      .from("follow-users")
+      .from("follow_users")
       .delete()
       .eq("user_id", user.id)
       .eq("target_id", targetUserID);
@@ -73,7 +73,7 @@ export async function toggleFollowUser(targetUserID: string): Response {
 
   // Follow the target user.
   const { data: follow, error: followErr } = await supabase
-    .from("follow-users")
+    .from("follow_users")
     .insert([{ user_id: user.id, target_id: targetUserID }])
     .select()
     .single();
