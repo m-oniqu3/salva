@@ -42,18 +42,7 @@ export async function getFollowing(props: Props): Response {
   // Get the users that the target user is following
   const targetUserFollowing = supabase
     .from("follow_users")
-    .select(
-      ` user_id,
-        profile:profiles!user_id(
-        id,
-        user_id,
-        avatar,
-        username,
-        firstname,
-        lastname 
-        )
-      `
-    )
+    .select("target_id")
     .eq("user_id", targetUserID)
     .order("created_at", { ascending: false })
     .range(start, end);
@@ -103,12 +92,29 @@ export async function getFollowing(props: Props): Response {
     userFollowing?.data.map((user) => user.target_id) ?? []
   );
 
+  const targetFollowingIDs = targetFollowing.data.map((t) => t.target_id);
+
+  const { data: profiles, error: profilesError } = await supabase
+    .from("profiles")
+    .select("id, user_id, avatar, username, firstname, lastname")
+    .in("user_id", targetFollowingIDs);
+
+  if (!profiles || profilesError) {
+    return {
+      data: null,
+      error:
+        "No profiles found. Could not get profiles for target user's followings.",
+    };
+  }
+
+  const profileByUserID = new Map(profiles.map((p) => [p.user_id, p]));
+
   // Follower information for the target user's following
   const followings = targetFollowing.data.map((user) => {
     return {
-      id: user.user_id,
-      isFollowedByViewer: userFollowingIDs.has(user.user_id),
-      profile: user.profile,
+      id: user.target_id,
+      isFollowedByViewer: userFollowingIDs.has(user.target_id),
+      profile: profileByUserID.get(user.target_id)!,
     };
   });
 

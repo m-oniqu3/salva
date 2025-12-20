@@ -52,7 +52,7 @@ function FollowerPreview(props: Props) {
 
       <div className="w-full flex flex-col items-start" onClick={handleClick}>
         <p className="text-sm font-semibold capitalize line-clamp-1 sm:text-sml">
-          {firstname} {lastname}
+          {firstname ? `${firstname} ${lastname}` : username}
         </p>
         <p className="text-sml font-semibold text-zinc-500 line-clamp-1">
           @{username}

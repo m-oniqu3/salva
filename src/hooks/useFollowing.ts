@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getFollowers } from "@utils/api/user/get-followers";
+import { getFollowing } from "@utils/api/user/get-following";
 
-function useFollowers(targetUserID: string) {
+function useFollowings(targetUserID: string) {
   const {
     isLoading,
     error,
@@ -12,8 +12,8 @@ function useFollowers(targetUserID: string) {
     isRefetching,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["get-followers", targetUserID],
-    queryFn: ({ pageParam }) => getFollowers({ targetUserID, page: pageParam }),
+    queryKey: ["get-followings", targetUserID],
+    queryFn: ({ pageParam }) => getFollowing({ targetUserID, page: pageParam }),
 
     initialPageParam: 0,
 
@@ -43,4 +43,4 @@ function useFollowers(targetUserID: string) {
   };
 }
 
-export default useFollowers;
+export default useFollowings;

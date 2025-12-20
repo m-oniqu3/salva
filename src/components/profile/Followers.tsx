@@ -41,7 +41,7 @@ function Followers(props: Props) {
     >
       <header className="sticky p-6 top-0 z-10 pb-10 bg-white border-b-[1px] border-neutral-50">
         <h1 className="text-lg font-semibold text-neutral-800">Followers</h1>
-        <p className="text-sml">Here are your followers.</p>
+        <p className="text-sml">People who follow this user.</p>
 
         <button
           onClick={closeModal}
