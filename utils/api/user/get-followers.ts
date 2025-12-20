@@ -18,6 +18,7 @@ type Props = {
  *
  * Get followers for the giver user (target user).
  * Find out if the user (auth user) is following any of the given user's (target user) followers.
+ * Who follows the target user?
  */
 export async function getFollowers(props: Props): Response {
   const { targetUserID, page, limit } = props;

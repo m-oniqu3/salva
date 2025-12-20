@@ -26,9 +26,12 @@ type FollowersModal = ModalState<
   { userID: string | null; targetUserID: string }
 >;
 
-type MobileMenuModal = ModalState<ModalEnum.MM>;
+type FollowingModal = ModalState<
+  ModalEnum.FL,
+  { userID: string | null; targetUserID: string }
+>;
 
-type FollowingModal = ModalState<ModalEnum.FL>;
+type MobileMenuModal = ModalState<ModalEnum.MM>;
 
 export type Modal =
   | CreateCollectionModal

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { findFollowing } from "@utils/api/user/find-following";
+import { findFollowing } from "@utils/api/user/get-following-count";
 import { useCallback, useEffect } from "react";
 
 function useFollowStates(userID: string | null, targetUserID: string) {

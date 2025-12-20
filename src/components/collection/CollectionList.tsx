@@ -23,12 +23,19 @@ async function CollectionList({ username }: Props) {
   const previews = collections.map((item) => {
     // console.log(item);
     return (
-      <CollectionPreview key={item.id} username={username} preview={item} />
+      <CollectionPreview
+        key={item.id}
+        username={username}
+        preview={{
+          ...item,
+          cover_image: `https://picsum.photos/id/${item.id}/500/500`,
+        }}
+      />
     );
   });
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 gap-y-12 ">
       {previews}
     </div>
   );

@@ -35,7 +35,7 @@ function ProfileSummary({ profile, userID }: Props) {
 
   const { data, refetch } = useFollowStates(userID, profileID);
 
-  // Use local state since we want to manipulate the state to acheive 'optimistic' state changes
+  // Use local state since we want to manipulate the state locally to acheive 'optimistic' state changes
   const [followCounts, setFollowCounts] = useState<typeof data>(data);
 
   console.log(followCounts);
@@ -117,7 +117,15 @@ function ProfileSummary({ profile, userID }: Props) {
     });
   }
 
-  function handleViewFollowing() {}
+  function handleViewFollowing() {
+    dispatch({
+      type: ModalActionEnum.OPEN_MODAL,
+      payload: {
+        type: ModalEnum.FL,
+        payload: { userID, targetUserID: profileID },
+      },
+    });
+  }
 
   return (
     <section className="py-4 max-w-[450px]">
@@ -148,8 +156,9 @@ function ProfileSummary({ profile, userID }: Props) {
 
           {/* Followers Count */}
           <button
+            type="button"
             onClick={handleViewFollowers}
-            className="font-semibold flex gap-1"
+            className="font-semibold flex gap-1 cursor-pointer"
           >
             <span>{followCounts?.followers ?? 0}</span>
             <span>
@@ -160,7 +169,11 @@ function ProfileSummary({ profile, userID }: Props) {
           <span>&#xb7;</span>
 
           {/* Following Count */}
-          <button onClick={handleViewFollowing}>
+          <button
+            type="button"
+            onClick={handleViewFollowing}
+            className="cursor-pointer"
+          >
             {followCounts?.following ?? 0}&nbsp;Following
           </button>
 

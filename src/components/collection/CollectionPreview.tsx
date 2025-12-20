@@ -19,15 +19,15 @@ function CollectionPreview({ preview, username }: Props) {
       width={100}
       height={50}
       quality={100}
-      className="size-full object-cover rounded-2xl"
+      className="size-full object-cover rounded-3xl"
     />
   ) : (
-    <div className="gray size-full rounded-2xl" />
+    <div className="gray size-full rounded-3xl" />
   );
 
   return (
-    <Link href={`/${username}/${slug}`} className="flex flex-col gap-2">
-      <figure className="h-32 w-full">{cover}</figure>
+    <Link href={`/${username}/${slug}`} className="flex flex-col gap-4">
+      <figure className="h-56 w-full">{cover}</figure>
 
       <div className="">
         <h3 className="font-semibold line-clamp-1 w-full text-sml">{name}</h3>
