@@ -12,7 +12,7 @@ function useFollowers(targetUserID: string) {
     isRefetching,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["get-followers", targetUserID],
+    queryKey: ["follow", "followers", targetUserID],
     queryFn: ({ pageParam }) => getFollowers({ targetUserID, page: pageParam }),
 
     initialPageParam: 0,

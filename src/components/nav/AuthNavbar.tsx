@@ -10,7 +10,6 @@ import {
 } from "@/components/icons";
 import Searchbar from "@/components/Searchbar";
 import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ContextMenuEnum } from "@/types/context-menu";
@@ -24,22 +23,8 @@ type Props = {
 };
 
 function AuthNavbar({ profile }: Props) {
-  const { dispatch } = useModal();
+  const { openModal } = useModal();
   const { dispatch: ctxDispatch } = useContextMenu();
-
-  function handleMobileMenu() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: { type: ModalEnum.MM },
-    });
-  }
-
-  function handleCreateCollection() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: { type: ModalEnum.CCM },
-    });
-  }
 
   function handleContextMenu(e: MouseEvent) {
     e.stopPropagation();
@@ -78,7 +63,11 @@ function AuthNavbar({ profile }: Props) {
 
         <Searchbar />
 
-        <button type="button" onClick={handleMobileMenu} className="md:hidden">
+        <button
+          type="button"
+          onClick={openModal.bind(null, { type: ModalEnum.MM })}
+          className="md:hidden"
+        >
           <MenuIcon className="size-5" />
         </button>
 
@@ -92,7 +81,7 @@ function AuthNavbar({ profile }: Props) {
         {profile && (
           <div className="hidden md:flex items-center gap-4">
             <Button
-              onClick={handleCreateCollection}
+              onClick={openModal.bind(null, { type: ModalEnum.CCM })}
               className="bg-neutral-800 text-white"
             >
               Create

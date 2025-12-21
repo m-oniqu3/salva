@@ -65,8 +65,8 @@ function FollowerPreview(props: Props) {
         id={followerID}
         canFollowUser={canFollowUser}
         isFollowedByViewer={isFollowedByViewer}
-        isRefetching={isRefetching}
-        refetch={refetch}
+        isRefetchingFollowerInformation={isRefetching}
+        refetchFollowerInformation={refetch}
       />
     </li>
   );

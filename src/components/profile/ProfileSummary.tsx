@@ -1,11 +1,11 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
 import useFollowStates from "@/hooks/useFollowStates";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
+import { useQueryClient } from "@tanstack/react-query";
 import { toggleFollowUser } from "@utils/api/user/follow-user";
 import { useEffect, useState } from "react";
 
@@ -22,7 +22,7 @@ enum Counts {
 type State = Counts;
 
 function ProfileSummary({ profile, userID }: Props) {
-  const { dispatch } = useModal();
+  const { openModal } = useModal();
 
   const {
     user_id: profileID,
@@ -33,29 +33,20 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
-  const { data, refetch } = useFollowStates(userID, profileID);
+  const { data } = useFollowStates(userID, profileID);
+  const qc = useQueryClient();
 
   // Use local state since we want to manipulate the state locally to acheive 'optimistic' state changes
   const [followCounts, setFollowCounts] = useState<typeof data>(data);
 
-  console.log(followCounts);
-
-  const isLoggedIn = Boolean(userID);
-
   // Is the current user viewing their own profile?
   const isUserViewingSelf = profileID === userID;
+  const isLoggedIn = Boolean(userID);
 
   // Sync local state whenever the query data changes
   useEffect(() => {
     if (data) setFollowCounts(data);
   }, [data]);
-
-  function openLoginModal() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: { type: ModalEnum.A },
-    });
-  }
 
   function updateFollowCounts(state: State, increment = false) {
     if (!followCounts) return;
@@ -89,7 +80,7 @@ function ProfileSummary({ profile, userID }: Props) {
    * Refetch the data after following/unfollowing the user.
    */
   async function handleFollowUser() {
-    if (!isLoggedIn) return openLoginModal();
+    if (!isLoggedIn) return openModal({ type: ModalEnum.A });
 
     // Optimistically update follower count through local state
     // Following the user? Decrement. Otherwise increment.
@@ -102,28 +93,25 @@ function ProfileSummary({ profile, userID }: Props) {
       return updateFollowCounts(Counts.F);
     }
 
-    refetch();
+    await qc.invalidateQueries({ queryKey: ["follow"] });
+    // refetch();
   }
 
   function handleViewFollowers() {
     if (!followCounts?.followers) return;
 
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: {
-        type: ModalEnum.F,
-        payload: { userID, targetUserID: profileID },
-      },
+    openModal({
+      type: ModalEnum.F,
+      payload: { userID, targetUserID: profileID },
     });
   }
 
   function handleViewFollowing() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: {
-        type: ModalEnum.FL,
-        payload: { userID, targetUserID: profileID },
-      },
+    if (!followCounts?.following) return;
+
+    openModal({
+      type: ModalEnum.FL,
+      payload: { userID, targetUserID: profileID },
     });
   }
 

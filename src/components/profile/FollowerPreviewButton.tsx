@@ -4,16 +4,17 @@ import { ChevronRightIcon, LoadingIcon } from "@/components/icons";
 import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
+import { useQueryClient } from "@tanstack/react-query";
 import { toggleFollowUser } from "@utils/api/user/follow-user";
 import { useState } from "react";
 
 type Props = {
-  userID: string | null | undefined;
   id: string; // follower ID
-  canFollowUser: boolean;
+  userID: string | null | undefined;
+  canFollowUser: boolean; // can the auth user follow this user?
   isFollowedByViewer: boolean; // isFollowedByAuthUser : is the auth user following this follower?
-  isRefetching: boolean;
-  refetch: () => void;
+  isRefetchingFollowerInformation: boolean;
+  refetchFollowerInformation: () => void;
 };
 
 function FollowerPreviewButton(props: Props) {
@@ -22,12 +23,12 @@ function FollowerPreviewButton(props: Props) {
     id,
     canFollowUser,
     isFollowedByViewer: initialFollowState,
-    refetch,
   } = props;
 
   const { dispatch } = useModal();
   const [isToggling, setIsToggling] = useState(false);
   const [isFollowing, setIsFollowing] = useState(initialFollowState);
+  const qc = useQueryClient();
 
   function openLoginModal() {
     dispatch({
@@ -58,7 +59,9 @@ function FollowerPreviewButton(props: Props) {
       return;
     }
 
-    refetch();
+    //maybe await
+    await qc.invalidateQueries({ queryKey: ["follow"] });
+    // refetchFollowerInformation();
 
     setIsToggling(false);
   }

@@ -19,7 +19,7 @@ function useFollowStates(userID: string | null, targetUserID: string) {
 
   // Only fetch if targetUserID is present
   const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["follow-states", targetUserID],
+    queryKey: ["follow", "states", targetUserID],
     queryFn: fetchFollowStates,
     enabled: Boolean(targetUserID),
   });

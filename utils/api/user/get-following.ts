@@ -6,13 +6,13 @@ import { Follower } from "@/types/user";
 import { createClient } from "@utils/supabase/server";
 import { calculateRange } from "@utils/validation/paginate";
 
-type Response = Result<Array<Follower> | null>;
-
 type Props = {
   targetUserID: string;
   page: number;
   limit?: number | null;
 };
+
+type Response = Result<Array<Follower> | null>;
 
 /**
  * Find the followers of the target user.
@@ -107,14 +107,12 @@ export async function getFollowing(props: Props): Response {
     };
   }
 
-  const profileByUserID = new Map(profiles.map((p) => [p.user_id, p]));
-
   // Follower information for the target user's following
-  const followings = targetFollowing.data.map((user) => {
+  const followings = profiles.map((p) => {
     return {
-      id: user.target_id,
-      isFollowedByViewer: userFollowingIDs.has(user.target_id),
-      profile: profileByUserID.get(user.target_id)!,
+      id: p.user_id,
+      isFollowedByViewer: userFollowingIDs.has(p.user_id),
+      profile: p,
     };
   });
 
