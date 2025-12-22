@@ -40,21 +40,22 @@ function FollowerPreview(props: Props) {
   return (
     <li
       key={followerID}
-      className="h-[72px] w-full grid grid-cols-[auto_1fr_100px] place-items-center gap-3 px-6  hover:bg-zinc-50 "
+      onClick={handleClick}
+      className="h-20 w-full grid grid-cols-[auto_1fr_90px] place-items-center gap-4 px-10 cursor-pointer hover:bg-zinc-50 "
     >
       <div className="mr-auto" onClick={handleClick}>
         <Avatar
           avatar={avatar}
           username={username}
-          className={"size-9 rounded-full text-xl md:size-10"}
+          className={"size-12 rounded-full text-xl"}
         />
       </div>
 
       <div className="w-full flex flex-col items-start" onClick={handleClick}>
-        <p className="text-sm font-semibold capitalize line-clamp-1 sm:text-sml">
+        <p className="text-sm font-semibold capitalize line-clamp-1 cursor-pointer sm:text-sml">
           {firstname ? `${firstname} ${lastname}` : username}
         </p>
-        <p className="text-sml font-semibold text-zinc-500 line-clamp-1">
+        <p className="text-xs font-semibold text-zinc-500 line-clamp-1 cursor-pointer">
           @{username}
         </p>
       </div>

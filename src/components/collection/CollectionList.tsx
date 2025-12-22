@@ -18,10 +18,7 @@ async function CollectionList({ username }: Props) {
     return <p className="">No collections created yet.</p>;
   }
 
-  // console.log(collections);
-
   const previews = collections.map((item) => {
-    // console.log(item);
     return (
       <CollectionPreview
         key={item.id}
@@ -35,7 +32,7 @@ async function CollectionList({ username }: Props) {
   });
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-12 md:gap-8 ">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-12 lg:gap-8 ">
       {previews}
     </div>
   );

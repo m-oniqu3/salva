@@ -5,7 +5,7 @@ import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { useQueryClient } from "@tanstack/react-query";
 import { toggleFollowUser } from "@utils/api/user/follow-user";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 
 type Props = {
   id: string; // follower ID
@@ -34,7 +34,11 @@ function FollowerPreviewButton(props: Props) {
    *  Otherwise, toggle follow user; (Follow/un-follow the target user).
    *  After toggling, invalidate the query -> triggers a refetch
    */
-  async function handleToggleFollowUser() {
+  async function handleToggleFollowUser(
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) {
+    e.stopPropagation();
+
     if (!userID) return openModal({ type: ModalEnum.A });
 
     setIsToggling(true);

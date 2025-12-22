@@ -1,13 +1,15 @@
 "use client";
 
-import { CloseIcon, LoadingIcon } from "@/components/icons";
-import InfiniteScroll from "@/components/InfiniteScroll";
-import FollowerPreview from "@/components/profile/FollowerPreview";
+import { CloseIcon } from "@/components/icons";
+import FollowingCollection from "@/components/profile/FollowingCollection";
+import FollowingPeople from "@/components/profile/FollowingPeople";
 import { useModal } from "@/context/useModal";
-import useFollowings from "@/hooks/useFollowing";
 import { ModalEnum } from "@/types/modal";
+import { useState } from "react";
 
 type Props = { closeModal: () => void };
+
+const tabs = ["People", "Boards"];
 
 function Following(props: Props) {
   const { closeModal } = props;
@@ -16,80 +18,69 @@ function Following(props: Props) {
     state: { modal },
     stopPropagation,
   } = useModal();
+  const [activeTab, setActiveTab] = useState(tabs.at(0));
 
   const isFollowingsModal = modal?.type === ModalEnum.FL;
   const payload = isFollowingsModal && modal?.payload ? modal.payload : null;
 
-  const targetUserID = payload?.targetUserID ?? "";
+  const { targetUserID, userID } = payload ?? {
+    targetUserID: "",
+    userID: null,
+  };
 
-  console.log({ targetUserID });
+  const renderedTabs = tabs.map((t) => (
+    <button
+      key={t}
+      onClick={setActiveTab.bind(null, t)}
+      className={`font-bold text-sml rounded-2xl cursor-pointer text-black/40 ${
+        activeTab == t ? "bg-neutral-700 text-white" : ""
+      } `}
+    >
+      {t}
+    </button>
+  ));
 
-  const {
-    isLoading,
-    error,
-    data,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    isRefetching,
-    refetch,
-  } = useFollowings(targetUserID);
+  const renderedContent = (() => {
+    if (!activeTab) return null;
 
-  console.log(data);
+    switch (activeTab) {
+      case tabs.at(0):
+        return <FollowingPeople userID={userID} targetUserID={targetUserID} />;
+
+      case tabs.at(1):
+        return <FollowingCollection />;
+
+      default:
+        return null;
+    }
+  })();
 
   return (
     <section
       className="panel p-0 pb-6 max-w-sm overflow-y-auto no-scrollbar flex flex-col"
       onClick={stopPropagation}
     >
-      <header className="sticky top-0 z-10 p-8 pb-10 bg-white border-b-[1px] border-neutral-50">
+      <header className="sticky top-0 z-10 p-8 pb-4 bg-white">
         <h1 className="text-lg font-semibold text-neutral-800">Following</h1>
-        <p className="text-sml">People who this user is following.</p>
+        <p className="text-sml">
+          {activeTab === tabs[0]
+            ? "People who this user is following."
+            : "Collections this user is following."}
+        </p>
 
         <button
           onClick={closeModal}
-          className="absolute top-9 right-9 cursor-pointer"
+          className="absolute top-6 right-8 cursor-pointer"
         >
           <CloseIcon className="size-5" />
         </button>
+
+        <div className="h-14 grid grid-cols-2 p-2 mt-6 gray rounded-3xl">
+          {renderedTabs}
+        </div>
       </header>
 
-      <article className="h-full">
-        {/* load */}
-        {isLoading && (
-          <span className="h-full grid place-items-center">
-            <LoadingIcon className="size-5 text-neutral-500" />
-          </span>
-        )}
-
-        {/* fetch error */}
-        {!isLoading && error && (
-          <p>Error fetching followers {" " + error.message}</p>
-        )}
-
-        {/* no data*/}
-        {!isLoading && !error && !data && <p> No data</p>}
-
-        {!isLoading && !!data && (
-          <InfiniteScroll
-            isLoadingIntialData={isLoading}
-            isLoadingMoreData={isFetchingNextPage}
-            fetchMoreData={() => hasNextPage && fetchNextPage()}
-          >
-            <ul className="list-none">
-              {data.map((follower) => (
-                <FollowerPreview
-                  key={follower.id}
-                  userID={payload?.userID}
-                  follower={follower}
-                  isRefetching={isRefetching}
-                  refetch={refetch}
-                />
-              ))}
-            </ul>
-          </InfiniteScroll>
-        )}
-      </article>
+      <article className="h-full">{renderedContent}</article>
     </section>
   );
 }
