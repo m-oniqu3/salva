@@ -14,13 +14,6 @@ type Props = {
   userID: Profile["user_id"] | null;
 };
 
-enum Counts {
-  F = "FOLLOWERS",
-  FL = "FOLLOWING",
-}
-
-type State = Counts;
-
 function ProfileSummary({ profile, userID }: Props) {
   const { openModal } = useModal();
 
@@ -48,29 +41,21 @@ function ProfileSummary({ profile, userID }: Props) {
     if (data) setFollowCounts(data);
   }, [data]);
 
-  function updateFollowCounts(state: State, increment = false) {
+  // Optimistically update follower count through local state
+  function updateFollowerCount(increment = false) {
     if (!followCounts) return;
 
-    const obj = Object.assign({}, followCounts);
     const count = increment ? 1 : -1;
 
-    const modifiedObj = (() => {
-      switch (state) {
-        case Counts.F:
-          return Object.assign(obj, {
-            followers: obj.followers + count,
-            isFollowing: !obj.isFollowing,
-          });
+    setFollowCounts((prevState) => {
+      if (!prevState) return prevState;
 
-        case Counts.FL:
-          return obj;
-
-        default:
-          return obj;
-      }
-    })();
-
-    setFollowCounts(modifiedObj);
+      return {
+        ...prevState,
+        followers: prevState.followers + count,
+        isFollowing: !prevState.isFollowing,
+      };
+    });
   }
 
   /**
@@ -82,15 +67,14 @@ function ProfileSummary({ profile, userID }: Props) {
   async function handleFollowUser() {
     if (!isLoggedIn) return openModal({ type: ModalEnum.A });
 
-    // Optimistically update follower count through local state
     // Following the user? Decrement. Otherwise increment.
-    updateFollowCounts(Counts.F, !followCounts?.isFollowing);
+    updateFollowerCount(!followCounts?.isFollowing);
 
     // Toggle follow user & re-fetch follow counts
     const { error } = await toggleFollowUser(profile.user_id);
 
     if (error) {
-      return updateFollowCounts(Counts.F);
+      return updateFollowerCount(followCounts?.isFollowing);
     }
 
     await qc.invalidateQueries({ queryKey: ["follow"] });
@@ -128,8 +112,7 @@ function ProfileSummary({ profile, userID }: Props) {
         {/* Name */}
         <div className="mt-2">
           <h2 className="font-semibold text-lg capitalize text-neutral-800">
-            {!firstname && <span>{username}</span>}
-            <span>{firstname + " " + lastname}</span>
+            <span>{firstname ? `${firstname} ${lastname}` : username}</span>
           </h2>
         </div>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronRightIcon, LoadingIcon } from "@/components/icons";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,46 +19,36 @@ type Props = {
 function FollowerPreviewButton(props: Props) {
   const {
     userID,
-    id,
+    id: followerID,
     canFollowUser,
     isFollowedByViewer: initialFollowState,
   } = props;
 
-  const { dispatch } = useModal();
+  const { openModal } = useModal();
   const [isToggling, setIsToggling] = useState(false);
   const [isFollowing, setIsFollowing] = useState(initialFollowState);
   const qc = useQueryClient();
 
-  function openLoginModal() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: { type: ModalEnum.A },
-    });
-  }
-
   /**
    *  If no user, prompt user to log in; Open Prompt modal.
    *  Otherwise, toggle follow user; (Follow/un-follow the target user).
-   *  After toggling, manually update the cache instead of refetching from the server since its just a boolean change.
+   *  After toggling, invalidate the query -> triggers a refetch
    */
   async function handleToggleFollowUser() {
-    if (!userID) return openLoginModal;
+    if (!userID) return openModal({ type: ModalEnum.A });
 
     setIsToggling(true);
 
     //optimistic
     setIsFollowing((prevState) => !prevState);
 
-    // Follow/Unfollow the user & refetch the follower information
-    const { error } = await toggleFollowUser(id);
-    if (error) {
-      console.log(error, handleToggleFollowUser.name);
-      setIsFollowing((prevState) => !prevState); // rollback to original state if server failed
+    const { error } = await toggleFollowUser(followerID);
 
+    if (error) {
+      setIsFollowing((prevState) => !prevState); // rollback to original state if server failed
       return;
     }
 
-    //maybe await
     await qc.invalidateQueries({ queryKey: ["follow"] });
     // refetchFollowerInformation();
 
