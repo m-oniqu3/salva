@@ -8,16 +8,16 @@ export enum ModalEnum {
   MM = "MOBILE_MENU",
 }
 
-type ModalState<K extends ModalEnum, P = undefined> = {
+type ModalState<K extends ModalEnum, P = null> = {
   type: K;
-  payload?: P | null;
+  payload?: P;
 };
 
-type CreateCollectionModal = ModalState<ModalEnum.CCM, null>;
+type CreateCollectionModal = ModalState<ModalEnum.CCM>;
 
-type EditCollectionModal = ModalState<ModalEnum.ECM, null>;
+type EditCollectionModal = ModalState<ModalEnum.ECM>;
 
-type ImagePickerModal = ModalState<ModalEnum.IPM, null>;
+type ImagePickerModal = ModalState<ModalEnum.IPM>;
 
 type AuthModal = ModalState<ModalEnum.A>;
 

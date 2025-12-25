@@ -1,9 +1,8 @@
 import Avatar from "@/components/Avatar";
-import { LoadingIcon } from "@/components/icons";
+import { ChevronRightIcon, LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { Follower } from "@/types/user";
-import { useQueryClient } from "@tanstack/react-query";
 import { toggleFollowUser } from "@utils/api/user/follow-user";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,12 +10,14 @@ import { useState } from "react";
 type Props = {
   userID: string | null;
   follower: Follower;
+  isFollowingText: string;
+  refreshFollowData: () => void;
 };
 
 /**
  * Displays a condensed view of follower information (avatar, name, username, follow status)
  */
-function FollowingUserSummary(props: Props) {
+function FollowerSummary(props: Props) {
   const {
     userID,
     follower: {
@@ -24,12 +25,16 @@ function FollowingUserSummary(props: Props) {
       profile: { avatar, username, firstname, lastname },
       isFollowedByViewer: viewerFollows,
     },
+    isFollowingText,
+    refreshFollowData,
   } = props;
 
   const { openModal } = useModal();
-  const qc = useQueryClient();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(viewerFollows);
+
+  const isSelf = userID === followerID;
 
   /**
    * Toggles follow status for a user with optimistic UI updates.
@@ -55,13 +60,7 @@ function FollowingUserSummary(props: Props) {
 
     setIsLoading(false);
 
-    Promise.all([
-      qc.invalidateQueries({
-        queryKey: ["follow", "followings"],
-        refetchType: "none",
-      }),
-      qc.invalidateQueries({ queryKey: ["follow", "states"] }),
-    ]);
+    refreshFollowData();
   }
 
   return (
@@ -83,21 +82,28 @@ function FollowingUserSummary(props: Props) {
 
       <>
         {isLoading && <LoadingIcon className="size-4" />}
+
         {!isLoading && (
-          <button
-            type="button"
-            disabled={isLoading}
-            className={`h-9 px-3 text-xs font-bold gray text-neutral-600 rounded-full cursor-pointer ${
-              !isFollowing ? "bg-neutral-800 text-white" : " "
-            }`}
-            onClick={handleToggleFollowUser}
-          >
-            {isFollowing ? "Unfollow" : "Follow"}
-          </button>
+          <>
+            {isSelf && <ChevronRightIcon className="size-4" />}
+
+            {!isSelf && (
+              <button
+                type="button"
+                disabled={isLoading}
+                className={`h-9 px-3 text-xs font-bold gray text-neutral-600 rounded-full cursor-pointer ${
+                  !isFollowing ? "bg-neutral-800 text-white" : " "
+                }`}
+                onClick={handleToggleFollowUser}
+              >
+                {isFollowing ? isFollowingText : "Follow"}
+              </button>
+            )}
+          </>
         )}
       </>
     </li>
   );
 }
 
-export default FollowingUserSummary;
+export default FollowerSummary;

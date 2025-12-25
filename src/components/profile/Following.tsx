@@ -14,7 +14,7 @@ function Following(props: Props) {
   const { closeModal } = props;
 
   const { stopPropagation } = useModal();
-  const [activeTab, setActiveTab] = useState(tabs.at(0));
+  const [activeTab, setActiveTab] = useState(tabs ? tabs[0] : "");
 
   const renderedTabs = tabs.map((t) => (
     <button

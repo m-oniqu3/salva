@@ -1,10 +1,12 @@
 "use client";
+
 import { LoadingIcon } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
-import FollowingUserSummary from "@/components/profile/FollowingUserSummary";
+import FollowerSummary from "@/components/profile/FollowerSummary";
 import { useModal } from "@/context/useModal";
 import useFollowings from "@/hooks/useFollowing";
 import { ModalEnum } from "@/types/modal";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * Displays the users the current user is following.
@@ -15,6 +17,8 @@ function FollowingPeople() {
   const {
     state: { modal },
   } = useModal();
+  const qc = useQueryClient();
+
   const isFollowingsModal = modal?.type === ModalEnum.FL;
   const payload = isFollowingsModal && modal?.payload ? modal.payload : null;
 
@@ -61,11 +65,25 @@ function FollowingPeople() {
     );
   }
 
+  const invalidateQueries = () => {
+    return Promise.all([
+      qc.invalidateQueries({
+        queryKey: ["follow", "followings", targetUserID],
+        refetchType: "none",
+      }),
+      qc.invalidateQueries({
+        queryKey: ["follow", "states", targetUserID],
+      }),
+    ]);
+  };
+
   const renderedFollowers = data.map((follower) => (
-    <FollowingUserSummary
+    <FollowerSummary
       key={follower.id}
       userID={userID}
       follower={follower}
+      isFollowingText="Unfollow"
+      refreshFollowData={invalidateQueries}
     />
   ));
 
