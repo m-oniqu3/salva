@@ -14,7 +14,7 @@ function Provider(props: Props) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000,
+            staleTime: Infinity,
           },
         },
       })

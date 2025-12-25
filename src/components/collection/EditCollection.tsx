@@ -2,7 +2,6 @@
 
 import Button from "@/components/Button";
 import { AddIcon, CloseIcon, LoadingIcon } from "@/components/icons";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +22,7 @@ type Props = {
 
 function EditCollection(props: Props) {
   const { closeModal } = props;
-  const { dispatch, stopPropagation } = useModal();
+  const { openModal, stopPropagation } = useModal();
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
   const pathname = usePathname();
@@ -78,12 +77,7 @@ function EditCollection(props: Props) {
   }, [form, username, slug]);
 
   function openImagePickerModal() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: {
-        type: ModalEnum.IPM,
-      },
-    });
+    openModal({ type: ModalEnum.IPM });
   }
 
   function onSubmitForm(input: EditedCollection) {
@@ -97,8 +91,10 @@ function EditCollection(props: Props) {
   }
 
   return (
-    <div className="panel max-w-sm mx-auto" onClick={stopPropagation}>
-      P
+    <div
+      className="panel h-10/12 flex flex-col max-w-sm mx-auto"
+      onClick={stopPropagation}
+    >
       <header className="relative pb-10">
         <h1 className="text-lg font-semibold text-neutral-800">
           Edit Collection
@@ -113,7 +109,7 @@ function EditCollection(props: Props) {
         </button>
       </header>
       <form
-        className="flex flex-col gap-4"
+        className="relative flex flex-col gap-4  h-full"
         onSubmit={form.handleSubmit(onSubmitForm)}
       >
         {/* name */}
@@ -165,7 +161,7 @@ function EditCollection(props: Props) {
           </p>
         </div>
 
-        <div className="">
+        <div className="absolute bottom-0 w-full">
           <Button
             disabled={isEditingCollection}
             type="submit"

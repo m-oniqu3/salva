@@ -25,14 +25,14 @@ async function CollectionList({ username }: Props) {
         username={username}
         preview={{
           ...item,
-          cover_image: `https://picsum.photos/id/${item.id}/500/500`,
+          // cover_image: `https://picsum.photos/id/${item.id}/500/500`,
         }}
       />
     );
   });
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-12 lg:gap-8 ">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-16 lg:gap-x-8  ">
       {previews}
     </div>
   );

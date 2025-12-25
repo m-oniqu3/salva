@@ -8,43 +8,35 @@ import {
   SolidSparkleIcon,
   UserAddIcon,
 } from "@/components/icons";
-import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import type { CollectionSummary } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 
-type Props = { summary: CollectionSummary; user: User | null };
+type Props = { summary: CollectionSummary; userID: string | null };
 
-function CollectionSummary({ summary, user }: Props) {
+function CollectionSummary({ summary, userID }: Props) {
   const {
-    user: { userID, username, avatar, firstname },
+    user: { user_id: collectionOwnerID, username, avatar, firstname },
     collection: { name, is_private: locked, description },
   } = summary;
 
-  const isOwner = userID === user?.id;
+  const isOwner = userID === collectionOwnerID;
 
-  const { dispatch } = useContextMenu();
+  const { openContextMenu } = useContextMenu();
 
   //todo: better function names for handlemore & handle add
   function handleMore() {
-    dispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.COLLECTION_ACTIONS_MENU,
-        position: { x: 500, y: 15 },
-      },
+    openContextMenu({
+      type: ContextMenuEnum.CAM,
+      position: { x: 500, y: 15 },
     });
   }
 
   function handleAdd() {
-    dispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.ADD_ELEMENT_MENU,
-        position: { x: 500, y: 15 },
-      },
+    openContextMenu({
+      type: ContextMenuEnum.AEM,
+      position: { x: 500, y: 15 },
     });
   }
 
@@ -119,7 +111,6 @@ function CollectionSummary({ summary, user }: Props) {
               <button
                 onClick={handleAdd}
                 className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
-                name="Collection Actions Menu"
               >
                 <AddIcon className="size-3 text-neutral-800/60" />
               </button>

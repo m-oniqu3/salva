@@ -9,7 +9,6 @@ import {
   MenuIcon,
 } from "@/components/icons";
 import Searchbar from "@/components/Searchbar";
-import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ContextMenuEnum } from "@/types/context-menu";
@@ -24,18 +23,12 @@ type Props = {
 
 function AuthNavbar({ profile }: Props) {
   const { openModal } = useModal();
-  const { dispatch: ctxDispatch } = useContextMenu();
+  const { openContextMenu } = useContextMenu();
 
   function handleContextMenu(e: MouseEvent) {
     e.stopPropagation();
 
-    ctxDispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.PROFILE_MENU,
-        position: { x: 0, y: 30 },
-      },
-    });
+    openContextMenu({ type: ContextMenuEnum.PM, position: { x: 0, y: 30 } });
   }
 
   return (

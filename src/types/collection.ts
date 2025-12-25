@@ -19,7 +19,7 @@ export type CollectionPreview = {
 export type CollectionSummary = {
   user: {
     id: number;
-    userID: string;
+    user_id: string;
     username: string;
     avatar: string | null;
     firstname: string | null;

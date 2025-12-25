@@ -16,7 +16,7 @@ export type UserFollow = {
   created_at: string;
 };
 
-export type UserFollowings = {
+export type UserFollowingsCount = {
   followers: number;
   following: number;
   isFollowing: boolean;
@@ -24,7 +24,6 @@ export type UserFollowings = {
 
 export type Follower = {
   id: string;
-  isFollowedByViewer: boolean;
   profile: {
     id: number;
     user_id: string;
@@ -33,4 +32,5 @@ export type Follower = {
     firstname: string;
     lastname: string;
   };
+  isFollowedByViewer: boolean;
 };

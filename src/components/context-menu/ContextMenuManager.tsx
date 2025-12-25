@@ -6,42 +6,34 @@ import ContextMenu from "@/components/context-menu/ContextMenu";
 import ProfileMenu from "@/components/context-menu/ProfileMenu";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types/context-menu";
-import { ReactNode } from "react";
 
 function ContextMenuManager() {
   const {
-    state: { currentContextMenu, isOpen },
+    state: { menu },
     closeContextMenu,
   } = useContextMenu();
 
-  if (!currentContextMenu) return null;
+  const renderedMenu = (() => {
+    if (!menu) return null;
 
-  let contextMenuContent: ReactNode = null;
+    switch (menu.type) {
+      case ContextMenuEnum.PM:
+        return <ProfileMenu />;
 
-  switch (currentContextMenu) {
-    case ContextMenuEnum.PROFILE_MENU:
-      contextMenuContent = <ProfileMenu />;
-      break;
+      case ContextMenuEnum.CAM:
+        return <CollectionActionsMenu closeContextMenu={closeContextMenu} />;
 
-    case ContextMenuEnum.COLLECTION_ACTIONS_MENU:
-      contextMenuContent = (
-        <CollectionActionsMenu closeContextMenu={closeContextMenu} />
-      );
-      break;
+      case ContextMenuEnum.AEM:
+        return <AddElementMenu />;
 
-    case ContextMenuEnum.ADD_ELEMENT_MENU:
-      contextMenuContent = <AddElementMenu />;
-      break;
+      default:
+        return null;
+    }
+  })();
 
-    default:
-      return null;
-  }
+  if (!renderedMenu) return null;
 
-  if (!isOpen) return null;
-
-  return (
-    <ContextMenu close={closeContextMenu}>{contextMenuContent}</ContextMenu>
-  );
+  return <ContextMenu close={closeContextMenu}>{renderedMenu}</ContextMenu>;
 }
 
 export default ContextMenuManager;

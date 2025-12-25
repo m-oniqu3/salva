@@ -1,7 +1,6 @@
 "use client";
 
 import ContextContainer from "@/components/context-menu/ContextContainer";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 
@@ -30,13 +29,13 @@ const keys = Object.keys(Options) as Array<keyof typeof Options>;
 
 function CollectionActionsMenu(props: Props) {
   const { closeContextMenu } = props;
-  const { dispatch } = useModal();
+  const { openModal } = useModal();
 
   // Action functions
   function editCollectionDetails() {
     console.log("editing collection");
     closeContextMenu();
-    dispatch({ type: ModalActionEnum.OPEN_MODAL, payload: ModalEnum.ECM });
+    openModal({ type: ModalEnum.ECM });
   }
 
   function organizeCollection() {
@@ -92,9 +91,10 @@ function CollectionActionsMenu(props: Props) {
       className="w-44"
       style={{
         position: "absolute",
-        top: "330px",
-        left: "55%",
-        transform: "translate(-50%, 0%)",
+        top: 0,
+        // top: "330px",
+        // left: "55%",
+        // transform: "translate(-50%, 0%)",
       }}
     >
       <ul>{options}</ul>

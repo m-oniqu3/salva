@@ -53,7 +53,7 @@ body {
   }
 
   .panel {
-    @apply bg-white h-9/12 p-6 rounded-3xl w-full
+    @apply bg-white h-full max-h-[500px] p-8 rounded-2xl w-full overflow-scroll no-scrollbar
   }
 
   .dark {

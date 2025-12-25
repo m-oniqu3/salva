@@ -59,8 +59,11 @@ function CreateCollection(props: Props) {
   }
 
   return (
-    <div className="panel flex flex-col max-w-sm" onClick={stopPropagation}>
-      <header className="relative  pb-12">
+    <div
+      className="panel grid grid-rows-[80px_1fr] max-w-sm"
+      onClick={stopPropagation}
+    >
+      <header className="relative">
         <h1 className="text-lg font-semibold">Create Collection</h1>
         <p className="text-sml">Create a collection to organize your films.</p>
 
@@ -73,7 +76,7 @@ function CreateCollection(props: Props) {
       </header>
 
       <form
-        className="relative flex flex-col gap-4 h-full"
+        className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmitForm)}
       >
         {/* name */}
@@ -125,23 +128,21 @@ function CreateCollection(props: Props) {
           </p>
         </div>
 
-        <div className="absolute bottom-0 w-full">
-          <Button
-            disabled={isCreatingCollection}
-            type="submit"
-            className="bg-neutral-800 text-white rounded-lg w-full h-9"
-          >
-            {isCreatingCollection ? (
-              <div className="flex items-center justify-center gap-2">
-                <span className="animate-spin text-white">
-                  <LoadingIcon className="size-5" />
-                </span>
-              </div>
-            ) : (
-              "Create Collection"
-            )}
-          </Button>
-        </div>
+        <Button
+          disabled={isCreatingCollection}
+          type="submit"
+          className="bg-neutral-800 text-white rounded-lg h-9 mt-auto"
+        >
+          {isCreatingCollection ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="animate-spin text-white">
+                <LoadingIcon className="size-5" />
+              </span>
+            </div>
+          ) : (
+            "Create Collection"
+          )}
+        </Button>
       </form>
     </div>
   );

@@ -1,3 +1,5 @@
+"use server";
+
 import { Result } from "@/types/result";
 import { Profile } from "@/types/user";
 import { User } from "@supabase/supabase-js";
@@ -11,52 +13,38 @@ type Props = {
 type Response = Result<Profile | null>;
 
 export async function getProfile(props: Props): Response {
-  const supabase = await createClient();
+  try {
+    const { username, id } = props;
 
-  const { username, id } = props;
-
-  async function findProfile() {
-    if (username) {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("username", username)
-        .single();
-
-      return { data, error };
+    if (!username && !id) {
+      throw new Error("Cannot fetch profile. No identifier provided.");
     }
 
-    if (id) {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", id)
-        .single();
+    const supabase = await createClient();
 
-      return { data, error };
+    // Build base query.
+    const baseQuery = supabase.from("profiles").select("*");
+
+    const { data, error } = username
+      ? await baseQuery.eq("username", username).single()
+      : await baseQuery.eq("user_id", id!).single();
+
+    if (error) {
+      throw new Error(`Failed to get profile : ${error.message}`);
     }
 
-    return null;
+    if (!data) {
+      throw new Error("Profile not found.");
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error(`Error in ${getProfile.name}`, error);
+
+    return {
+      data: null,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    };
   }
-  //   return { data: null, error: "No identifier provided" };
-  // }
-
-  const profile = await findProfile();
-
-  if (!profile) {
-    return { data: null, error: "No profile found." };
-  }
-
-  const { data, error } = profile;
-
-  if (error) {
-    console.error("Error fetching profile data", error);
-    return { data: null, error: "Could not find profile" };
-  }
-
-  if (!data) {
-    return { data: null, error: "Could not find profile" };
-  }
-
-  return { data, error: null };
 }

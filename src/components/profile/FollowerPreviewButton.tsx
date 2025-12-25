@@ -53,7 +53,11 @@ function FollowerPreviewButton(props: Props) {
       return;
     }
 
-    await qc.invalidateQueries({ queryKey: ["follow"] });
+    // Mark as Stale Only: If you don't want active queries to refetch immediately, just mark them as invalid so they refetch on their next access.
+    await qc.invalidateQueries({
+      queryKey: ["follow"],
+      refetchType: "none",
+    });
     // refetchFollowerInformation();
 
     setIsToggling(false);

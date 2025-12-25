@@ -26,11 +26,11 @@ function ProfileSummary({ profile, userID }: Props) {
     bio,
   } = profile;
 
-  const { data } = useFollowStates(userID, profileID);
+  const { result } = useFollowStates(userID, profileID);
   const qc = useQueryClient();
 
   // Use local state since we want to manipulate the state locally to acheive 'optimistic' state changes
-  const [followCounts, setFollowCounts] = useState<typeof data>(data);
+  const [followCounts, setFollowCounts] = useState<typeof result>(result);
 
   // Is the current user viewing their own profile?
   const isUserViewingSelf = profileID === userID;
@@ -38,8 +38,9 @@ function ProfileSummary({ profile, userID }: Props) {
 
   // Sync local state whenever the query data changes
   useEffect(() => {
-    if (data) setFollowCounts(data);
-  }, [data]);
+    if (result) setFollowCounts(result);
+    console.log("useeffect", result);
+  }, [result]);
 
   // Optimistically update follower count through local state
   function updateFollowerCount(increment = false) {
@@ -77,7 +78,7 @@ function ProfileSummary({ profile, userID }: Props) {
       return updateFollowerCount(followCounts?.isFollowing);
     }
 
-    await qc.invalidateQueries({ queryKey: ["follow"] });
+    await qc.invalidateQueries({ queryKey: ["follow"], refetchType: "all" });
     // refetch();
   }
 
@@ -106,12 +107,12 @@ function ProfileSummary({ profile, userID }: Props) {
         <Avatar
           avatar={avatar}
           username={username}
-          className={"size-10 rounded-full text-xl"}
+          className={"size-10 rounded-full text-xl lg:size-12"}
         />
 
         {/* Name */}
         <div className="mt-2">
-          <h2 className="font-semibold text-lg capitalize text-neutral-800">
+          <h2 className="font-semibold text-lg capitalize text-neutral-800 lg:text-xl">
             <span>{firstname ? `${firstname} ${lastname}` : username}</span>
           </h2>
         </div>

@@ -1,16 +1,27 @@
 "use client";
 import { LoadingIcon } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
-import FollowerPreview from "@/components/profile/FollowerPreview";
+import FollowingUserSummary from "@/components/profile/FollowingUserSummary";
+import { useModal } from "@/context/useModal";
 import useFollowings from "@/hooks/useFollowing";
+import { ModalEnum } from "@/types/modal";
 
-type Props = {
-  userID: string | null;
-  targetUserID: string;
-};
+/**
+ * Displays the users the current user is following.
+ * Fetches the users and displays a summary.
+ * Allows the user to update the follow status - unfollow/follow the followed user.
+ */
+function FollowingPeople() {
+  const {
+    state: { modal },
+  } = useModal();
+  const isFollowingsModal = modal?.type === ModalEnum.FL;
+  const payload = isFollowingsModal && modal?.payload ? modal.payload : null;
 
-function FollowingPeople(props: Props) {
-  const { userID, targetUserID } = props;
+  const { targetUserID, userID } = payload ?? {
+    targetUserID: "",
+    userID: null,
+  };
 
   const {
     isLoading,
@@ -19,8 +30,6 @@ function FollowingPeople(props: Props) {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-    isRefetching,
-    refetch,
   } = useFollowings(targetUserID);
 
   if (isLoading) {
@@ -52,17 +61,13 @@ function FollowingPeople(props: Props) {
     );
   }
 
-  const renderedFollowers = data.map((follower) => {
-    return (
-      <FollowerPreview
-        key={follower.id}
-        userID={userID}
-        follower={follower}
-        isRefetching={isRefetching}
-        refetch={refetch}
-      />
-    );
-  });
+  const renderedFollowers = data.map((follower) => (
+    <FollowingUserSummary
+      key={follower.id}
+      userID={userID}
+      follower={follower}
+    />
+  ));
 
   return (
     <InfiniteScroll

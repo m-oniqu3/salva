@@ -1,4 +1,4 @@
 export type Result<T> = Promise<{
-  data: T | null;
+  data: T;
   error: string | null;
 }>;

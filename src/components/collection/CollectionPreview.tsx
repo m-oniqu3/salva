@@ -18,11 +18,16 @@ function CollectionPreview({ preview, username }: Props) {
       alt={`cover image for collection:${name}`}
       width={100}
       height={50}
-      quality={100}
+      quality={75}
       className="size-full object-cover rounded-3xl"
     />
   ) : (
-    <div className="gray size-full rounded-3xl" />
+    <div className="size-full  grid grid-cols-2 grid-rows-[2fr_1fr] gap-3">
+      <div className=" col-span-full rounded-xl bg-neutral-200"></div>
+
+      <div className="col-span-1 rounded-xl bg-neutral-400"></div>
+      <div className="col-span-1 rounded-xl bg-neutral-300"></div>
+    </div>
   );
 
   return (
