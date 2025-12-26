@@ -11,7 +11,7 @@ function ContextContainer(props: Props) {
 
   return (
     <div
-      className={`gray p-2 rounded-xl ${className}`}
+      className={`gray p-3 rounded-xl ${className}`}
       style={style}
       onClick={(e) => e.stopPropagation()}
     >

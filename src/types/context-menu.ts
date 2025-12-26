@@ -1,6 +1,6 @@
 export enum ContextMenuEnum {
   PM = "PROFILE_MENU",
-  CAM = "COLLECTION_ACTIONS_MENU",
+  COM = "COLLECTION_OPTIONS_MENU",
   AEM = "ADD_ELEMENT_MENU",
 }
 
@@ -13,7 +13,7 @@ type ContextMenuState<K extends ContextMenuEnum, P = undefined> = {
 // might need user ID here in the payload
 type ProfileMenu = ContextMenuState<ContextMenuEnum.PM, null>;
 
-type CollectionActionsMenu = ContextMenuState<ContextMenuEnum.CAM, null>;
+type CollectionActionsMenu = ContextMenuState<ContextMenuEnum.COM, null>;
 
 type AddElementMenu = ContextMenuState<ContextMenuEnum.AEM, null>;
 

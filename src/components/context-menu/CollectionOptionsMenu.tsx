@@ -1,6 +1,6 @@
 "use client";
 
-import ContextContainer from "@/components/context-menu/ContextContainer";
+import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 
@@ -27,9 +27,14 @@ enum Options {
 
 const keys = Object.keys(Options) as Array<keyof typeof Options>;
 
-function CollectionActionsMenu(props: Props) {
+function CollectionOptionsMenu(props: Props) {
   const { closeContextMenu } = props;
   const { openModal } = useModal();
+  const {
+    state: { menu },
+  } = useContextMenu();
+
+  if (!menu) return null;
 
   // Action functions
   function editCollectionDetails() {
@@ -87,19 +92,10 @@ function CollectionActionsMenu(props: Props) {
   });
 
   return (
-    <ContextContainer
-      className="w-44"
-      style={{
-        position: "absolute",
-        top: 0,
-        // top: "330px",
-        // left: "55%",
-        // transform: "translate(-50%, 0%)",
-      }}
-    >
-      <ul>{options}</ul>
-    </ContextContainer>
+    <div className="context-panel w-full">
+      <ul className="w-44">{options}</ul>
+    </div>
   );
 }
 
-export default CollectionActionsMenu;
+export default CollectionOptionsMenu;

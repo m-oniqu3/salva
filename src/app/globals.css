@@ -56,6 +56,10 @@ body {
     @apply bg-white h-full max-h-[500px] p-8 rounded-2xl w-full overflow-scroll no-scrollbar
   }
 
+  .context-panel {
+    @apply gray p-3 rounded-xl
+  }
+
   .dark {
     background-color: rgb(13, 13, 13)
   }
@@ -75,6 +79,10 @@ body {
     @apply text-red-500 text-xs font-semibold h-4
   }
 
+}
+
+@utility gray {
+  @apply bg-[#F5F4F2]
 }
 
 @utility no-scrollbar {

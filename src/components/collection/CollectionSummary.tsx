@@ -12,24 +12,34 @@ import { useContextMenu } from "@/context/useContextMenu";
 import type { CollectionSummary } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
 import Link from "next/link";
+import { MouseEvent, useRef } from "react";
 
 type Props = { summary: CollectionSummary; userID: string | null };
 
 function CollectionSummary({ summary, userID }: Props) {
   const {
     user: { user_id: collectionOwnerID, username, avatar, firstname },
-    collection: { name, is_private: locked, description },
+    collection: { name, is_private: isPrivate, description },
   } = summary;
 
-  const isOwner = userID === collectionOwnerID;
+  const isCollectionOwner = userID === collectionOwnerID;
 
   const { openContextMenu } = useContextMenu();
+  const optionsRef = useRef<HTMLButtonElement | null>(null);
 
   //todo: better function names for handlemore & handle add
-  function handleMore() {
+  function handleMoreOptions(e: MouseEvent) {
+    const btn = optionsRef?.current?.getBoundingClientRect();
+
+    if (!btn) return;
+
+    console.log(e.pageX, e.pageY, btn, window.scrollX, window.scrollX);
     openContextMenu({
-      type: ContextMenuEnum.CAM,
-      position: { x: 500, y: 15 },
+      type: ContextMenuEnum.COM,
+      position: {
+        x: btn.left - 50,
+        y: btn.top + 60,
+      },
     });
   }
 
@@ -50,7 +60,7 @@ function CollectionSummary({ summary, userID }: Props) {
         )}
 
         <div className="flex gap-2 font-semibold text-xs mt-1 text-neutral-800">
-          {locked && (
+          {isPrivate && (
             <p className="flex gap-1 font-semibold">
               Private
               <span>
@@ -59,7 +69,7 @@ function CollectionSummary({ summary, userID }: Props) {
             </p>
           )}
 
-          {locked && <span>&#xb7;</span>}
+          {isPrivate && <span>&#xb7;</span>}
 
           <p className="">{description?.length ?? 0} films</p>
 
@@ -70,7 +80,7 @@ function CollectionSummary({ summary, userID }: Props) {
             <span>{description?.length === 1 ? "Follower" : "Followers"}</span>
           </p>
 
-          {!isOwner && (
+          {!isCollectionOwner && (
             <div className="flex gap-1">
               <span>&#xb7;</span>
 
@@ -84,10 +94,10 @@ function CollectionSummary({ summary, userID }: Props) {
             <Avatar
               avatar={avatar}
               username={username}
-              className={"size-8 rounded-full"}
+              className={"size-9 rounded-full"}
             />
 
-            {!isOwner && (
+            {!isCollectionOwner && (
               <figcaption className="text-sml">
                 By
                 <span>&nbsp;</span>
@@ -98,28 +108,29 @@ function CollectionSummary({ summary, userID }: Props) {
             )}
           </div>
 
-          {isOwner && (
+          {isCollectionOwner && (
             <div className="flex gap-3">
-              <div className="gray size-8 flex items-center justify-center rounded-full">
-                <UserAddIcon className="size-3 text-neutral-800/60" />
+              <div className="gray size-9 flex items-center justify-center rounded-full">
+                <UserAddIcon className="size-3.5 text-neutral-800/60" />
               </div>
 
-              <button className="rounded-full size-8 flex justify-center items-center gray cursor-pointer">
-                <SolidSparkleIcon className="size-3 text-neutral-800/60" />
+              <button className="rounded-full size-9 flex justify-center items-center gray cursor-pointer">
+                <SolidSparkleIcon className="size-3.5 text-neutral-800/60" />
               </button>
 
               <button
                 onClick={handleAdd}
-                className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
+                className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
               >
-                <AddIcon className="size-3 text-neutral-800/60" />
+                <AddIcon className="size-3.5 text-neutral-800/60" />
               </button>
 
               <button
-                onClick={handleMore}
-                className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
+                ref={optionsRef}
+                onClick={handleMoreOptions}
+                className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
               >
-                <MoreHorizontalIcon className="size-3 text-neutral-800/60" />
+                <MoreHorizontalIcon className="size-3.5 text-neutral-800/60" />
               </button>
             </div>
           )}
