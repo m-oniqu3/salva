@@ -1,3 +1,5 @@
+import { CollectionSummary } from "@/types/collection";
+
 export enum ModalEnum {
   CCM = "CREATE_COLLECTION_MODAL",
   ECM = "EDIT_COLLECTION_MODAL",
@@ -15,7 +17,12 @@ type ModalState<K extends ModalEnum, P = null> = {
 
 type CreateCollectionModal = ModalState<ModalEnum.CCM>;
 
-type EditCollectionModal = ModalState<ModalEnum.ECM>;
+type EditCollectionModal = ModalState<
+  ModalEnum.ECM,
+  {
+    collectionSummary: CollectionSummary;
+  }
+>;
 
 type ImagePickerModal = ModalState<ModalEnum.IPM>;
 

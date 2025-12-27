@@ -13,14 +13,15 @@ import Modal from "@components/Modal";
 
 function ModalManager() {
   const {
+    state,
     state: { modal },
     closeModal,
   } = useModal();
 
-  console.log("MM", modal, closeModal);
+  console.log("MM", state);
 
-  const renderedModal = (() => {
-    if (!modal || !modal.type) return null;
+  const rendered_modal = (() => {
+    if (!modal) return null;
 
     switch (modal.type) {
       case ModalEnum.CCM:
@@ -45,13 +46,15 @@ function ModalManager() {
         return <MobileMenu closeModal={closeModal} />;
 
       default:
-        return null;
+        throw new Error(
+          "Modal type not allowed or missing. No modal to render"
+        );
     }
   })();
 
-  if (!renderedModal) return null;
+  if (!rendered_modal) return null;
 
-  return <Modal close={closeModal}>{renderedModal}</Modal>;
+  return <Modal closeModal={closeModal}>{rendered_modal}</Modal>;
 }
 
 export default ModalManager;

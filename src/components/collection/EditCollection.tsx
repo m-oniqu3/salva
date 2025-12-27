@@ -22,20 +22,30 @@ type Props = {
 
 function EditCollection(props: Props) {
   const { closeModal } = props;
-  const { openModal, stopPropagation } = useModal();
+  const {
+    state: { modal },
+    openModal,
+    stopPropagation,
+  } = useModal();
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
   const pathname = usePathname();
-  console.log(pathname.split("/"));
-  const [username, slug] = pathname.split("/").slice(1) as Array<string | null>;
 
-  console.log(username, slug);
+  const [username, slug] = pathname.split("/").slice(1) as Array<string | null>;
 
   // const triggerFileInput = () => hiddenFileInputRef.current?.click();
 
+  // Is EditCollection Modal ?
+  const isECM = modal?.type === ModalEnum.ECM;
+  const collectionSummary =
+    isECM && modal.payload ? modal.payload.collectionSummary : null;
+
   const form = useForm<EditedCollection>({
     resolver: zodResolver(EditedCollectionSchema),
-    defaultValues: { name: "", description: "" },
+    defaultValues: {
+      name: collectionSummary?.collection.name ?? "",
+      description: collectionSummary?.collection.description ?? "",
+    },
   });
 
   useEffect(() => {
@@ -54,7 +64,8 @@ function EditCollection(props: Props) {
         // if (!isMounted) return;
 
         if (!data || !data.collection) {
-          form.reset({ name: "", description: "" });
+          // form.reset({ name: "", description: "" });
+          form.reset();
           return;
         }
 
@@ -92,7 +103,7 @@ function EditCollection(props: Props) {
 
   return (
     <div
-      className="panel h-10/12 flex flex-col max-w-sm mx-auto"
+      className="panel flex flex-col max-w-sm mx-auto"
       onClick={stopPropagation}
     >
       <header className="relative pb-10">
@@ -121,7 +132,7 @@ function EditCollection(props: Props) {
           <button
             type="button"
             onClick={openImagePickerModal}
-            className="gray flex justify-center items-center size-24 rounded-lg gray z-0 cursor-pointer"
+            className="flex justify-center items-center size-24 rounded-lg gray z-0 cursor-pointer"
           >
             <AddIcon className="size-5 text-neutral-400" />
           </button>
@@ -152,7 +163,7 @@ function EditCollection(props: Props) {
 
           <textarea
             {...form.register("description")}
-            className="input h-20 resize-none gray"
+            className="input h-20 resize-none gray no-scrollbar"
             placeholder="movies i throw on when my brain is tired"
           ></textarea>
 
@@ -161,23 +172,21 @@ function EditCollection(props: Props) {
           </p>
         </div>
 
-        <div className="absolute bottom-0 w-full">
-          <Button
-            disabled={isEditingCollection}
-            type="submit"
-            className="bg-neutral-800 text-white rounded-md w-full h-9"
-          >
-            {isEditingCollection ? (
-              <div className="flex items-center justify-center gap-2">
-                <span className="animate-spin text-white">
-                  <LoadingIcon className="size-5" />
-                </span>
-              </div>
-            ) : (
-              "Edit Collection"
-            )}
-          </Button>
-        </div>
+        <Button
+          disabled={isEditingCollection}
+          type="submit"
+          className="bg-neutral-800 text-white rounded-lg h-9 mt-auto"
+        >
+          {isEditingCollection ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="animate-spin text-white">
+                <LoadingIcon className="size-5" />
+              </span>
+            </div>
+          ) : (
+            "Edit Collection"
+          )}
+        </Button>
       </form>
     </div>
   );

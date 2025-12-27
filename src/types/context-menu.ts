@@ -1,19 +1,26 @@
+import { CollectionSummary } from "@/types/collection";
+
 export enum ContextMenuEnum {
-  PM = "PROFILE_MENU",
-  COM = "COLLECTION_OPTIONS_MENU",
-  AEM = "ADD_ELEMENT_MENU",
+  "PM" = "PROFILE_MENU",
+  "COM" = "COLLECTION_OPTIONS_MENU",
+  "AEM" = "ADD_ELEMENT_MENU",
 }
 
-type ContextMenuState<K extends ContextMenuEnum, P = undefined> = {
+type ContextMenuState<K = ContextMenuEnum, P = undefined> = {
   type: K;
-  position: { x: number; y: number };
+  position: { top?: number; left?: number; right?: number; bottom?: number };
   payload?: P | null;
 };
 
 // might need user ID here in the payload
 type ProfileMenu = ContextMenuState<ContextMenuEnum.PM, null>;
 
-type CollectionActionsMenu = ContextMenuState<ContextMenuEnum.COM, null>;
+type CollectionActionsMenu = ContextMenuState<
+  ContextMenuEnum.COM,
+  {
+    collectionSummary: CollectionSummary;
+  }
+>;
 
 type AddElementMenu = ContextMenuState<ContextMenuEnum.AEM, null>;
 

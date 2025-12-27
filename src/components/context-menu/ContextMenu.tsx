@@ -6,22 +6,33 @@ import React, { useEffect, useState } from "react";
 
 type Props = {
   children: React.ReactNode;
-  close: () => void;
+  closeMenu: () => void;
 };
 
 function ContextMenu(props: Props) {
-  const { children, close } = props;
+  const { children, closeMenu } = props;
   const [isMobile, setisMobile] = useState(false);
   const {
     state: { menu },
   } = useContextMenu();
 
+  // Close menu when the route changes
+  useEffect(() => {
+    const handlePopState = () => {
+      closeMenu();
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [closeMenu]);
+
   // Show context menu as modal on small screens. Otherwise position the context menu
   useEffect(() => {
     function positionMenu() {
-      const windowWidth = window.innerWidth;
-
-      if (windowWidth < 400) {
+      if (window.innerWidth < 400) {
         setisMobile(true);
       } else setisMobile(false);
     }
@@ -36,21 +47,21 @@ function ContextMenu(props: Props) {
 
   if (!menu) return null;
 
-  const { x, y } = menu.position;
+  const { top, left, right, bottom } = menu.position;
 
   return (
-    <Portal selector="#context-menu" close={close}>
+    <Portal selector="#context-menu" close={closeMenu}>
       {isMobile && (
         <div
           className="fixed p-4 w-full inset-0 z-50 flex items-end justify-center bg-black/70"
-          onClick={close}
+          onClick={closeMenu}
         >
           {children}
         </div>
       )}
 
       {!isMobile && (
-        <div className="absolute" style={{ top: y, left: x }}>
+        <div className="absolute" style={{ top, left, right, bottom }}>
           {children}
         </div>
       )}

@@ -33,7 +33,7 @@ function ContextMenuManager() {
 
   if (!renderedMenu) return null;
 
-  return <ContextMenu close={closeContextMenu}>{renderedMenu}</ContextMenu>;
+  return <ContextMenu closeMenu={closeContextMenu}>{renderedMenu}</ContextMenu>;
 }
 
 export default ContextMenuManager;

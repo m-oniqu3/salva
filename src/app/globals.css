@@ -57,7 +57,7 @@ body {
   }
 
   .context-panel {
-    @apply gray p-3 rounded-xl
+    @apply gray p-3 rounded-2xl
   }
 
   .dark {

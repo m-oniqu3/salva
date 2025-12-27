@@ -9,10 +9,10 @@ import {
   UserAddIcon,
 } from "@/components/icons";
 import { useContextMenu } from "@/context/useContextMenu";
+import useClientRect from "@/hooks/useClientRect";
 import type { CollectionSummary } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
 import Link from "next/link";
-import { MouseEvent, useRef } from "react";
 
 type Props = { summary: CollectionSummary; userID: string | null };
 
@@ -25,33 +25,39 @@ function CollectionSummary({ summary, userID }: Props) {
   const isCollectionOwner = userID === collectionOwnerID;
 
   const { openContextMenu } = useContextMenu();
-  const optionsRef = useRef<HTMLButtonElement | null>(null);
+  const optionsBtn = useClientRect<HTMLButtonElement>();
+  const addElementBtn = useClientRect<HTMLButtonElement>();
 
   //todo: better function names for handlemore & handle add
-  function handleMoreOptions(e: MouseEvent) {
-    const btn = optionsRef?.current?.getBoundingClientRect();
+  function handleCollectionOptions() {
+    if (!optionsBtn.rect) return;
 
-    if (!btn) return;
-
-    console.log(e.pageX, e.pageY, btn, window.scrollX, window.scrollX);
     openContextMenu({
       type: ContextMenuEnum.COM,
       position: {
-        x: btn.left - 50,
-        y: btn.top + 60,
+        top: optionsBtn.rect.top + 60,
+        left: optionsBtn.rect.left - 100,
+      },
+      payload: { collectionSummary: summary },
+    });
+  }
+
+  function handleAddElementMenu() {
+    if (!addElementBtn.rect) return;
+
+    console.log(addElementBtn.rect);
+
+    openContextMenu({
+      type: ContextMenuEnum.AEM,
+      position: {
+        top: addElementBtn.rect.top + 60,
+        left: addElementBtn.rect.left - 100,
       },
     });
   }
 
-  function handleAdd() {
-    openContextMenu({
-      type: ContextMenuEnum.AEM,
-      position: { x: 500, y: 15 },
-    });
-  }
-
   return (
-    <section className="flex flex-col max-w-[450px]">
+    <section className="flex flex-col max-w-[450px] relative">
       <article className="flex flex-col gap-1">
         <h1 className="font-bold text-lg max-w-lg text-neutral-800">{name}</h1>
 
@@ -119,16 +125,19 @@ function CollectionSummary({ summary, userID }: Props) {
               </button>
 
               <button
-                onClick={handleAdd}
+                ref={addElementBtn.ref}
+                onClick={handleAddElementMenu}
                 className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
+                name="Add Element"
               >
                 <AddIcon className="size-3.5 text-neutral-800/60" />
               </button>
 
               <button
-                ref={optionsRef}
-                onClick={handleMoreOptions}
+                ref={optionsBtn.ref}
+                onClick={handleCollectionOptions}
                 className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
+                name="Collection Options"
               >
                 <MoreHorizontalIcon className="size-3.5 text-neutral-800/60" />
               </button>

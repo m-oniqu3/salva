@@ -3,17 +3,17 @@ import React from "react";
 
 type Props = {
   children: React.ReactNode;
-  close: () => void;
+  closeModal: () => void;
 };
 
 function Modal(props: Props) {
-  const { children, close } = props;
+  const { children, closeModal } = props;
 
   return (
-    <Portal selector="#modal" close={close}>
+    <Portal selector="#modal" close={closeModal}>
       <div
         className="fixed p-4 w-full inset-0 z-50 flex items-center justify-center bg-black/70"
-        onClick={close}
+        onClick={closeModal}
       >
         {children}
       </div>

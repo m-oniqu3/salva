@@ -41,11 +41,12 @@ async function page({ params }: Props) {
 
   const targetUserID = profile.user_id;
 
-  await Promise.all([
+  Promise.all([
     queryClient.prefetchInfiniteQuery({
       queryKey: ["follow", "followers", targetUserID],
       queryFn: ({ pageParam }) =>
         getFollowers({ targetUserID, page: pageParam }),
+
       initialPageParam: 0,
     }),
 

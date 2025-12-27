@@ -19,7 +19,7 @@ function Following(props: Props) {
   const renderedTabs = tabs.map((t) => (
     <button
       key={t}
-      onClick={setActiveTab.bind(null, t)}
+      onClick={() => setActiveTab(t)}
       className={`font-bold text-sml rounded-2xl cursor-pointer text-black/40 ${
         activeTab == t ? "bg-neutral-700 text-white" : ""
       } `}

@@ -11,11 +11,11 @@ import {
 import Searchbar from "@/components/Searchbar";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
+import useClientRect from "@/hooks/useClientRect";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
 import Link from "next/link";
-import { MouseEvent } from "react";
 
 type Props = {
   profile: Profile | null;
@@ -24,11 +24,15 @@ type Props = {
 function AuthNavbar({ profile }: Props) {
   const { openModal } = useModal();
   const { openContextMenu } = useContextMenu();
+  const { ref: profileUserMenuRef, rect } = useClientRect<HTMLButtonElement>();
 
-  function handleContextMenu(e: MouseEvent) {
-    e.stopPropagation();
+  function handleProfileContextMenu() {
+    if (!rect) return;
 
-    openContextMenu({ type: ContextMenuEnum.PM, position: { x: 0, y: 30 } });
+    openContextMenu({
+      type: ContextMenuEnum.PM,
+      position: { top: rect.top + 50, right: 0 },
+    });
   }
 
   return (
@@ -58,7 +62,7 @@ function AuthNavbar({ profile }: Props) {
 
         <button
           type="button"
-          onClick={openModal.bind(null, { type: ModalEnum.MM })}
+          onClick={() => openModal({ type: ModalEnum.MM })}
           className="md:hidden"
         >
           <MenuIcon className="size-5" />
@@ -74,7 +78,7 @@ function AuthNavbar({ profile }: Props) {
         {profile && (
           <div className="hidden md:flex items-center gap-4">
             <Button
-              onClick={openModal.bind(null, { type: ModalEnum.CCM })}
+              onClick={() => openModal({ type: ModalEnum.CCM })}
               className="bg-neutral-800 text-white"
             >
               Create
@@ -90,9 +94,11 @@ function AuthNavbar({ profile }: Props) {
             />
 
             <button
+              ref={profileUserMenuRef}
               type="button"
               className="cursor-pointer"
-              onClick={handleContextMenu}
+              onClick={handleProfileContextMenu}
+              name="Profile User Menu"
             >
               <ArrowDownIcon className="size-4" />
             </button>
