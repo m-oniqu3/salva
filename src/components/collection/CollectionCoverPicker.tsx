@@ -9,7 +9,6 @@ function CollectionCoverPicker() {
   const { openModal, stopPropagation } = useModal();
 
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
-
   const triggerFileInput = () => hiddenFileInputRef.current?.click();
 
   //todo : get the collection images from the db for the given collection

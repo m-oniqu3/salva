@@ -23,12 +23,11 @@ function CollectionSummary({ summary, userID }: Props) {
   } = summary;
 
   const isCollectionOwner = userID === collectionOwnerID;
-
   const { openContextMenu } = useContextMenu();
   const optionsBtn = useClientRect<HTMLButtonElement>();
   const addElementBtn = useClientRect<HTMLButtonElement>();
 
-  //todo: better function names for handlemore & handle add
+  // Opens and positions the Collection Options Menu
   function handleCollectionOptions() {
     if (!optionsBtn.rect) return;
 
@@ -42,10 +41,9 @@ function CollectionSummary({ summary, userID }: Props) {
     });
   }
 
+  // Opens and positions the Add Element Menu
   function handleAddElementMenu() {
     if (!addElementBtn.rect) return;
-
-    console.log(addElementBtn.rect);
 
     openContextMenu({
       type: ContextMenuEnum.AEM,

@@ -3,9 +3,9 @@
 import Button from "@/components/Button";
 import { AddIcon, CloseIcon, LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
+import useFindCollection from "@/hooks/useFindCollection";
 import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { findCollection } from "@utils/api/collections/find-collection";
 import {
   EditedCollection,
   EditedCollectionSchema,
@@ -25,14 +25,15 @@ function EditCollection() {
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
   const pathname = usePathname();
-  const [username, slug] = pathname.split("/").slice(1) as Array<string | null>;
+  const [username, slug] = pathname.split("/").slice(1) as Array<string>;
 
   // const triggerFileInput = () => hiddenFileInputRef.current?.click();
 
   // Is EditCollection Modal ?
   const isECM = modal?.type === ModalEnum.ECM;
-  const collectionSummary =
-    isECM && modal.payload ? modal.payload.collectionSummary : null;
+  const collectionSummary = isECM ? modal.payload?.collectionSummary : null;
+
+  const { data } = useFindCollection(username, slug);
 
   const form = useForm<EditedCollection>({
     resolver: zodResolver(EditedCollectionSchema),
@@ -42,44 +43,18 @@ function EditCollection() {
     },
   });
 
+  //When we get data we update the form
+
   useEffect(() => {
-    async function fetchCollection() {
-      // let isMounted = true;
+    if (data?.data) {
+      const collection = data.data;
 
-      try {
-        if (!username || !slug) return;
-
-        const { data, error } = await findCollection(username, slug);
-
-        if (error) {
-          throw new Error(error);
-        }
-
-        // if (!isMounted) return;
-
-        if (!data || !data.collection) {
-          // form.reset({ name: "", description: "" });
-          form.reset();
-          return;
-        }
-
-        const { name, description } = data.collection;
-
-        form.reset({ name, description: description ?? "" });
-      } catch (error: unknown) {
-        form.setError("root", {
-          type: "value",
-          message: error instanceof Error ? error.message : String(error),
-        });
-      }
-
-      // return () => {
-      //   isMounted = false; // avoids state updates if component unmounts
-      // };
+      form.reset({
+        name: collection.collection.name,
+        description: collection.collection.description,
+      });
     }
-
-    fetchCollection();
-  }, [form, username, slug]);
+  }, [data, form]);
 
   function openImagePickerModal() {
     openModal({ type: ModalEnum.IPM });

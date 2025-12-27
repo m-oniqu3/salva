@@ -3,6 +3,7 @@
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
+import toggleCollectionPrivacy from "@utils/api/collections/toggle-collection-privacy";
 
 function CollectionOptionsMenu() {
   const { closeContextMenu } = useContextMenu();
@@ -45,8 +46,19 @@ function CollectionOptionsMenu() {
     console.log("Organizing collection...");
   }
 
-  function togglePrivacyStatus() {
+  async function togglePrivacyStatus() {
     console.log("Making collection public...");
+
+    closeContextMenu();
+
+    const { data, error } = await toggleCollectionPrivacy(
+      collectionSummary.collection.id
+    );
+
+    if (!error) {
+      console.log(data);
+      console.log("successfully toggled privacy");
+    }
   }
 
   function inviteCollaborators() {
@@ -94,8 +106,11 @@ function CollectionOptionsMenu() {
   });
 
   return (
-    <div className="context-panel w-full" onClick={(e) => e.stopPropagation()}>
-      <ul className="w-44">{rendered_collection_options}</ul>
+    <div
+      className="context-panel w-full min-[400px]:w-48"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <ul className="">{rendered_collection_options}</ul>
     </div>
   );
 }

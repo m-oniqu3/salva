@@ -18,7 +18,7 @@ export type Database = {
         Row: {
           cover_image: string | null
           created_at: string
-          description: string | null
+          description: string
           id: number
           is_private: boolean
           name: string
@@ -29,7 +29,7 @@ export type Database = {
         Insert: {
           cover_image?: string | null
           created_at?: string
-          description?: string | null
+          description?: string
           id?: number
           is_private?: boolean
           name?: string
@@ -40,7 +40,7 @@ export type Database = {
         Update: {
           cover_image?: string | null
           created_at?: string
-          description?: string | null
+          description?: string
           id?: number
           is_private?: boolean
           name?: string
