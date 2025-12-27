@@ -6,15 +6,11 @@ import FollowingPeople from "@/components/profile/FollowingPeople";
 import { useModal } from "@/context/useModal";
 import { useState } from "react";
 
-type Props = { closeModal: () => void };
+function Following() {
+  const { stopPropagation, closeModal } = useModal();
 
-const tabs = ["People", "Boards"];
-
-function Following(props: Props) {
-  const { closeModal } = props;
-
-  const { stopPropagation } = useModal();
-  const [activeTab, setActiveTab] = useState(tabs ? tabs[0] : "");
+  const tabs = ["People", "Boards"];
+  const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const renderedTabs = tabs.map((t) => (
     <button

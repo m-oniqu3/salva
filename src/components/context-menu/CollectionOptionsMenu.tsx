@@ -4,12 +4,8 @@ import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 
-type Props = {
-  closeContextMenu: () => void;
-};
-
-function CollectionOptionsMenu(props: Props) {
-  const { closeContextMenu } = props;
+function CollectionOptionsMenu() {
+  const { closeContextMenu } = useContextMenu();
   const { openModal } = useModal();
   const {
     state: { menu },

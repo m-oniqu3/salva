@@ -21,7 +21,7 @@ function ContextMenuManager() {
         return <ProfileMenu />;
 
       case ContextMenuEnum.COM:
-        return <CollectionOptionsMenu closeContextMenu={closeContextMenu} />;
+        return <CollectionOptionsMenu />;
 
       case ContextMenuEnum.AEM:
         return <AddElementMenu />;

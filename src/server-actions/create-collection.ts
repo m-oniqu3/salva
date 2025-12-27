@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 
 export async function createCollection(
   formData: FormData
-): Promise<Result<Collection>> {
+): Promise<Result<Collection | null>> {
   const supabase = await createClient();
 
   try {

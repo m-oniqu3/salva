@@ -3,13 +3,8 @@
 import { CloseIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 
-type Props = {
-  closeModal: () => void;
-};
-
-function Prompt(props: Props) {
-  const { closeModal } = props;
-  const { stopPropagation } = useModal();
+function Prompt() {
+  const { stopPropagation, closeModal } = useModal();
 
   return (
     <div className="panel max-w-sm mx-auto" onClick={stopPropagation}>

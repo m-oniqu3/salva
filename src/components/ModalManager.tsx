@@ -25,25 +25,25 @@ function ModalManager() {
 
     switch (modal.type) {
       case ModalEnum.CCM:
-        return <CreateCollection closeModal={closeModal} />;
+        return <CreateCollection />;
 
       case ModalEnum.A:
-        return <Prompt closeModal={closeModal} />;
+        return <Prompt />;
 
       case ModalEnum.F:
-        return <Followers closeModal={closeModal} />;
+        return <Followers />;
 
       case ModalEnum.FL:
-        return <Following closeModal={closeModal} />;
+        return <Following />;
 
       case ModalEnum.ECM:
-        return <EditCollection closeModal={closeModal} />;
+        return <EditCollection />;
 
       case ModalEnum.IPM:
-        return <CollectionCoverPicker closeModal={closeModal} />;
+        return <CollectionCoverPicker />;
 
       case ModalEnum.MM:
-        return <MobileMenu closeModal={closeModal} />;
+        return <MobileMenu />;
 
       default:
         throw new Error(

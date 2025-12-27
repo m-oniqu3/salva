@@ -14,23 +14,17 @@ import { usePathname } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
-type Props = {
-  closeModal: () => void;
-};
-
-// todo: put something in State here for the modal, similar to Followers Modal & State
-
-function EditCollection(props: Props) {
-  const { closeModal } = props;
+function EditCollection() {
   const {
     state: { modal },
     openModal,
+    closeModal,
     stopPropagation,
   } = useModal();
+
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
   const pathname = usePathname();
-
   const [username, slug] = pathname.split("/").slice(1) as Array<string | null>;
 
   // const triggerFileInput = () => hiddenFileInputRef.current?.click();

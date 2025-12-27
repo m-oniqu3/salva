@@ -8,13 +8,10 @@ import useFollowers from "@/hooks/useFollowers";
 import { ModalEnum } from "@/types/modal";
 import { useQueryClient } from "@tanstack/react-query";
 
-type Props = { closeModal: () => void };
-
-function Followers(props: Props) {
-  const { closeModal } = props;
-
+function Followers() {
   const {
     state: { modal },
+    closeModal,
     stopPropagation,
   } = useModal();
   const qc = useQueryClient();

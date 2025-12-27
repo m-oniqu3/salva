@@ -15,13 +15,8 @@ import { useForm } from "react-hook-form";
 
 //const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-type Props = {
-  closeModal: () => void;
-};
-
-function CreateCollection(props: Props) {
-  const { closeModal } = props;
-  const { stopPropagation } = useModal();
+function CreateCollection() {
+  const { stopPropagation, closeModal } = useModal();
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
 

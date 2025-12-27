@@ -5,11 +5,7 @@ import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { useRef } from "react";
 
-type Props = {
-  closeModal: () => void;
-};
-
-function CollectionCoverPicker(props: Props) {
+function CollectionCoverPicker() {
   const { openModal, stopPropagation } = useModal();
 
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
