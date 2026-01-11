@@ -31,7 +31,7 @@ function CollectionPreview({ preview, username }: Props) {
 
   return (
     <Link href={`/${username}/${slug}`} className="flex flex-col gap-4">
-      <figure className="w-full h-22 md:h-30">{cover}</figure>
+      <figure className="w-full h-22 md:h-36">{cover}</figure>
 
       <div className="">
         <h3 className="font-semibold line-clamp-1 w-full text-sml">{name}</h3>
