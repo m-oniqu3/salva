@@ -107,12 +107,12 @@ function ProfileSummary({ profile, userID }: Props) {
         <Avatar
           avatar={avatar}
           username={username}
-          className={"size-10 rounded-full text-xl lg:size-12"}
+          className={"size-8 rounded-lg text-xl font-medium "}
         />
 
         {/* Name */}
         <div className="mt-2">
-          <h2 className="font-semibold text-lg capitalize text-neutral-800 lg:text-xl">
+          <h2 className="font-semibold text-md capitalize text-neutral-800 ">
             <span>{firstname ? `${firstname} ${lastname}` : username}</span>
           </h2>
         </div>

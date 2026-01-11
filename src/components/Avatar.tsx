@@ -31,7 +31,7 @@ function Avatar<T>(props: Props<T>) {
 
       {!avatar && (
         <span
-          className="size-full grid place-items-center uppercase text-[#ffffff] bg-[#dec5da]"
+          className="size-full flex items-center justify-center uppercase text-[#ffffff] bg-neutral-800"
           style={{ fontSize: "inherit" }}
         >
           {chars}

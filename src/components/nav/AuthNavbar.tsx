@@ -21,6 +21,8 @@ type Props = {
   profile: Profile | null;
 };
 
+const links = ["discover", "discuss"];
+
 function AuthNavbar({ profile }: Props) {
   const { openModal } = useModal();
   const { openContextMenu } = useContextMenu();
@@ -35,27 +37,27 @@ function AuthNavbar({ profile }: Props) {
     });
   }
 
+  const rendered_links = links.map((link) => {
+    return (
+      <Link
+        key={link}
+        href={"/" + link}
+        className="text-zinc-600 text-sml font-semibold capitalize hidden md:grid"
+      >
+        {link}
+      </Link>
+    );
+  });
+
   return (
-    <header className="flex items-center h-28">
+    <header className="flex items-center h-28 sticky top-0 left-0 bg-white z-10">
       <nav className="w-full flex items-center justify-between gap-6 md:gap-6">
         <ul className="flex gap-6 items-center">
           <Link href="/" className="font-extrabold capitalize text-xl relative">
             <FilmIcon className="size-6 text-neutral-800" />
           </Link>
 
-          <Link
-            href={"#"}
-            className="text-zinc-600 text-sml font-semibold hidden md:grid"
-          >
-            Discover
-          </Link>
-
-          <Link
-            href={"#"}
-            className="text-zinc-600 text-sml font-semibold hidden md:grid"
-          >
-            Shop
-          </Link>
+          {rendered_links}
         </ul>
 
         <Searchbar />

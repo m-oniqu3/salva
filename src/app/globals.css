@@ -47,11 +47,15 @@ body {
 @layer components {
 
   .wrapper {
-    @apply w-[90%] mx-auto max-w-7xl
+    @apply w-[90%] mx-auto max-w-7xl;
   }
 
   .text-sml {
     @apply text-[0.8rem]
+  }
+
+  .flex-center {
+    @apply flex justify-center items-center
   }
 
   .center {

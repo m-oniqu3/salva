@@ -39,8 +39,8 @@ type LayoutProps = {
 
 export default async function RootLayout({ children }: LayoutProps) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased wrapper relative`}>
+    <html lang="en" className="wrapper">
+      <body className={`${inter.variable} antialiased relative`}>
         <Provider>
           <ModalContextProvider>
             <ContextMenuProvider>

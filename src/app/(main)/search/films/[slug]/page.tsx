@@ -1,5 +1,5 @@
 import Film from "@/components/films/Film";
-import { getFilms } from "@utils/api/search/get-films";
+import { getFilms } from "@utils/api/films/get-films";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -28,7 +28,7 @@ async function page({ params }: Props) {
   });
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6 lg:grid-cols-5 lg:gap-10">
+    <div className="grid grid-cols-2 gap-12 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
       {rendered_films}
     </div>
   );
