@@ -14,6 +14,8 @@ https://avatar-placeholder.iran.liara.run/document/name/#more-option
 
 https://movie-reel.netlify.app/
 
+
+
 ### Temp Code
 ```ts
 // Invalidate the query that gets the follower information
@@ -33,6 +35,33 @@ https://movie-reel.netlify.app/
       }
     );
 ```
+
+are they any collections created by the user?
+
+- no 
+  - diaplay the arrow icon and the save button
+  - user cant add to the collection if they click the save button because they have no collection (disable btn or open the collection menu )
+  - user will have to click the (v) icon
+  - open the context menu and display collection info (prompt to create new board)
+  - create the collection and add the film to it
+
+- yes
+  - chwck th db for the most saved to collection/saved saved to collection
+  - display that collection name 
+  - if user clciks the arrow beside the collection open the collection menu
+  - if they click the collection name then go to the collection page
+  - if they click the plus icon add the film to the displayed collection
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Getting Started

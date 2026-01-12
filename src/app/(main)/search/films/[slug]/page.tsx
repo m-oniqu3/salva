@@ -1,5 +1,7 @@
 import Film from "@/components/films/Film";
+import getUser from "@/server-actions/get-user";
 import { getFilms } from "@utils/api/films/get-films";
+import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -14,17 +16,20 @@ async function page({ params }: Props) {
     redirect("/");
   }
 
-  const films = await getFilms(slug);
+  const [films, user] = await Promise.all([
+    getFilms(slug),
+    createClient().then((data) => getUser(data)),
+  ]);
 
   if (!films) {
     console.log("no films");
-    return;
+    return <p>no films</p>;
   }
 
   console.log(films);
 
   const rendered_films = films.map((film) => {
-    return <Film key={film.id} film={film} />;
+    return <Film key={film.id} film={film} userID={user.data?.id ?? null} />;
   });
 
   return (
