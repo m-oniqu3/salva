@@ -2,18 +2,27 @@
 
 import { FilmIcon, SearchIcon } from "@/components/icons";
 import { slugify } from "@utils/validation/slug";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useRef } from "react";
 
 function Searchbar() {
   const searchRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
+  const pathname = usePathname();
+  const [, page] = pathname.split("/").slice(1) as unknown as string[];
+  console.log("search", page);
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (!searchRef.current) return;
     const slug = slugify(searchRef.current.value);
+
+    if (page) {
+      router.replace(`/search/${page}/${slug}`);
+      return;
+    }
 
     router.replace("/search/films/" + slug);
   }

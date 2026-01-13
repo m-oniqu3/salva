@@ -25,13 +25,13 @@ function Avatar<T>(props: Props<T>) {
           alt={`${username}'s avatar'`}
           width="90"
           height="90"
-          className="size-full object-cover"
+          className="size-full object-cover rounded-full"
         />
       )}
 
       {!avatar && (
         <span
-          className="size-full flex items-center justify-center uppercase text-[#ffffff] bg-neutral-800"
+          className="size-full rounded-full flex items-center justify-center uppercase text-[#ffffff] bg-[#ff9a6e]"
           style={{ fontSize: "inherit" }}
         >
           {chars}

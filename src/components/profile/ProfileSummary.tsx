@@ -107,7 +107,7 @@ function ProfileSummary({ profile, userID }: Props) {
         <Avatar
           avatar={avatar}
           username={username}
-          className={"size-8 rounded-lg text-xl font-medium "}
+          className={"size-8 rounded-full text-lg lg:size-10"}
         />
 
         {/* Name */}

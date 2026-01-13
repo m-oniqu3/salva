@@ -1,6 +1,8 @@
+import { Result } from "@/types/result";
+import { ProfileSnippet } from "@/types/user";
 import { createClient } from "@utils/supabase/server";
 
-export async function findProfiles(q: string) {
+export async function findProfiles(q: string): Result<ProfileSnippet[] | null> {
   try {
     if (!q) {
       throw new Error("A query is required to search for a profile.");
@@ -10,8 +12,8 @@ export async function findProfiles(q: string) {
 
     const { data, error } = await supabase
       .from("profiles")
-      .select("*")
-      .eq("username", q);
+      .select("id, user_id, username, firstname, lastname, avatar")
+      .or(`firstname.ilike.%${q}%,username.ilike.%${q}%`);
 
     if (error) {
       throw new Error(error.message);

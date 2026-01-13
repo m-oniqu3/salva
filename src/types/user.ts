@@ -9,6 +9,15 @@ export type Profile = {
   created_at: string;
 };
 
+export type ProfileSnippet = {
+  id: number;
+  user_id: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  avatar: string;
+};
+
 export type UserFollow = {
   id: number;
   user_id: string;
