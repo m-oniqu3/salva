@@ -4,7 +4,7 @@ import { Result } from "@/types/result";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Promise<Result<Array<CollectionPreview> | null>>;
+type Response = Result<Array<CollectionPreview> | null>;
 
 /**
  *

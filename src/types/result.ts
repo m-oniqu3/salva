@@ -1,4 +1,4 @@
-export type Result<T> = {
-  data: T | null;
+export type Result<T> = Promise<{
+  data: T;
   error: string | null;
-};
+}>;

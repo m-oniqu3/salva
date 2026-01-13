@@ -12,7 +12,9 @@ const nextConfig: NextConfig = {
         hostname: "avatar.iran.liara.run",
         pathname: "/**",
       },
+      new URL("https://image.tmdb.org/t/p/**"),
     ],
+    qualities: [25, 50, 75],
   },
 };
 

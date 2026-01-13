@@ -9,91 +9,79 @@ import {
   MenuIcon,
 } from "@/components/icons";
 import Searchbar from "@/components/Searchbar";
-import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
+import useClientRect from "@/hooks/useClientRect";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
 import Link from "next/link";
-import { MouseEvent } from "react";
 
 type Props = {
   profile: Profile | null;
 };
 
+const links = ["discover", "discuss"];
+
 function AuthNavbar({ profile }: Props) {
-  const { dispatch } = useModal();
-  const { dispatch: ctxDispatch } = useContextMenu();
+  const { openModal } = useModal();
+  const { openContextMenu } = useContextMenu();
+  const { ref: profileUserMenuRef, rect } = useClientRect<HTMLButtonElement>();
 
-  function handleMobileMenu() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.MOBILE_MENU,
+  function handleProfileContextMenu() {
+    if (!rect) return;
+
+    openContextMenu({
+      type: ContextMenuEnum.PM,
+      position: { top: rect.top + 50, right: 0 },
     });
   }
 
-  function handleCreateCollection() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.CREATE_COLLECTION_MODAL,
-    });
-  }
-
-  function handleContextMenu(e: MouseEvent) {
-    e.stopPropagation();
-
-    ctxDispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.PROFILE_MENU,
-        position: { x: 0, y: 30 },
-      },
-    });
-  }
+  const rendered_links = links.map((link) => {
+    return (
+      <Link
+        key={link}
+        href={"/" + link}
+        className="text-zinc-600 text-sml font-semibold capitalize hidden md:grid"
+      >
+        {link}
+      </Link>
+    );
+  });
 
   return (
-    <header className="flex items-center h-20">
+    <header className="flex items-center h-28 sticky top-0 left-0 bg-white z-10">
       <nav className="w-full flex items-center justify-between gap-6 md:gap-6">
         <ul className="flex gap-6 items-center">
           <Link href="/" className="font-extrabold capitalize text-xl relative">
-            <FilmIcon className="size-6 text-black" />
+            <FilmIcon className="size-6 text-neutral-800" />
           </Link>
 
-          <Link
-            href={"#"}
-            className="text-zinc-600 text-sml font-semibold hidden md:grid"
-          >
-            Discover
-          </Link>
-
-          <Link
-            href={"#"}
-            className="text-zinc-600 text-sml font-semibold hidden md:grid"
-          >
-            Shop
-          </Link>
+          {rendered_links}
         </ul>
 
         <Searchbar />
 
-        <button type="button" onClick={handleMobileMenu} className="md:hidden">
+        <button
+          type="button"
+          onClick={() => openModal({ type: ModalEnum.MM })}
+          className="md:hidden"
+        >
           <MenuIcon className="size-5" />
         </button>
 
         {!profile && (
           <div className="hidden md:flex items-center gap-4">
             <Button>Log In</Button>
-            <Button className="bg-black text-white">Sign Up</Button>
+            <Button className="bg-neutral-800 text-white">Sign Up</Button>
           </div>
         )}
 
         {profile && (
           <div className="hidden md:flex items-center gap-4">
             <Button
-              onClick={handleCreateCollection}
-              className="bg-black text-white"
+              onClick={() => openModal({ type: ModalEnum.CCM })}
+              className="bg-neutral-800 text-white"
             >
               Create
             </Button>
@@ -108,9 +96,11 @@ function AuthNavbar({ profile }: Props) {
             />
 
             <button
+              ref={profileUserMenuRef}
               type="button"
               className="cursor-pointer"
-              onClick={handleContextMenu}
+              onClick={handleProfileContextMenu}
+              name="Profile User Menu"
             >
               <ArrowDownIcon className="size-4" />
             </button>

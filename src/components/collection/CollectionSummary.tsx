@@ -8,57 +8,63 @@ import {
   SolidSparkleIcon,
   UserAddIcon,
 } from "@/components/icons";
-import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
 import { useContextMenu } from "@/context/useContextMenu";
+import useClientRect from "@/hooks/useClientRect";
 import type { CollectionSummary } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 
-type Props = { summary: CollectionSummary; user: User | null };
+type Props = { summary: CollectionSummary; userID: string | null };
 
-function CollectionSummary({ summary, user }: Props) {
+function CollectionSummary({ summary, userID }: Props) {
   const {
-    user: { userID, username, avatar, firstname },
-    collection: { name, is_private: locked, description },
+    user: { user_id: collectionOwnerID, username, avatar, firstname },
+    collection: { name, is_private: isPrivate, description },
   } = summary;
 
-  const isOwner = userID === user?.id;
+  const isCollectionOwner = userID === collectionOwnerID;
+  const { openContextMenu } = useContextMenu();
+  const optionsBtn = useClientRect<HTMLButtonElement>();
+  const addElementBtn = useClientRect<HTMLButtonElement>();
 
-  const { dispatch } = useContextMenu();
+  // Opens and positions the Collection Options Menu
+  function handleCollectionOptions() {
+    if (!optionsBtn.rect) return;
 
-  //todo: better function names for handlemore & handle add
-  function handleMore() {
-    dispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.COLLECTION_ACTIONS_MENU,
-        position: { x: 500, y: 15 },
+    openContextMenu({
+      type: ContextMenuEnum.COM,
+      position: {
+        top: optionsBtn.rect.top + 60,
+        left: optionsBtn.rect.left - 100,
       },
+      payload: { collectionSummary: summary },
     });
   }
 
-  function handleAdd() {
-    dispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.ADD_ELEMENT_MENU,
-        position: { x: 500, y: 15 },
+  // Opens and positions the Add Element Menu
+  function handleAddElementMenu() {
+    if (!addElementBtn.rect) return;
+
+    openContextMenu({
+      type: ContextMenuEnum.AEM,
+      position: {
+        top: addElementBtn.rect.top + 60,
+        left: addElementBtn.rect.left - 100,
       },
     });
   }
 
   return (
-    <section className="flex flex-col max-w-[450px]">
+    <section className="flex flex-col max-w-[450px] relative">
       <article className="flex flex-col gap-1">
-        <h1 className="font-bold text-lg max-w-lg text-black">{name}</h1>
+        <h1 className="font-bold text-lg max-w-lg text-neutral-800">{name}</h1>
 
         {description && (
           <p className="text-zinc-500 text-[13px] leading-5">{description}</p>
         )}
 
-        <div className="flex gap-2 font-semibold text-xs mt-1 text-black">
-          {locked && (
+        <div className="flex gap-2 font-semibold text-xs mt-1 text-neutral-800">
+          {isPrivate && (
             <p className="flex gap-1 font-semibold">
               Private
               <span>
@@ -67,7 +73,7 @@ function CollectionSummary({ summary, user }: Props) {
             </p>
           )}
 
-          {locked && <span>&#xb7;</span>}
+          {isPrivate && <span>&#xb7;</span>}
 
           <p className="">{description?.length ?? 0} films</p>
 
@@ -78,9 +84,13 @@ function CollectionSummary({ summary, user }: Props) {
             <span>{description?.length === 1 ? "Follower" : "Followers"}</span>
           </p>
 
-          {!isOwner && <span>&#xb7;</span>}
+          {!isCollectionOwner && (
+            <div className="flex gap-1">
+              <span>&#xb7;</span>
 
-          {!isOwner && <button className="cursor-pointer">Follow</button>}
+              <button className="cursor-pointer">Follow</button>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-3 mt-4">
@@ -88,10 +98,10 @@ function CollectionSummary({ summary, user }: Props) {
             <Avatar
               avatar={avatar}
               username={username}
-              className={"size-8 rounded-full"}
+              className={"size-9 rounded-full"}
             />
 
-            {!isOwner && (
+            {!isCollectionOwner && (
               <figcaption className="text-sml">
                 By
                 <span>&nbsp;</span>
@@ -102,29 +112,32 @@ function CollectionSummary({ summary, user }: Props) {
             )}
           </div>
 
-          {isOwner && (
+          {isCollectionOwner && (
             <div className="flex gap-3">
-              <div className="gray size-8 flex items-center justify-center rounded-full">
-                <UserAddIcon className="size-3 text-black/60" />
+              <div className="gray size-9 flex items-center justify-center rounded-full">
+                <UserAddIcon className="size-3.5 text-neutral-800/60" />
               </div>
 
-              <button className="rounded-full size-8 flex justify-center items-center gray cursor-pointer">
-                <SolidSparkleIcon className="size-3 text-black/60" />
+              <button className="rounded-full size-9 flex justify-center items-center gray cursor-pointer">
+                <SolidSparkleIcon className="size-3.5 text-neutral-800/60" />
               </button>
 
               <button
-                onClick={handleAdd}
-                className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
-                name="Collection Actions Menu"
+                ref={addElementBtn.ref}
+                onClick={handleAddElementMenu}
+                className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
+                name="Add Element"
               >
-                <AddIcon className="size-3 text-black/60" />
+                <AddIcon className="size-3.5 text-neutral-800/60" />
               </button>
 
               <button
-                onClick={handleMore}
-                className="rounded-full size-8 flex justify-center items-center gray cursor-pointer"
+                ref={optionsBtn.ref}
+                onClick={handleCollectionOptions}
+                className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
+                name="Collection Options"
               >
-                <MoreHorizontalIcon className="size-3 text-black/60" />
+                <MoreHorizontalIcon className="size-3.5 text-neutral-800/60" />
               </button>
             </div>
           )}

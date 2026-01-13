@@ -18,7 +18,7 @@ export type Database = {
         Row: {
           cover_image: string | null
           created_at: string
-          description: string | null
+          description: string
           id: number
           is_private: boolean
           name: string
@@ -29,7 +29,7 @@ export type Database = {
         Insert: {
           cover_image?: string | null
           created_at?: string
-          description?: string | null
+          description?: string
           id?: number
           is_private?: boolean
           name?: string
@@ -40,7 +40,7 @@ export type Database = {
         Update: {
           cover_image?: string | null
           created_at?: string
-          description?: string | null
+          description?: string
           id?: number
           is_private?: boolean
           name?: string
@@ -50,34 +50,63 @@ export type Database = {
         }
         Relationships: []
       }
+      follow_users: {
+        Row: {
+          created_at: string
+          id: number
+          target_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          target_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          target_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow-users_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
-          avatar: string | null
-          bio: string | null
+          avatar: string
+          bio: string
           created_at: string
-          firstname: string | null
+          firstname: string
           id: number
-          lastname: string | null
+          lastname: string
           user_id: string
           username: string
         }
         Insert: {
-          avatar?: string | null
-          bio?: string | null
+          avatar?: string
+          bio?: string
           created_at?: string
-          firstname?: string | null
+          firstname?: string
           id?: number
-          lastname?: string | null
+          lastname?: string
           user_id?: string
           username?: string
         }
         Update: {
-          avatar?: string | null
-          bio?: string | null
+          avatar?: string
+          bio?: string
           created_at?: string
-          firstname?: string | null
+          firstname?: string
           id?: number
-          lastname?: string | null
+          lastname?: string
           user_id?: string
           username?: string
         }

@@ -15,13 +15,8 @@ import { useForm } from "react-hook-form";
 
 //const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-type Props = {
-  closeModal: () => void;
-};
-
-function CreateCollection(props: Props) {
-  const { closeModal } = props;
-  const { stopPropagation } = useModal();
+function CreateCollection() {
+  const { stopPropagation, closeModal } = useModal();
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
 
@@ -59,14 +54,17 @@ function CreateCollection(props: Props) {
   }
 
   return (
-    <div className="c-container max-w-sm" onClick={stopPropagation}>
-      <header className="relative pb-12">
+    <div
+      className="panel grid grid-rows-[80px_1fr] max-w-sm"
+      onClick={stopPropagation}
+    >
+      <header className="relative">
         <h1 className="text-lg font-semibold">Create Collection</h1>
         <p className="text-sml">Create a collection to organize your films.</p>
 
         <button
           onClick={closeModal}
-          className="absolute -top-2 -right-3 cursor-pointer"
+          className="absolute top-0 right-0 cursor-pointer"
         >
           <CloseIcon className="size-5" />
         </button>
@@ -125,23 +123,21 @@ function CreateCollection(props: Props) {
           </p>
         </div>
 
-        <div className="pt-8">
-          <Button
-            disabled={isCreatingCollection}
-            type="submit"
-            className="bg-black text-white rounded-lg w-full h-9"
-          >
-            {isCreatingCollection ? (
-              <div className="flex items-center justify-center gap-2">
-                <span className="animate-spin text-white">
-                  <LoadingIcon className="size-5" />
-                </span>
-              </div>
-            ) : (
-              "Create Collection"
-            )}
-          </Button>
-        </div>
+        <Button
+          disabled={isCreatingCollection}
+          type="submit"
+          className="bg-neutral-800 text-white rounded-lg h-9 mt-auto"
+        >
+          {isCreatingCollection ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="animate-spin text-white">
+                <LoadingIcon className="size-5" />
+              </span>
+            </div>
+          ) : (
+            "Create Collection"
+          )}
+        </Button>
       </form>
     </div>
   );

@@ -1,9 +1,50 @@
+import { CollectionSummary } from "@/types/collection";
+
 export enum ModalEnum {
-  CREATE_COLLECTION_MODAL = "CREATE_COLLECTION_MODAL",
+  CCM = "CREATE_COLLECTION_MODAL",
   ECM = "EDIT_COLLECTION_MODAL",
   IPM = "IMAGE_PICKER_MODAL",
-  SHOW_BOARDS_MODAL = "SHOW_BOARDS_MODAL",
-  MOBILE_MENU = "MOBILE_MENU",
+  A = "AUTH_MODAL",
+  F = "FOLLOWERS_MODAL",
+  FL = "FOLLOWING_MODAL",
+  MM = "MOBILE_MENU",
 }
 
-export type ModalType = ModalEnum | null;
+type ModalState<K extends ModalEnum, P = null> = {
+  type: K;
+  payload?: P;
+};
+
+type CreateCollectionModal = ModalState<ModalEnum.CCM>;
+
+type EditCollectionModal = ModalState<
+  ModalEnum.ECM,
+  {
+    collectionSummary: CollectionSummary;
+  }
+>;
+
+type ImagePickerModal = ModalState<ModalEnum.IPM>;
+
+type AuthModal = ModalState<ModalEnum.A>;
+
+type FollowersModal = ModalState<
+  ModalEnum.F,
+  { userID: string | null; targetUserID: string }
+>;
+
+type FollowingModal = ModalState<
+  ModalEnum.FL,
+  { userID: string | null; targetUserID: string }
+>;
+
+type MobileMenuModal = ModalState<ModalEnum.MM>;
+
+export type Modal =
+  | CreateCollectionModal
+  | EditCollectionModal
+  | ImagePickerModal
+  | AuthModal
+  | FollowersModal
+  | FollowingModal
+  | MobileMenuModal;

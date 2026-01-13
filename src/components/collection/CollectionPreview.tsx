@@ -18,21 +18,25 @@ function CollectionPreview({ preview, username }: Props) {
       alt={`cover image for collection:${name}`}
       width={100}
       height={50}
-      quality={100}
-      className="size-full object-cover rounded-2xl"
+      quality={75}
+      className="size-full object-cover rounded-3xl"
     />
   ) : (
-    <div className="gray size-full rounded-2xl" />
+    <div className="size-full flex gap-1 rounded-2xl overflow-hidden">
+      {Array.from({ length: 3 }, (_, i) => {
+        return <div key={i} className="gray size-full" />;
+      })}
+    </div>
   );
 
   return (
-    <Link href={`/${username}/${slug}`} className="flex flex-col gap-2 w-full">
-      <figure className="w-full h-[180px]">{cover}</figure>
+    <Link href={`/${username}/${slug}`} className="flex flex-col gap-4">
+      <figure className="w-full h-22 md:h-36">{cover}</figure>
 
       <div className="">
-        <h3 className="font-semibold line-clamp-1 w-full text-sm">{name}</h3>
+        <h3 className="font-semibold line-clamp-1 w-full text-sml">{name}</h3>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center font-semibold gap-1">
           <p className="text-xs font-medium text-zinc-500">
             {name.length.toString().padStart(2, "0")} elements
           </p>
@@ -40,7 +44,7 @@ function CollectionPreview({ preview, username }: Props) {
           {is_private && (
             <p className="flex items-center gap-1">
               <span className="text-zinc-500">&#xb7;</span>
-              <span className="text-zinc-500 text-xs font-medium">Private</span>
+              <span className="text-zinc-500 text-xs">Private</span>
             </p>
           )}
         </div>

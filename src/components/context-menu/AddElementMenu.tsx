@@ -1,15 +1,7 @@
 function AddElementMenu() {
   return (
-    <div
-      className="size-48  bg-blue-200"
-      style={{
-        position: "absolute",
-        top: "180px",
-        left: "50%",
-        transform: "translate(-50%, 0px)",
-      }}
-    >
-      AddElementMenu
+    <div className="context-panel w-full">
+      <ul className="w-48"> AddElementMenu</ul>
     </div>
   );
 }

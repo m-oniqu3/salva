@@ -15,19 +15,27 @@ async function CollectionList({ username }: Props) {
   }
 
   if (!collections || collections.length == 0) {
-    return <p className="wrapper text-center">No collections created yet</p>;
+    return <p className="">No collections created yet.</p>;
   }
 
-  // console.log(collections);
-
   const previews = collections.map((item) => {
-    // console.log(item);
     return (
-      <CollectionPreview key={item.id} username={username} preview={item} />
+      <CollectionPreview
+        key={item.id}
+        username={username}
+        preview={{
+          ...item,
+          // cover_image: `https://picsum.photos/id/${item.id}/500/500`,
+        }}
+      />
     );
   });
 
-  return <div className="flex flex-wrap gap-4">{previews}</div>;
+  return (
+    <div className="grid grid-cols-2 gap-4 gap-y-16 md:gap-x-6  sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
+      {previews}
+    </div>
+  );
 }
 
 export default CollectionList;

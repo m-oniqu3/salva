@@ -1,12 +1,12 @@
 import { ModalActionEnum, ModalActions } from "@/context/actions/ModalActions";
-import { ModalType } from "@/types/modal";
+import { Modal } from "@/types/modal";
 
 export type State = {
-  currentModal: ModalType;
+  modal: Modal | null;
 };
 
 export const initialState: State = {
-  currentModal: null,
+  modal: null,
 };
 
 export function modalReducer(state: State, action: ModalActions) {
@@ -14,12 +14,12 @@ export function modalReducer(state: State, action: ModalActions) {
     case ModalActionEnum.OPEN_MODAL:
       return {
         ...state,
-        currentModal: action.payload,
+        modal: action.payload,
       };
     case ModalActionEnum.CLOSE_MODAL:
       return {
         ...state,
-        currentModal: null,
+        modal: null,
       };
     default:
       return state;

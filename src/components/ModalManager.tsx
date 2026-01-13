@@ -1,48 +1,60 @@
 "use client";
 
+import Prompt from "@/components/auth/Prompt";
 import CollectionCoverPicker from "@/components/collection/CollectionCoverPicker";
 import EditCollection from "@/components/collection/EditCollection";
 import MobileMenu from "@/components/nav/MobileMenu";
+import Followers from "@/components/profile/Followers";
+import Following from "@/components/profile/Following";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import CreateCollection from "@components/collection/CreateCollection";
 import Modal from "@components/Modal";
-import { ReactNode } from "react";
 
 function ModalManager() {
   const {
-    state: { currentModal },
+    state,
+    state: { modal },
     closeModal,
   } = useModal();
 
-  console.log("MM", currentModal, closeModal);
+  console.log("MM", state);
 
-  if (!currentModal) return null;
+  const rendered_modal = (() => {
+    if (!modal) return null;
 
-  let ModalContent: ReactNode = null;
+    switch (modal.type) {
+      case ModalEnum.CCM:
+        return <CreateCollection />;
 
-  switch (currentModal) {
-    case ModalEnum.CREATE_COLLECTION_MODAL:
-      ModalContent = <CreateCollection closeModal={closeModal} />;
-      break;
+      case ModalEnum.A:
+        return <Prompt />;
 
-    case ModalEnum.ECM:
-      ModalContent = <EditCollection closeModal={closeModal} />;
-      break;
+      case ModalEnum.F:
+        return <Followers />;
 
-    case ModalEnum.IPM:
-      ModalContent = <CollectionCoverPicker closeModal={closeModal} />;
-      break;
+      case ModalEnum.FL:
+        return <Following />;
 
-    case ModalEnum.MOBILE_MENU:
-      ModalContent = <MobileMenu closeModal={closeModal} />;
-      break;
+      case ModalEnum.ECM:
+        return <EditCollection />;
 
-    default:
-      return null;
-  }
+      case ModalEnum.IPM:
+        return <CollectionCoverPicker />;
 
-  return <Modal close={closeModal}>{ModalContent}</Modal>;
+      case ModalEnum.MM:
+        return <MobileMenu />;
+
+      default:
+        throw new Error(
+          "Modal type not allowed or missing. No modal to render"
+        );
+    }
+  })();
+
+  if (!rendered_modal) return null;
+
+  return <Modal closeModal={closeModal}>{rendered_modal}</Modal>;
 }
 
 export default ModalManager;

@@ -2,11 +2,10 @@
 
 import Button from "@/components/Button";
 import { AddIcon, CloseIcon, LoadingIcon } from "@/components/icons";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
+import useFindCollection from "@/hooks/useFindCollection";
 import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { findCollection } from "@utils/api/collections/find-collection";
 import {
   EditedCollection,
   EditedCollectionSchema,
@@ -15,71 +14,50 @@ import { usePathname } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
-type Props = {
-  closeModal: () => void;
-};
+function EditCollection() {
+  const {
+    state: { modal },
+    openModal,
+    closeModal,
+    stopPropagation,
+  } = useModal();
 
-function EditCollection(props: Props) {
-  const { closeModal } = props;
-  const { dispatch, stopPropagation } = useModal();
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
   const pathname = usePathname();
-  console.log(pathname.split("/"));
-  const [username, slug] = pathname.split("/").slice(1) as Array<string | null>;
-
-  console.log(username, slug);
+  const [username, slug] = pathname.split("/").slice(1) as Array<string>;
 
   // const triggerFileInput = () => hiddenFileInputRef.current?.click();
 
+  // Is EditCollection Modal ?
+  const isECM = modal?.type === ModalEnum.ECM;
+  const collectionSummary = isECM ? modal.payload?.collectionSummary : null;
+
+  const { data } = useFindCollection(username, slug);
+
   const form = useForm<EditedCollection>({
     resolver: zodResolver(EditedCollectionSchema),
-    defaultValues: { name: "", description: "" },
+    defaultValues: {
+      name: collectionSummary?.collection.name ?? "",
+      description: collectionSummary?.collection.description ?? "",
+    },
   });
 
+  //When we get data we update the form
+
   useEffect(() => {
-    async function fetchCollection() {
-      // let isMounted = true;
+    if (data?.data) {
+      const collection = data.data;
 
-      try {
-        if (!username || !slug) return;
-
-        const { data, error } = await findCollection(username, slug);
-
-        if (error) {
-          throw new Error(error);
-        }
-
-        // if (!isMounted) return;
-
-        if (!data || !data.collection) {
-          form.reset({ name: "", description: "" });
-          return;
-        }
-
-        const { name, description } = data.collection;
-
-        form.reset({ name, description: description ?? "" });
-      } catch (error: unknown) {
-        form.setError("root", {
-          type: "value",
-          message: error instanceof Error ? error.message : String(error),
-        });
-      }
-
-      // return () => {
-      //   isMounted = false; // avoids state updates if component unmounts
-      // };
+      form.reset({
+        name: collection.collection.name,
+        description: collection.collection.description,
+      });
     }
-
-    fetchCollection();
-  }, [form, username, slug]);
+  }, [data, form]);
 
   function openImagePickerModal() {
-    dispatch({
-      type: ModalActionEnum.OPEN_MODAL,
-      payload: ModalEnum.IPM,
-    });
+    openModal({ type: ModalEnum.IPM });
   }
 
   function onSubmitForm(input: EditedCollection) {
@@ -93,9 +71,14 @@ function EditCollection(props: Props) {
   }
 
   return (
-    <div className="c-container max-w-sm mx-auto" onClick={stopPropagation}>
+    <div
+      className="panel flex flex-col max-w-sm mx-auto"
+      onClick={stopPropagation}
+    >
       <header className="relative pb-10">
-        <h1 className="text-lg font-semibold text-black">Edit Collection</h1>
+        <h1 className="text-lg font-semibold text-neutral-800">
+          Edit Collection
+        </h1>
         <p className="text-sml">Edit your collection.</p>
 
         <button
@@ -105,21 +88,20 @@ function EditCollection(props: Props) {
           <CloseIcon className="size-5" />
         </button>
       </header>
-
       <form
-        className="flex flex-col gap-4"
+        className="relative flex flex-col gap-4  h-full"
         onSubmit={form.handleSubmit(onSubmitForm)}
       >
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-black">
+          <label htmlFor="name" className="text-sml text-neutral-800">
             Collection Cover
           </label>
 
           <button
             type="button"
             onClick={openImagePickerModal}
-            className="gray flex justify-center items-center size-24 rounded-lg gray z-0 cursor-pointer"
+            className="flex justify-center items-center size-24 rounded-lg gray z-0 cursor-pointer"
           >
             <AddIcon className="size-5 text-neutral-400" />
           </button>
@@ -129,7 +111,7 @@ function EditCollection(props: Props) {
 
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-black">
+          <label htmlFor="name" className="text-sml text-neutral-800">
             Collection Name
           </label>
 
@@ -144,13 +126,13 @@ function EditCollection(props: Props) {
 
         {/* description */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sml text-black">
+          <label htmlFor="description" className="text-sml text-neutral-800">
             What is this collection about?
           </label>
 
           <textarea
             {...form.register("description")}
-            className="input h-20 resize-none gray"
+            className="input h-20 resize-none gray no-scrollbar"
             placeholder="movies i throw on when my brain is tired"
           ></textarea>
 
@@ -159,23 +141,21 @@ function EditCollection(props: Props) {
           </p>
         </div>
 
-        <div className="">
-          <Button
-            disabled={isEditingCollection}
-            type="submit"
-            className="bg-black text-white rounded-md w-full h-9"
-          >
-            {isEditingCollection ? (
-              <div className="flex items-center justify-center gap-2">
-                <span className="animate-spin text-white">
-                  <LoadingIcon className="size-5" />
-                </span>
-              </div>
-            ) : (
-              "Edit Collection"
-            )}
-          </Button>
-        </div>
+        <Button
+          disabled={isEditingCollection}
+          type="submit"
+          className="bg-neutral-800 text-white rounded-lg h-9 mt-auto"
+        >
+          {isEditingCollection ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="animate-spin text-white">
+                <LoadingIcon className="size-5" />
+              </span>
+            </div>
+          ) : (
+            "Edit Collection"
+          )}
+        </Button>
       </form>
     </div>
   );

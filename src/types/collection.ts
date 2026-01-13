@@ -2,7 +2,7 @@ export type Collection = {
   id: number;
   user_id: string;
   name: string;
-  description: string | null;
+  description: string;
   cover_image: string | null;
   is_private: boolean;
   created_at: string; // ISO date string
@@ -19,7 +19,7 @@ export type CollectionPreview = {
 export type CollectionSummary = {
   user: {
     id: number;
-    userID: string;
+    user_id: string;
     username: string;
     avatar: string | null;
     firstname: string | null;
@@ -31,6 +31,6 @@ export type CollectionSummary = {
     is_private: boolean;
     cover_image: string | null;
     slug: string | null;
-    description: string | null;
+    description: string;
   };
 };

@@ -1,35 +1,27 @@
 "use client";
 
 import { CloseIcon } from "@/components/icons";
-import { ModalActionEnum } from "@/context/actions/ModalActions";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { useRef } from "react";
 
-type Props = {
-  closeModal: () => void;
-};
-
-function CollectionCoverPicker(props: Props) {
-  const { closeModal } = props;
-  const { dispatch } = useModal();
+function CollectionCoverPicker() {
+  const { openModal, stopPropagation } = useModal();
 
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
-
   const triggerFileInput = () => hiddenFileInputRef.current?.click();
 
   //todo : get the collection images from the db for the given collection
 
   // close IPM & open ECM
   function handleCloseModal() {
-    closeModal();
-    dispatch({ type: ModalActionEnum.OPEN_MODAL, payload: ModalEnum.ECM });
+    openModal({ type: ModalEnum.ECM });
   }
 
   return (
-    <div className="c-container max-w-sm">
+    <div className="panel max-w-sm" onClick={stopPropagation}>
       <header className="relative pb-8">
-        <h1 className="text-lg font-semibold text-black">
+        <h1 className="text-lg font-semibold text-neutral-800">
           Update Collection Cover
         </h1>
 

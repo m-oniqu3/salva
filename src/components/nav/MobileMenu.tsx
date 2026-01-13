@@ -1,4 +1,6 @@
+"use client";
 import { CloseIcon } from "@/components/icons";
+import { useModal } from "@/context/useModal";
 import Link from "next/link";
 
 const links = [
@@ -9,12 +11,8 @@ const links = [
   { id: 4, name: "logout", href: "logout" },
 ];
 
-type Props = {
-  closeModal: () => void;
-};
-
-function MobileMenu(props: Props) {
-  const { closeModal } = props;
+function MobileMenu() {
+  const { closeModal } = useModal();
 
   const renderedLinks = links.map((link) => {
     return (

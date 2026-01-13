@@ -1,42 +1,35 @@
 import {
+  ContextMenuAction,
   ContextMenuActionEnum,
-  ContextMenuActions,
 } from "@/context/actions/ContextMenuActions";
-import { ContextMenuType } from "@/types/context-menu";
+import { ContextMenu } from "@/types/context-menu";
 
 export type ContextState = {
-  currentContextMenu: ContextMenuType;
-  isOpen: boolean;
-  position: { x: number; y: number };
+  menu: ContextMenu | null;
 };
 
 export const initialState: ContextState = {
-  currentContextMenu: null,
-  isOpen: false,
-  position: { x: 0, y: 0 },
+  menu: null,
 };
 
 export function contextMenuReducer(
   state: ContextState,
-  action: ContextMenuActions
+  action: ContextMenuAction
 ) {
   switch (action.type) {
     case ContextMenuActionEnum.OPEN_CONTEXT_MENU:
-      const { currentContextMenu, position } = action.payload;
+      // if the menu is the same close it
 
-      if (state.currentContextMenu === currentContextMenu) {
-        return {
-          ...state,
-          currentContextMenu,
-          position,
-          isOpen: !state.isOpen, //toggle it otherwise it stays close after first toggle
-        };
-      } else {
-        return { ...state, currentContextMenu, position, isOpen: true };
-      }
+      if (state.menu?.type === action.payload.type)
+        return { ...state, menu: null };
+
+      return {
+        ...state,
+        menu: action.payload,
+      };
 
     case ContextMenuActionEnum.CLOSE_CONTEXT_MENU:
-      return { ...state, currentContextMenu: null, isOpen: false };
+      return { ...state, menu: null };
 
     default:
       return state;
