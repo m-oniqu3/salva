@@ -22,16 +22,14 @@ function CollectionPreview({ preview, username }: Props) {
       className="size-full object-cover rounded-3xl"
     />
   ) : (
-    <div className="size-full flex gap-1 rounded-2xl overflow-hidden">
-      {Array.from({ length: 3 }, (_, i) => {
-        return <div key={i} className="gray size-full" />;
-      })}
-    </div>
+    <div className="size-full gray" />
   );
 
   return (
-    <Link href={`/${username}/${slug}`} className="flex flex-col gap-4">
-      <figure className="w-full h-22 md:h-36">{cover}</figure>
+    <Link href={`/${username}/${slug}`} className="flex flex-col gap-4 ">
+      <figure className="relative w-full aspect-[3/4] overflow-hidden">
+        {cover}
+      </figure>
 
       <div className="">
         <h3 className="font-semibold line-clamp-1 w-full text-sml">{name}</h3>
