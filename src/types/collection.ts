@@ -34,3 +34,8 @@ export type CollectionSummary = {
     description: string;
   };
 };
+
+export type CollectionMeta = {
+  id: number;
+  name: string;
+};

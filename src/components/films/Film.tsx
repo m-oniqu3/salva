@@ -29,7 +29,7 @@ function Film(props: Props) {
         <>
           <div className="absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-          <div className="absolute top-0 left-0 w-full h-full p-3 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100">
+          <div className="absolute top-0 left-0 w-full h-full p-4 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100">
             <div className="grid grid-cols-[auto_50px] gap-2">
               <p className="self-center flex items-center gap-2 line-clamp-1">
                 <span className="flex-center px-2 text-base font-semibold text-white line-clamp-1">

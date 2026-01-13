@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      collection_films: {
+        Row: {
+          collection_id: number
+          created_at: string
+          film_id: number
+          id: number
+        }
+        Insert: {
+          collection_id: number
+          created_at?: string
+          film_id: number
+          id?: number
+        }
+        Update: {
+          collection_id?: number
+          created_at?: string
+          film_id?: number
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_films_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collection_films_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["tmdb_id"]
+          },
+        ]
+      }
       collections: {
         Row: {
           cover_image: string | null
@@ -47,6 +83,30 @@ export type Database = {
           slug?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      films: {
+        Row: {
+          created_at: string
+          id: number
+          poster_path: string
+          title: string
+          tmdb_id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          poster_path: string
+          title: string
+          tmdb_id: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          poster_path?: string
+          title?: string
+          tmdb_id?: number
         }
         Relationships: []
       }
