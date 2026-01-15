@@ -5,13 +5,13 @@ import { slugify } from "@utils/validation/slug";
 import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useRef } from "react";
 
+const pages = new Set(["films", "collections", "profiles"]);
 function Searchbar() {
   const searchRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
   const pathname = usePathname();
   const [, page] = pathname.split("/").slice(1) as unknown as string[];
-  console.log("search", page);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -20,6 +20,11 @@ function Searchbar() {
     const slug = slugify(searchRef.current.value);
 
     if (page) {
+      if (!pages.has(page)) {
+        router.replace("/search/films/" + slug);
+        return;
+      }
+
       router.replace(`/search/${page}/${slug}`);
       return;
     }

@@ -17,8 +17,6 @@ function SearchLayout({ children }: Props) {
 
   const [, page, slug] = pathname.split("/").slice(1) as unknown as string[];
 
-  console.log(page);
-
   const [activeLink, setActiveLink] = useState<string>(page || links[0]);
 
   const rendered_links = links.map((link) => {

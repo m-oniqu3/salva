@@ -1,5 +1,6 @@
 import Film from "@/components/films/Film";
 import getUser from "@/server-actions/get-user";
+import { getLastSavedCollectionMeta } from "@utils/api/collections/get-last-saved-collection-meta";
 import { getFilms } from "@utils/api/films/get-films";
 import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -26,14 +27,23 @@ async function page({ params }: Props) {
     return <p>no films</p>;
   }
 
-  console.log(films);
+  const collectionMeta = user.data?.id
+    ? (await getLastSavedCollectionMeta(user.data.id)).data
+    : null;
 
   const rendered_films = films.map((film) => {
-    return <Film key={film.id} film={film} userID={user.data?.id ?? null} />;
+    return (
+      <Film
+        key={film.id}
+        film={film}
+        userID={user.data?.id ?? null}
+        collectionMeta={collectionMeta}
+      />
+    );
   });
 
   return (
-    <div className="grid grid-cols-2 gap-12 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xs:gap-12">
       {rendered_films}
     </div>
   );

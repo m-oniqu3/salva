@@ -4,6 +4,7 @@ export enum ContextMenuEnum {
   "PM" = "PROFILE_MENU",
   "COM" = "COLLECTION_OPTIONS_MENU",
   "AEM" = "ADD_ELEMENT_MENU",
+  "CPM" = "COLLECTION_PICKER_MENU",
 }
 
 type ContextMenuState<K = ContextMenuEnum, P = undefined> = {
@@ -24,4 +25,10 @@ type CollectionActionsMenu = ContextMenuState<
 
 type AddElementMenu = ContextMenuState<ContextMenuEnum.AEM, null>;
 
-export type ContextMenu = ProfileMenu | CollectionActionsMenu | AddElementMenu;
+type CollectionPickerMenu = ContextMenuState<ContextMenuEnum.CPM, null>;
+
+export type ContextMenu =
+  | ProfileMenu
+  | CollectionActionsMenu
+  | AddElementMenu
+  | CollectionPickerMenu;

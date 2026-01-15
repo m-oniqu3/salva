@@ -4,6 +4,12 @@ import { createClient } from "@utils/supabase/server";
 
 type Response = Result<CollectionMeta | null>;
 
+/**
+ *
+ * @param userID string
+ * @returns CollectionMeta | null
+ * @description Gets the collection meta for the collection the user last saved a film to.
+ */
 export async function getLastSavedCollectionMeta(userID: string): Response {
   if (!userID) {
     return { data: null, error: "User ID is required" };
