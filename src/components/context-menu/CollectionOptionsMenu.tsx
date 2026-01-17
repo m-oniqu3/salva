@@ -2,6 +2,7 @@
 
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
+import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import toggleCollectionPrivacy from "@utils/api/collections/toggle-collection-privacy";
 
@@ -13,6 +14,7 @@ function CollectionOptionsMenu() {
   } = useContextMenu();
 
   if (!menu) return null;
+  if (menu.type !== ContextMenuEnum.COM) return null;
   if (!menu.payload?.collectionSummary)
     throw new Error(
       "Collection Summary must be provided to" + CollectionOptionsMenu.name

@@ -1,3 +1,5 @@
+"use server";
+
 import { CollectionMeta } from "@/types/collection";
 import { Result } from "@/types/result";
 import { createClient } from "@utils/supabase/server";
@@ -21,15 +23,14 @@ export async function getLastSavedCollectionMeta(userID: string): Response {
     const { data, error } = await supabase
       .from("collection_films")
       .select(
-        `
+        ` id,
             collection:collections!inner(
                 id, 
-                user_id, 
                 name
             )
         `
       )
-      .eq("collection.user_id", userID)
+      .eq("user_id", userID)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();

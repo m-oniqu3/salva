@@ -43,7 +43,7 @@ async function page({ params }: Props) {
   });
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xs:gap-12">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xs:gap-12 xl:grid-cols-5">
       {rendered_films}
     </div>
   );

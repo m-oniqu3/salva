@@ -1,3 +1,5 @@
+"use server";
+
 import getUser from "@/server-actions/get-user";
 import { CollectionPreview } from "@/types/collection";
 import { Result } from "@/types/result";

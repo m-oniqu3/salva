@@ -25,7 +25,12 @@ type CollectionActionsMenu = ContextMenuState<
 
 type AddElementMenu = ContextMenuState<ContextMenuEnum.AEM, null>;
 
-type CollectionPickerMenu = ContextMenuState<ContextMenuEnum.CPM, null>;
+type CollectionPickerMenu = ContextMenuState<
+  ContextMenuEnum.CPM,
+  {
+    userID?: string | null;
+  }
+>;
 
 export type ContextMenu =
   | ProfileMenu

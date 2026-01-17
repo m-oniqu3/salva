@@ -29,29 +29,41 @@ function FilmMeta(props: Props) {
     if (!rect) return;
 
     const MENU_WIDTH = 320;
+    const MENU_HEIGHT = 360; // estimate or known height
+    const PADDING = 16;
 
-    const windowWidth = window.innerWidth;
-    const PADDING = 16; // Safe padding from edges
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
-    // Horizontal positioning
+    // Start by positioning below the trigger
     let left = rect.left;
+    let top = rect.bottom + 8;
 
-    // If menu would go off right edge, align to right edge of trigger
-    if (rect.left + MENU_WIDTH > windowWidth - PADDING) {
-      left = rect.right - MENU_WIDTH - 40;
+    // Clamp horizontally
+    if (left + MENU_WIDTH > viewportWidth - PADDING) {
+      left = viewportWidth - MENU_WIDTH - PADDING;
     }
 
-    // If still off left edge, align to left padding
     if (left < PADDING) {
       left = PADDING;
     }
 
-    // Vertical positioning
-    const top = rect.top + 50;
+    // Clamp vertically
+    if (top + MENU_HEIGHT > viewportHeight - PADDING) {
+      // flip above trigger if it doesn't fit below
+      top = rect.top - MENU_HEIGHT - 8;
+    }
+
+    if (top < PADDING) {
+      top = PADDING;
+    }
 
     openContextMenu({
       type: ContextMenuEnum.CPM,
-      position: { top, left },
+      position: { top: top + 20, left },
+      payload: {
+        userID,
+      },
     });
   }
 
@@ -80,7 +92,7 @@ function FilmMeta(props: Props) {
               <ChevronDownIcon className="size-5 text-white" />
             </button>
           </p>
-          s
+
           <button className="bg-white text-neutral-800 rounded-full size-8 grid place-items-center cursor-pointer xs:size-12">
             <AddIcon className="size-4 xs:size-5" />
           </button>

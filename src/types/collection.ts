@@ -39,3 +39,11 @@ export type CollectionMeta = {
   id: number;
   name: string;
 };
+
+export type CollectionSnippet = {
+  id: number;
+  name: string;
+  is_private: boolean;
+  cover_image: string | null;
+  filmCount: number;
+};

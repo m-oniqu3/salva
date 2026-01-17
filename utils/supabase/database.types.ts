@@ -20,18 +20,21 @@ export type Database = {
           created_at: string
           film_id: number
           id: number
+          user_id: string
         }
         Insert: {
           collection_id: number
           created_at?: string
           film_id: number
           id?: number
+          user_id?: string
         }
         Update: {
           collection_id?: number
           created_at?: string
           film_id?: number
           id?: number
+          user_id?: string
         }
         Relationships: [
           {
