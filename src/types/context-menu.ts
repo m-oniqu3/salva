@@ -29,6 +29,7 @@ type CollectionPickerMenu = ContextMenuState<
   ContextMenuEnum.CPM,
   {
     userID?: string | null;
+    filmID: number;
   }
 >;
 

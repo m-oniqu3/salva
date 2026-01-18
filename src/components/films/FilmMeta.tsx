@@ -6,7 +6,7 @@ import useClientRect from "@/hooks/useClientRect";
 import { CollectionMeta } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { TMDBFilm } from "@/types/tmdb";
-import { MouseEvent, useEffect } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 type Props = {
   collectionMeta: CollectionMeta | null;
@@ -16,13 +16,18 @@ type Props = {
 
 function FilmMeta(props: Props) {
   const {
-    film: { title },
+    film: { id, title },
     collectionMeta,
     userID,
   } = props;
 
-  const { openContextMenu, closeContextMenu } = useContextMenu();
+  const {
+    openContextMenu,
+    state: { menu },
+  } = useContextMenu();
   const { ref: filmRef, rect } = useClientRect<HTMLButtonElement>();
+
+  const [activeFilm, setActiveFilm] = useState<number | null>(null);
 
   function handleCollectionPickerContextMenu(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
@@ -58,26 +63,49 @@ function FilmMeta(props: Props) {
       top = PADDING;
     }
 
+    setActiveFilm(id);
     openContextMenu({
       type: ContextMenuEnum.CPM,
       position: { top: top + 20, left },
       payload: {
         userID,
+        filmID: id,
       },
     });
   }
 
   useEffect(() => {
-    window.addEventListener("resize", closeContextMenu);
+    if (menu && menu.type !== ContextMenuEnum.CPM) {
+      setActiveFilm(null);
+    }
 
-    return () => {
-      window.removeEventListener("resize", closeContextMenu);
-    };
-  }, [closeContextMenu]);
+    if (!menu) {
+      setActiveFilm(null);
+    }
+  }, [menu]);
+
+  // useEffect(() => {
+  //   window.addEventListener("resize", () => {
+  //     setActiveFilm(null);
+  //     closeContextMenu();
+  //   });
+
+  //   return () => {
+  //     window.removeEventListener("resize", () => {
+  //       setActiveFilm(null);
+  //       closeContextMenu();
+  //     });
+  //   };
+  // }, [closeContextMenu]);
 
   return (
-    <div className="absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity">
-      <div className="absolute top-0 left-0 w-full h-full p-3 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100 xs:p-4">
+    <div
+      key={id}
+      className={`absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
+    >
+      <div
+        className={`absolute top-0 left-0 w-full h-full p-3 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100 xs:p-4 ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
+      >
         <div className="flex items-center justify-between gap-2">
           <p className=" flex items-center gap-1">
             <span className="flex-center px-2 text-base font-semibold text-white line-clamp-1">

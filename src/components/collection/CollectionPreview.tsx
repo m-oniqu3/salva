@@ -19,7 +19,7 @@ function CollectionPreview({ preview, username }: Props) {
       width={100}
       height={50}
       quality={75}
-      className="size-full object-cover rounded-3xl"
+      className="size-full object-cover"
     />
   ) : (
     <div className="size-full gray" />
