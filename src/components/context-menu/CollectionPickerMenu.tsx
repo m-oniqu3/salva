@@ -5,8 +5,11 @@ import { CloseIcon, LoadingIcon, SearchIcon } from "@/components/icons";
 import { useContextMenu } from "@/context/useContextMenu";
 import useGetCollectionsMeta from "@/hooks/useGetCollectionsMeta";
 import { ContextMenuEnum } from "@/types/context-menu";
+import { QueryClient } from "@tanstack/react-query";
+import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
+import { toast } from "sonner";
 
 function CollectionPickerMenu() {
   const [search, setSearch] = useState("");
@@ -14,19 +17,17 @@ function CollectionPickerMenu() {
     state: { menu },
     closeContextMenu,
   } = useContextMenu();
+  const qc = new QueryClient();
 
   const isCPM = menu?.type === ContextMenuEnum.CPM;
-  const payload = isCPM ? menu.payload : undefined;
+  const film = isCPM ? menu.payload?.film : undefined;
 
   const {
     isLoading,
     data: result,
     refetch,
     isRefetching,
-  } = useGetCollectionsMeta({
-    userID: payload?.userID,
-    filmID: payload?.filmID,
-  });
+  } = useGetCollectionsMeta({ filmID: film?.id });
 
   const [selectedIDs, setSelectedIDs] = useState<Set<number>>(
     result?.data?.in ?? new Set(),
@@ -44,7 +45,10 @@ function CollectionPickerMenu() {
     closeContextMenu();
   }
 
-  function handleSelectedCollection(id: number) {
+  // Update the selected collection IDS
+  function handleSelectedCollection(e: MouseEvent, id: number) {
+    e.stopPropagation();
+
     setSelectedIDs((prev) => {
       const next = new Set(prev);
 
@@ -58,12 +62,41 @@ function CollectionPickerMenu() {
     });
   }
 
+  async function handleSubmit() {
+    if (!film) return;
+
+    const originalIDs = result?.data?.in ?? new Set();
+
+    const addedIDs = selectedIDs.difference(originalIDs);
+    const deletedIDs = originalIDs.difference(selectedIDs);
+
+    // add the film to the films table
+    // add/delete the record(s) to/from the collection_films table
+    const { data } = await addFilmToCollection({
+      film,
+      addedIDs: Array.from(addedIDs),
+      deletedIDs: Array.from(deletedIDs),
+    });
+
+    if (data) {
+      toast(`Updated your collections`);
+
+      // invalidate the query
+      qc.invalidateQueries({
+        queryKey: ["collection", "meta"],
+        refetchType: "none",
+      });
+
+      closeContextMenu();
+    }
+  }
+
   const rendered_collections = result?.data?.collections
     ? result.data.collections.map((collection) => {
         return (
           <li
             key={collection.id}
-            onClick={() => handleSelectedCollection(collection.id)}
+            onClick={(e) => handleSelectedCollection(e, collection.id)}
             className="grid place-items-center grid-cols-[50px_auto_40px] p-2 gap-4 rounded-2xl transition-all duration-300 ease-in-out cursor-pointer hover:gray"
           >
             {collection.cover_image ? (
@@ -91,7 +124,7 @@ function CollectionPickerMenu() {
 
             <button
               type="button"
-              onClick={() => handleSelectedCollection(collection.id)}
+              onClick={(e) => handleSelectedCollection(e, collection.id)}
               className={`size-3.5  border border-neutral-800 rounded-full cursor-pointer ${selectedIDs.has(collection.id) ? "bg-neutral-800" : ""}`}
             />
           </li>
@@ -168,7 +201,13 @@ function CollectionPickerMenu() {
                 Create Collection
               </Button>
             ) : (
-              <Button className="bg-neutral-800 text-white">Done</Button>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                className="bg-neutral-800 text-white"
+              >
+                Save
+              </Button>
             )}
           </div>
         </div>

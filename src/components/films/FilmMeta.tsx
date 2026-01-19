@@ -1,23 +1,27 @@
 "use client";
 
-import { AddIcon, ChevronDownIcon } from "@/components/icons";
+import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
 import { useContextMenu } from "@/context/useContextMenu";
 import useClientRect from "@/hooks/useClientRect";
-import { CollectionMeta } from "@/types/collection";
+import { MostRecentCollection } from "@/types/collection";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { TMDBFilm } from "@/types/tmdb";
+import { QueryClient } from "@tanstack/react-query";
+import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { MouseEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type Props = {
-  collectionMeta: CollectionMeta | null;
+  mostRecentCollection: MostRecentCollection | null;
   film: TMDBFilm;
   userID: string;
 };
 
 function FilmMeta(props: Props) {
   const {
+    film,
     film: { id, title },
-    collectionMeta,
+    mostRecentCollection,
     userID,
   } = props;
 
@@ -25,9 +29,12 @@ function FilmMeta(props: Props) {
     openContextMenu,
     state: { menu },
   } = useContextMenu();
+  const qc = new QueryClient();
   const { ref: filmRef, rect } = useClientRect<HTMLButtonElement>();
 
   const [activeFilm, setActiveFilm] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   function handleCollectionPickerContextMenu(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
@@ -67,10 +74,7 @@ function FilmMeta(props: Props) {
     openContextMenu({
       type: ContextMenuEnum.CPM,
       position: { top: top + 20, left },
-      payload: {
-        userID,
-        filmID: id,
-      },
+      payload: { userID, film },
     });
   }
 
@@ -98,6 +102,37 @@ function FilmMeta(props: Props) {
   //   };
   // }, [closeContextMenu]);
 
+  async function handleSaveFilm() {
+    if (!film) return;
+
+    if (mostRecentCollection) {
+      setIsLoading(true);
+      setIsSaved(true);
+
+      const { data, error } = await addFilmToCollection({
+        film,
+        addedIDs: [mostRecentCollection.id],
+        deletedIDs: [],
+      });
+
+      if (data) {
+        toast(`Saved film to your collection.`);
+
+        // invalidate the query
+        qc.invalidateQueries({
+          queryKey: ["collection", "meta"],
+          refetchType: "none",
+        });
+      }
+      if (error) {
+        setIsSaved(false);
+        toast("Failed to save film to your collection");
+      }
+
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div
       key={id}
@@ -109,7 +144,7 @@ function FilmMeta(props: Props) {
         <div className="flex items-center justify-between gap-2">
           <p className=" flex items-center gap-1">
             <span className="flex-center px-2 text-base font-semibold text-white line-clamp-1">
-              {collectionMeta ? collectionMeta.name : "..."}
+              {mostRecentCollection ? mostRecentCollection.name : "..."}
             </span>
 
             <button
@@ -121,8 +156,17 @@ function FilmMeta(props: Props) {
             </button>
           </p>
 
-          <button className="bg-white text-neutral-800 rounded-full size-8 grid place-items-center cursor-pointer xs:size-12">
-            <AddIcon className="size-4 xs:size-5" />
+          <button
+            type="button"
+            disabled={isLoading}
+            onClick={handleSaveFilm}
+            className={`bg-white text-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer  ${isSaved ? "opacity-50" : ""}`}
+          >
+            {isSaved ? (
+              <CheckIcon className="size-4" />
+            ) : (
+              <AddIcon className="size-4" />
+            )}
           </button>
         </div>
 

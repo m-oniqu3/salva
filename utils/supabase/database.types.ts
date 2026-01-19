@@ -49,7 +49,7 @@ export type Database = {
             columns: ["film_id"]
             isOneToOne: false
             referencedRelation: "films"
-            referencedColumns: ["tmdb_id"]
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -95,21 +95,18 @@ export type Database = {
           id: number
           poster_path: string
           title: string
-          tmdb_id: number
         }
         Insert: {
           created_at?: string
           id?: number
           poster_path: string
           title: string
-          tmdb_id: number
         }
         Update: {
           created_at?: string
           id?: number
           poster_path?: string
           title?: string
-          tmdb_id?: number
         }
         Relationships: []
       }

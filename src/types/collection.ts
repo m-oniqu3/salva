@@ -35,12 +35,12 @@ export type CollectionSummary = {
   };
 };
 
-export type CollectionMeta = {
+export type MostRecentCollection = {
   id: number;
   name: string;
 };
 
-export type CollectionSnippet = {
+export type CollectionMeta = {
   id: number;
   name: string;
   is_private: boolean;

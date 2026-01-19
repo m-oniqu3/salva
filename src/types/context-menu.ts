@@ -1,4 +1,5 @@
 import { CollectionSummary } from "@/types/collection";
+import { TMDBFilm } from "@/types/tmdb";
 
 export enum ContextMenuEnum {
   "PM" = "PROFILE_MENU",
@@ -29,7 +30,7 @@ type CollectionPickerMenu = ContextMenuState<
   ContextMenuEnum.CPM,
   {
     userID?: string | null;
-    filmID: number;
+    film: TMDBFilm;
   }
 >;
 

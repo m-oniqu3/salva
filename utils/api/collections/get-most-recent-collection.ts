@@ -1,10 +1,10 @@
 "use server";
 
-import { CollectionMeta } from "@/types/collection";
+import { MostRecentCollection } from "@/types/collection";
 import { Result } from "@/types/result";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Result<CollectionMeta | null>;
+type Response = Result<MostRecentCollection | null>;
 
 /**
  *
@@ -12,7 +12,7 @@ type Response = Result<CollectionMeta | null>;
  * @returns CollectionMeta | null
  * @description Gets the collection meta for the collection the user last saved a film to.
  */
-export async function getLastSavedCollectionMeta(userID: string): Response {
+export async function getMostRecentCollection(userID: string): Response {
   if (!userID) {
     return { data: null, error: "User ID is required" };
   }
@@ -24,11 +24,11 @@ export async function getLastSavedCollectionMeta(userID: string): Response {
       .from("collection_films")
       .select(
         ` id,
-            collection:collections!inner(
-                id, 
-                name
-            )
-        `
+          collection:collections!inner(
+              id, 
+              name
+          )
+        `,
       )
       .eq("user_id", userID)
       .order("created_at", { ascending: false })
@@ -45,14 +45,17 @@ export async function getLastSavedCollectionMeta(userID: string): Response {
 
     return { data: collection, error: null };
   } catch (error) {
-    console.error("Unexpected error in getLastSavedCollectionMeta:", error);
+    console.error(
+      "Unexpected error in " + getMostRecentCollection.name + ": ",
+      error,
+    );
 
     return {
       data: null,
       error:
         error instanceof Error
           ? error.message
-          : "Failed to fetch last saved collection",
+          : "Failed to fetch most recent collection",
     };
   }
 }

@@ -1,17 +1,13 @@
 "use server";
 
-import { CollectionSnippet } from "@/types/collection";
+import getUser from "@/server-actions/get-user";
+import { CollectionMeta } from "@/types/collection";
 import { Result } from "@/types/result";
 import { createClient } from "@utils/supabase/server";
 
-type Props = {
-  userID: string;
-  filmID: number;
-};
-
 type Response = Result<{
   in: Set<number>; // collections this film is in
-  collections: CollectionSnippet[]; // ordered list for picker
+  collections: CollectionMeta[]; // ordered list for picker
 } | null>;
 
 /**
@@ -21,26 +17,33 @@ type Response = Result<{
  * Reorders collections so: “Saved in” collections appear first & Everything else follows
  *
  */
-export async function getCollectionsMeta(props: Props): Response {
-  const { userID, filmID } = props;
-
+export async function getCollectionsMeta(filmID: number): Response {
   try {
-    if (!filmID || !userID) {
+    if (!filmID) {
       throw new Error("Missing argument.");
     }
 
     const supabase = await createClient();
+    const { data: user } = await getUser(supabase);
+
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
 
     //Gets meta of the user's collections
     // and how much films they have saved to them
     const { data: collections, error: collectionsError } = await supabase
       .from("collections")
       .select(
-        `id, name, is_private, cover_image,
-        collection_films(id)
+        `
+                id, 
+                name, 
+                is_private, 
+                cover_image,
+                collection_films(id)
             `,
       )
-      .eq("user_id", userID)
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false });
 
     if (collectionsError) throw collectionsError;
@@ -54,7 +57,7 @@ export async function getCollectionsMeta(props: Props): Response {
       await supabase
         .from("collection_films")
         .select("collection_id")
-        .eq("user_id", userID)
+        .eq("user_id", user.id)
         .eq("film_id", filmID)
         .order("created_at", { ascending: false });
 
@@ -75,9 +78,9 @@ export async function getCollectionsMeta(props: Props): Response {
 
         return acc;
       },
-      {} as Record<number, CollectionSnippet>,
+      {} as Record<number, CollectionMeta>,
     );
-    const orderedCollections: CollectionSnippet[] = [];
+    const orderedCollections: CollectionMeta[] = [];
 
     // Add recently used first
     for (const id of recentCollectionsIDs) {

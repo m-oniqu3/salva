@@ -4,19 +4,18 @@ import { useQuery } from "@tanstack/react-query";
 import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
 
 type Props = {
-  userID?: string | null;
   filmID?: number | null;
 };
 
-function useGetCollectionsMeta({ userID, filmID }: Props) {
+function useGetCollectionsMeta({ filmID }: Props) {
   return useQuery({
-    queryKey: ["collection", "meta", userID],
+    queryKey: ["collection", "meta"],
     queryFn: async () => {
-      if (!userID || !filmID) throw new Error("Missing argument");
+      if (!filmID) throw new Error("Film ID is not present");
 
-      return getCollectionsMeta({ userID: userID ?? "", filmID });
+      return getCollectionsMeta(filmID);
     },
-    enabled: !!userID,
+    enabled: !!filmID,
   });
 }
 

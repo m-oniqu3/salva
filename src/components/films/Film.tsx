@@ -1,5 +1,5 @@
 import FilmMeta from "@/components/films/FilmMeta";
-import { CollectionMeta } from "@/types/collection";
+import { MostRecentCollection } from "@/types/collection";
 import { TMDBFilm } from "@/types/tmdb";
 import {
   dehydrate,
@@ -12,7 +12,7 @@ import Image from "next/image";
 type Props = {
   film: TMDBFilm;
   userID: string | null;
-  collectionMeta: CollectionMeta | null;
+  mostRecentCollection: MostRecentCollection | null;
 };
 
 async function Film(props: Props) {
@@ -22,12 +22,12 @@ async function Film(props: Props) {
     film,
     film: { id, title, poster_path },
     userID,
-    collectionMeta,
+    mostRecentCollection,
   } = props;
 
   await queryClient.prefetchQuery({
-    queryKey: ["collection", "meta", userID],
-    queryFn: () => getCollectionsMeta({ userID: userID ?? "", filmID: id }),
+    queryKey: ["collection", "meta"],
+    queryFn: () => getCollectionsMeta(id),
   });
 
   return (
@@ -46,7 +46,7 @@ async function Film(props: Props) {
         {userID && (
           <FilmMeta
             film={film}
-            collectionMeta={collectionMeta}
+            mostRecentCollection={mostRecentCollection}
             userID={userID}
           />
         )}

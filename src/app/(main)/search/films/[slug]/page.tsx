@@ -1,6 +1,6 @@
 import Film from "@/components/films/Film";
 import getUser from "@/server-actions/get-user";
-import { getLastSavedCollectionMeta } from "@utils/api/collections/get-last-saved-collection-meta";
+import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
 import { getFilms } from "@utils/api/films/get-films";
 import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -27,8 +27,8 @@ async function page({ params }: Props) {
     return <p>no films</p>;
   }
 
-  const collectionMeta = user.data?.id
-    ? (await getLastSavedCollectionMeta(user.data.id)).data
+  const mostRecentCollection = user.data?.id
+    ? (await getMostRecentCollection(user.data.id)).data
     : null;
 
   const rendered_films = films.map((film) => {
@@ -37,7 +37,7 @@ async function page({ params }: Props) {
         key={film.id}
         film={film}
         userID={user.data?.id ?? null}
-        collectionMeta={collectionMeta}
+        mostRecentCollection={mostRecentCollection}
       />
     );
   });

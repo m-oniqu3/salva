@@ -5,6 +5,7 @@ import { ModalContextProvider } from "@/context/ModalContext";
 import Provider from "@/context/Provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 // const geistSans = Geist({
@@ -44,6 +45,7 @@ export default async function RootLayout({ children }: LayoutProps) {
         <Provider>
           <ModalContextProvider>
             <ContextMenuProvider>
+              <Toaster position="bottom-right" />
               <ModalManager />
               <ContextMenuManager />
               {children}
