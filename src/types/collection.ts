@@ -45,5 +45,5 @@ export type CollectionMeta = {
   name: string;
   is_private: boolean;
   cover_image: string | null;
-  filmCount: number;
+  films_count: number;
 };

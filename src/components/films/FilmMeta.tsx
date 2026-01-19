@@ -49,26 +49,26 @@ function FilmMeta(props: Props) {
 
     // Start by positioning below the trigger
     let left = rect.left;
-    let top = rect.bottom + 8;
+    const top = rect.top + 8;
 
     // Clamp horizontally
     if (left + MENU_WIDTH > viewportWidth - PADDING) {
       left = viewportWidth - MENU_WIDTH - PADDING;
     }
 
-    if (left < PADDING) {
-      left = PADDING;
-    }
+    // if (left < PADDING) {
+    //   left = PADDING;
+    // }
 
-    // Clamp vertically
-    if (top + MENU_HEIGHT > viewportHeight - PADDING) {
-      // flip above trigger if it doesn't fit below
-      top = rect.top - MENU_HEIGHT - 8;
-    }
+    // // Clamp vertically
+    // if (top + MENU_HEIGHT > viewportHeight - PADDING) {
+    //   // flip above trigger if it doesn't fit below
+    //   top = rect.top - MENU_HEIGHT - 8;
+    // }
 
-    if (top < PADDING) {
-      top = PADDING;
-    }
+    // if (top < PADDING) {
+    //   top = PADDING;
+    // }
 
     setActiveFilm(id);
     openContextMenu({
@@ -109,8 +109,6 @@ function FilmMeta(props: Props) {
       setIsLoading(true);
       setIsSaved(true);
 
-      toast(`Saved film to your collection.`);
-
       const { data, error } = await addFilmToCollection({
         film,
         addedIDs: [mostRecentCollection.id],
@@ -118,10 +116,12 @@ function FilmMeta(props: Props) {
       });
 
       if (data) {
+        toast(`Saved film to your collection.`);
         // invalidate the query
-        qc.invalidateQueries({
-          queryKey: ["collection", "meta"],
-          refetchType: "none",
+        console.log("ivalidatinf the query");
+        await qc.invalidateQueries({
+          queryKey: ["collection", "meta", id],
+          refetchType: "all",
         });
       }
 

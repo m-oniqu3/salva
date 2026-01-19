@@ -50,7 +50,7 @@ export default async function RootLayout({ children }: LayoutProps) {
               <ContextMenuManager />
               {children}
               <div id="modal" />
-              <div id="context-menu" className="absolute top-0 left-0" />
+              <div id="context-menu" />
             </ContextMenuProvider>
           </ModalContextProvider>
         </Provider>

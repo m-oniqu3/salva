@@ -26,7 +26,7 @@ async function Film(props: Props) {
   } = props;
 
   await queryClient.prefetchQuery({
-    queryKey: ["collection", "meta"],
+    queryKey: ["collection", "meta", id],
     queryFn: () => getCollectionsMeta(id),
   });
 

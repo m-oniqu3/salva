@@ -1,14 +1,10 @@
 "use server";
 
-import getUser from "@/server-actions/get-user";
 import { CollectionMeta } from "@/types/collection";
 import { Result } from "@/types/result";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Result<{
-  in: Set<number>; // collections this film is in
-  collections: CollectionMeta[]; // ordered list for picker
-} | null>;
+type Response = Result<CollectionMeta[] | null>;
 
 /**
  *
@@ -19,16 +15,27 @@ type Response = Result<{
  */
 export async function getCollectionsMeta(filmID: number): Response {
   try {
-    if (!filmID) {
-      throw new Error("Missing argument.");
-    }
-
     const supabase = await createClient();
-    const { data: user } = await getUser(supabase);
+    const { data: auth } = await supabase.auth.getUser();
 
-    if (!user) {
+    if (!auth.user) {
       throw new Error("Not authenticated");
     }
+
+    // get the collections the film is saved in
+    const { data: collectionsSavedTo, error: collectionsSavedToError } =
+      await supabase
+        .from("collection_films")
+        .select("collection_id")
+        .eq("user_id", auth.user.id)
+        .eq("film_id", filmID)
+        .order("created_at", { ascending: false });
+
+    if (collectionsSavedToError) throw collectionsSavedToError;
+
+    const savedIDs = collectionsSavedTo?.map((col) => col.collection_id) ?? [];
+
+    const inFilter = `(${savedIDs.join(",")})`;
 
     //Gets meta of the user's collections
     // and how much films they have saved to them
@@ -36,14 +43,15 @@ export async function getCollectionsMeta(filmID: number): Response {
       .from("collections")
       .select(
         `
-                id, 
-                name, 
-                is_private, 
-                cover_image,
-                collection_films(id)
-            `,
+          id, 
+          name, 
+          is_private, 
+          cover_image,
+          collection_films(id)
+        `,
       )
-      .eq("user_id", user.id)
+      .eq("user_id", auth.user.id)
+      .not("id", "in", inFilter)
       .order("created_at", { ascending: false });
 
     if (collectionsError) throw collectionsError;
@@ -52,54 +60,14 @@ export async function getCollectionsMeta(filmID: number): Response {
       return { data: null, error: null };
     }
 
-    // collections the user recently saved to
-    const { data: recentCollections, error: recentCollectionsError } =
-      await supabase
-        .from("collection_films")
-        .select("collection_id")
-        .eq("user_id", user.id)
-        .eq("film_id", filmID)
-        .order("created_at", { ascending: false });
+    const collections_meta = collections.map((collection) => {
+      return {
+        ...collection,
+        films_count: collection.collection_films.length,
+      };
+    });
 
-    if (recentCollectionsError) throw recentCollectionsError;
-
-    const recentCollectionsIDs = new Set(
-      recentCollections.map((c) => c.collection_id),
-    );
-
-    const collectionsMap = collections.reduce(
-      (acc, cur) => {
-        if (!acc[cur.id]) {
-          acc[cur.id] = {
-            ...cur,
-            filmCount: cur.collection_films.length,
-          };
-        }
-
-        return acc;
-      },
-      {} as Record<number, CollectionMeta>,
-    );
-    const orderedCollections: CollectionMeta[] = [];
-
-    // Add recently used first
-    for (const id of recentCollectionsIDs) {
-      if (collectionsMap[id]) {
-        orderedCollections.push(collectionsMap[id]);
-        delete collectionsMap[id];
-      }
-    }
-
-    // Add remaining collections
-    orderedCollections.push(...Object.values(collectionsMap));
-
-    return {
-      data: {
-        in: recentCollectionsIDs,
-        collections: orderedCollections,
-      },
-      error: null,
-    };
+    return { data: collections_meta, error: null };
   } catch (error) {
     console.error(`Error in ${getCollectionsMeta.name}:`, error);
 
