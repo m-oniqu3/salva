@@ -109,6 +109,8 @@ function FilmMeta(props: Props) {
       setIsLoading(true);
       setIsSaved(true);
 
+      toast(`Saved film to your collection.`);
+
       const { data, error } = await addFilmToCollection({
         film,
         addedIDs: [mostRecentCollection.id],
@@ -116,14 +118,13 @@ function FilmMeta(props: Props) {
       });
 
       if (data) {
-        toast(`Saved film to your collection.`);
-
         // invalidate the query
         qc.invalidateQueries({
           queryKey: ["collection", "meta"],
           refetchType: "none",
         });
       }
+
       if (error) {
         setIsSaved(false);
         toast("Failed to save film to your collection");
@@ -141,8 +142,8 @@ function FilmMeta(props: Props) {
       <div
         className={`absolute top-0 left-0 w-full h-full p-3 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100 xs:p-4 ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
       >
-        <div className="flex items-center justify-between gap-2">
-          <p className=" flex items-center gap-1">
+        <div className="grid grid-cols-[auto_auto] items-center justify-between gap-2">
+          <p className=" grid grid-cols-[auto_1fr] gap-1 ">
             <span className="flex-center px-2 text-base font-semibold text-white line-clamp-1">
               {mostRecentCollection ? mostRecentCollection.name : "..."}
             </span>

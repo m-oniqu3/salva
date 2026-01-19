@@ -8,8 +8,11 @@ import { ContextMenuEnum } from "@/types/context-menu";
 import { QueryClient } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import Image from "next/image";
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
+
+const areSetsEqualArrow = (set1: Set<number>, set2: Set<number>) =>
+  set1.size === set2.size && [...set1].every((value) => set2.has(value));
 
 function CollectionPickerMenu() {
   const [search, setSearch] = useState("");
@@ -32,6 +35,18 @@ function CollectionPickerMenu() {
   const [selectedIDs, setSelectedIDs] = useState<Set<number>>(
     result?.data?.in ?? new Set(),
   );
+  const [isSavingFilm, setIsSavingFilm] = useState(false);
+  // const [isSaved, setIsSaved] = useState(false);
+
+  const [areSelectionsEqual, setAreSelectionsEqual] = useState(
+    areSetsEqualArrow(selectedIDs, result?.data?.in ?? new Set()),
+  );
+
+  useEffect(() => {
+    setAreSelectionsEqual(
+      areSetsEqualArrow(selectedIDs, result?.data?.in ?? new Set()),
+    );
+  }, [selectedIDs, result?.data?.in]);
 
   function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value);
@@ -64,31 +79,38 @@ function CollectionPickerMenu() {
 
   async function handleSubmit() {
     if (!film) return;
+    setIsSavingFilm(true);
 
     const originalIDs = result?.data?.in ?? new Set();
 
     const addedIDs = selectedIDs.difference(originalIDs);
     const deletedIDs = originalIDs.difference(selectedIDs);
 
+    toast(`Updated your collections.`);
+    closeContextMenu();
+
     // add the film to the films table
     // add/delete the record(s) to/from the collection_films table
-    const { data } = await addFilmToCollection({
+    const { data, error } = await addFilmToCollection({
       film,
       addedIDs: Array.from(addedIDs),
       deletedIDs: Array.from(deletedIDs),
     });
 
     if (data) {
-      toast(`Updated your collections`);
-
       // invalidate the query
       qc.invalidateQueries({
         queryKey: ["collection", "meta"],
         refetchType: "none",
       });
-
-      closeContextMenu();
     }
+
+    if (error) {
+      // setIsSaved(false);
+      toast("Failed to save film to your collection.");
+    }
+
+    setIsSavingFilm(false);
   }
 
   const rendered_collections = result?.data?.collections
@@ -201,13 +223,18 @@ function CollectionPickerMenu() {
                 Create Collection
               </Button>
             ) : (
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                className="bg-neutral-800 text-white"
-              >
-                Save
-              </Button>
+              <>
+                {!areSelectionsEqual ? (
+                  <Button
+                    type="submit"
+                    disabled={isSavingFilm}
+                    onClick={handleSubmit}
+                    className="bg-neutral-800 text-white"
+                  >
+                    Save
+                  </Button>
+                ) : null}
+              </>
             )}
           </div>
         </div>

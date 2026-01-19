@@ -22,7 +22,7 @@ async function page({ params }: Props) {
     createClient().then((data) => getUser(data)),
   ]);
 
-  if (!films) {
+  if (!films || films.length === 0) {
     console.log("no films");
     return <p>no films</p>;
   }

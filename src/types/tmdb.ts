@@ -80,6 +80,7 @@ export type TMDBFilm = {
   id: number;
   title: string;
   poster_path: string;
+  media_type: string;
 };
 
 export type TMDBConfig = {
