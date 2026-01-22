@@ -26,7 +26,7 @@ export default async function MainLayout({ children }: Props) {
   // }
 
   return (
-    <div>
+    <div className="">
       {/* Layout UI */}
       {/* Place children where you want to render a page or nested layout */}
       <AuthNavbar profile={profile} />

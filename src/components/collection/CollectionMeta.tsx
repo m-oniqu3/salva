@@ -29,8 +29,7 @@ function CollectionMeta(props: Props) {
   );
 
   return (
-    <button
-      type="button"
+    <li
       onClick={() => selectCollection(id)}
       className="grid place-items-center grid-cols-[40px_auto_40px] p-2 gap-4 rounded-2xl transition-all duration-300 ease-in-out cursor-pointer hover:gray"
     >
@@ -48,7 +47,7 @@ function CollectionMeta(props: Props) {
         onClick={() => selectCollection(id)}
         className={`size-3  border border-neutral-800 rounded-full cursor-pointer ${collectionIsSelected ? "bg-neutral-800" : ""}`}
       />
-    </button>
+    </li>
   );
 }
 

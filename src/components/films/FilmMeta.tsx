@@ -109,6 +109,7 @@ function FilmMeta(props: Props) {
       setIsLoading(true);
       setIsSaved(true);
 
+      // todo turn function parameters into one argument
       const { data, error } = await addFilmToCollection({
         film,
         addedIDs: [mostRecentCollection.id],
@@ -120,7 +121,7 @@ function FilmMeta(props: Props) {
         // invalidate the query
         console.log("ivalidatinf the query");
         await qc.invalidateQueries({
-          queryKey: ["collection", "meta", id],
+          queryKey: ["collection", "films", id],
           refetchType: "all",
         });
       }
@@ -140,38 +141,44 @@ function FilmMeta(props: Props) {
       className={`absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
     >
       <div
-        className={`absolute top-0 left-0 w-full h-full p-3 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100 xs:p-4 ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
+        className={`absolute top-0 left-0 w-full h-full p-4 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100 ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
       >
-        <div className="grid grid-cols-[auto_auto] items-center justify-between gap-2">
-          <p className=" grid grid-cols-[auto_1fr] gap-1 ">
-            <span className="flex-center px-2 text-base font-semibold text-white line-clamp-1">
-              {mostRecentCollection ? mostRecentCollection.name : "..."}
-            </span>
+        <div className="grid grid-cols-2 items-center justify-between w-full">
+          <div className="grid grid-cols-2 items-center sm:gap-2">
+            <>
+              <p className="sm:hidden font-semibold text-white line-clamp-1">
+                ...
+              </p>
+
+              <p className="hidden sm:block  font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
+                {mostRecentCollection ? mostRecentCollection.name : "..."}
+              </p>
+            </>
 
             <button
               ref={filmRef}
               className="flex-center cursor-pointer w-fit"
               onClick={handleCollectionPickerContextMenu}
             >
-              <ChevronDownIcon className="size-5 text-white" />
+              <ChevronDownIcon className="size-6 text-white" />
             </button>
-          </p>
+          </div>
 
           <button
             type="button"
             disabled={isLoading}
             onClick={handleSaveFilm}
-            className={`bg-white text-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer  ${isSaved ? "opacity-50" : ""}`}
+            className={`bg-white text-neutral-800 rounded-full size-10 sm:size-12 grid place-items-center cursor-pointer ml-auto ${isSaved ? "opacity-70" : ""}`}
           >
             {isSaved ? (
-              <CheckIcon className="size-4" />
+              <CheckIcon className="size-5 text-neutral-800" />
             ) : (
-              <AddIcon className="size-4" />
+              <AddIcon className="size-5 text-neutral-800" />
             )}
           </button>
         </div>
 
-        <p className="font-semibold p-2 text-base text-white line-clamp-3 self-end">
+        <p className="text-base font-semibold  text-white line-clamp-3 self-end">
           {title}
         </p>
       </div>

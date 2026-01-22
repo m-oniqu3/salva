@@ -12,21 +12,21 @@ import { getFilmCollections } from "@utils/api/collections/get-film-collections"
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const areSetsEqualArrow = (set1: Set<number>, set2: Set<number>) =>
-  set1.size === set2.size && [...set1].every((value) => set2.has(value));
-
 function CollectionPickerMenu() {
   const [search, setSearch] = useState("");
+
   const {
     state: { menu },
     closeContextMenu,
   } = useContextMenu();
+
   const qc = new QueryClient();
 
   // Is Collection Picker Menu? Get the film payload.
   const isCPM = menu?.type === ContextMenuEnum.CPM;
   const film = isCPM ? menu.payload?.film : undefined;
 
+  // Get all the user's collections.
   const collectionsMetaQuery = useQuery({
     queryKey: ["collection", "meta", film?.id],
     queryFn: () => {
@@ -35,6 +35,7 @@ function CollectionPickerMenu() {
     },
   });
 
+  //Get the collections the film is saved in
   const collectionFilmsQuery = useQuery({
     queryKey: ["collection", "films", film?.id],
     queryFn: () => {
@@ -44,102 +45,90 @@ function CollectionPickerMenu() {
     enabled: !!film?.id,
   });
 
-  const savedIDs = collectionFilmsQuery?.data?.data?.map((col) => col.id) ?? [];
-
-  const [selectedIDs, setSelectedIDs] = useState<Set<number>>(
-    new Set(savedIDs),
+  const savedIDs = new Set(
+    collectionFilmsQuery?.data?.data?.map((col) => col.id) ?? [],
   );
+
+  const [selectedCollectionIDs, setSelectedCollectionIDs] = useState({
+    addedIDs: new Set<number>(),
+    deletedIDs: new Set<number>(),
+  });
 
   // When collection-films data is ready get the collection IDs
   useEffect(() => {
     if (collectionFilmsQuery.data?.data) {
       const savedIDs =
         collectionFilmsQuery.data?.data.map((col) => col.id) ?? [];
-      setSelectedIDs(new Set(savedIDs));
+
+      setSelectedCollectionIDs((prev) => {
+        return { ...prev, addedIDs: new Set([...prev.addedIDs, ...savedIDs]) };
+      });
     }
   }, [collectionFilmsQuery.data]);
 
   const [isSavingFilm, setIsSavingFilm] = useState(false);
   // const [isSaved, setIsSaved] = useState(false);
 
-  const [areSelectionsEqual, setAreSelectionsEqual] = useState(
-    areSetsEqualArrow(
-      selectedIDs,
-      new Set(collectionFilmsQuery.data?.data?.map((c) => c.id)),
-    ),
-  );
+  const [hasSelectionChanged, setHasSelectionsChanged] = useState(false);
 
   useEffect(() => {
-    setAreSelectionsEqual(
-      areSetsEqualArrow(
-        selectedIDs,
-        new Set(collectionFilmsQuery.data?.data?.map((c) => c.id)),
-      ),
+    setHasSelectionsChanged(
+      selectedCollectionIDs.addedIDs.size !== 0 ||
+        selectedCollectionIDs.deletedIDs.size !== 0,
     );
-  }, [collectionFilmsQuery.data?.data, selectedIDs]);
+  }, [
+    selectedCollectionIDs.addedIDs.size,
+    selectedCollectionIDs.deletedIDs.size,
+  ]);
 
   function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value);
   }
 
-  function clearSearch() {
-    setSearch("");
-  }
-
-  function closeMenu() {
-    closeContextMenu();
-  }
-
   // Update the selected collection IDS
   function handleSelectedCollection(id: number) {
     // e.stopPropagation();
+    console.log(selectedCollectionIDs, id);
+    setSelectedCollectionIDs((prev) => {
+      const copy = { ...prev };
 
-    setSelectedIDs((prev) => {
-      const next = new Set(prev);
-
-      if (next.has(id)) {
-        next.delete(id);
+      if (!copy.addedIDs.has(id)) {
+        copy.addedIDs.add(id);
       } else {
-        next.add(id);
+        copy.addedIDs.delete(id);
+
+        if (savedIDs.has(id)) {
+          copy.deletedIDs.add(id);
+        }
       }
 
-      return next;
+      if (copy.deletedIDs.has(id)) {
+        copy.deletedIDs.delete(id);
+      }
+
+      return copy;
     });
   }
 
   async function handleSubmit() {
     if (!film) return;
+
     setIsSavingFilm(true);
-
-    const originalIDs = new Set(
-      collectionFilmsQuery.data?.data?.map((c) => c.id) ?? [],
-    );
-
-    const addedIDs = selectedIDs.difference(originalIDs);
-    const deletedIDs = originalIDs.difference(selectedIDs);
-
     closeContextMenu();
 
     // add the film to the films table
     // add/delete the record(s) to/from the collection_films table
     const { data, error } = await addFilmToCollection({
       film,
-      addedIDs: Array.from(addedIDs),
-      deletedIDs: Array.from(deletedIDs),
+      addedIDs: Array.from(selectedCollectionIDs.addedIDs),
+      deletedIDs: Array.from(selectedCollectionIDs.deletedIDs),
     });
 
     if (data) {
       toast(`Updated your collections.`);
 
-      // invalidate the query
-      qc.invalidateQueries({
-        queryKey: ["collection", "meta", film.id],
-        refetchType: "all",
-      });
-
       qc.invalidateQueries({
         queryKey: ["collection", "films", film.id],
-        refetchType: "all",
       });
     }
 
@@ -152,14 +141,21 @@ function CollectionPickerMenu() {
     // setSelectedIDs(new Set());
   }
 
-  const rendered_available_collections = collectionsMetaQuery.data?.data?.map(
+  const available_collections =
+    collectionsMetaQuery.data?.data?.filter((col) => {
+      return !savedIDs.has(col.id);
+    }) ?? [];
+
+  const rendered_available_collections = available_collections.map(
     (collection) => {
       return (
         <CollectionMeta
           key={collection.id}
           collection={collection}
           selectCollection={handleSelectedCollection}
-          collectionIsSelected={selectedIDs.has(collection.id)}
+          collectionIsSelected={selectedCollectionIDs.addedIDs.has(
+            collection.id,
+          )}
         />
       );
     },
@@ -172,7 +168,9 @@ function CollectionPickerMenu() {
           key={collection.id}
           collection={collection}
           selectCollection={handleSelectedCollection}
-          collectionIsSelected={selectedIDs.has(collection.id)}
+          collectionIsSelected={selectedCollectionIDs.addedIDs.has(
+            collection.id,
+          )}
         />
       );
     },
@@ -203,7 +201,7 @@ function CollectionPickerMenu() {
             <button
               type="button"
               className="gray pr-4 flex-center rounded-r-2xl cursor-pointer"
-              onClick={clearSearch}
+              onClick={() => setSearch("")}
             >
               {search && <CloseIcon className="size-4.5 text-neutral-400" />}
             </button>
@@ -231,7 +229,7 @@ function CollectionPickerMenu() {
         </div>
 
         <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
-          <Button onClick={closeMenu}>Cancel</Button>
+          <Button onClick={closeContextMenu}>Cancel</Button>
 
           {search ? (
             <Button className="bg-neutral-800 text-white">
@@ -239,7 +237,7 @@ function CollectionPickerMenu() {
             </Button>
           ) : (
             <>
-              {!areSelectionsEqual ? (
+              {hasSelectionChanged ? (
                 <Button
                   type="submit"
                   disabled={isSavingFilm}

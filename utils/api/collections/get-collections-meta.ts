@@ -23,19 +23,19 @@ export async function getCollectionsMeta(filmID: number): Response {
     }
 
     // get the collections the film is saved in
-    const { data: collectionsSavedTo, error: collectionsSavedToError } =
-      await supabase
-        .from("collection_films")
-        .select("collection_id")
-        .eq("user_id", auth.user.id)
-        .eq("film_id", filmID)
-        .order("created_at", { ascending: false });
+    // const { data: collectionsSavedTo, error: collectionsSavedToError } =
+    //   await supabase
+    //     .from("collection_films")
+    //     .select("collection_id")
+    //     .eq("user_id", auth.user.id)
+    //     .eq("film_id", filmID)
+    //     .order("created_at", { ascending: false });
 
-    if (collectionsSavedToError) throw collectionsSavedToError;
+    // if (collectionsSavedToError) throw collectionsSavedToError;
 
-    const savedIDs = collectionsSavedTo?.map((col) => col.collection_id) ?? [];
+    // const savedIDs = collectionsSavedTo?.map((col) => col.collection_id) ?? [];
 
-    const inFilter = `(${savedIDs.join(",")})`;
+    // const inFilter = `(${savedIDs.join(",")})`;
 
     //Gets meta of the user's collections
     // and how much films they have saved to them
@@ -51,7 +51,7 @@ export async function getCollectionsMeta(filmID: number): Response {
         `,
       )
       .eq("user_id", auth.user.id)
-      .not("id", "in", inFilter)
+      // .not("id", "in", inFilter)
       .order("created_at", { ascending: false });
 
     if (collectionsError) throw collectionsError;

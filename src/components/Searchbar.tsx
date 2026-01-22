@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useRef } from "react";
 
 const pages = new Set(["films", "collections", "profiles"]);
+
 function Searchbar() {
   const searchRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
@@ -34,21 +35,21 @@ function Searchbar() {
 
   return (
     <form
-      className="relative w-full max-w-72 md:max-w-80 lg:max-w-sm mx-auto"
+      className="relative grid grid-cols-[auto_50px] w-full"
       onSubmit={handleSubmit}
     >
-      <div className="absolute top-4 left-5 z-10 ">
+      <div className="hidden w-full flex-center rounded-l-2xl gray">
         <FilmIcon className="size-5 text-neutral-400 animate-pulse" />
       </div>
 
       <input
         ref={searchRef}
         type="text"
-        className="gray w-full text-sml rounded-2xl h-[50px] pl-12 mr-20 font-medium focus:outline-none placeholder:text-neutral-500"
+        className="gray w-full px-4 text-sml h-[48px] rounded-l-2xl font-medium focus:outline-none placeholder:text-neutral-500"
         placeholder="Search..."
       />
 
-      <div className="absolute top-4.5 right-5 z-10 cursor-pointer">
+      <div className=" w-full flex-center rounded-r-2xl gray">
         <SearchIcon className="size-4 text-neutral-400" />
       </div>
     </form>
