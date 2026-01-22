@@ -60,11 +60,7 @@ function ContextMenu(props: Props) {
         </div>
       )}
 
-      {!isMobile && (
-        <div className="absolute" style={{ top, left, right, bottom }}>
-          {children}
-        </div>
-      )}
+      {!isMobile && <div>{children}</div>}
     </Portal>
   );
 }

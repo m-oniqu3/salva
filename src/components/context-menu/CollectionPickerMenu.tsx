@@ -25,6 +25,12 @@ function CollectionPickerMenu() {
   // Is Collection Picker Menu? Get the film payload.
   const isCPM = menu?.type === ContextMenuEnum.CPM;
   const film = isCPM ? menu.payload?.film : undefined;
+  const { top, left, right, bottom } = menu?.position ?? {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  };
 
   // Get all the user's collections.
   const collectionsMetaQuery = useQuery({
@@ -177,78 +183,80 @@ function CollectionPickerMenu() {
   );
 
   return (
-    <div
-      className="context-panel overflow-hidden h-110 bg-white min-[400px]:w-76 border border-gray-100 p-0 relative z-50"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div className="grid grid-rows-[110px_1fr_64px] h-full">
-        <div className="flex flex-col gap-4 p-4 border-b border-gray-50 ">
-          <p className="text-xs font-medium text-center">Add to Collection</p>
+    <div className="absolute z-5" style={{ top, left, right, bottom }}>
+      <div
+        className="context-panel overflow-hidden h-110 bg-white min-[400px]:w-76 border border-gray-100 p-0 relative z-10"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="grid grid-rows-[110px_1fr_64px] h-full">
+          <div className="flex flex-col gap-4 p-4 border-b border-gray-50 ">
+            <p className="text-xs font-medium text-center">Add to Collection</p>
 
-          <form className="grid grid-cols-[30px_auto_30px] ">
-            <div className="gray pl-4 flex-center rounded-l-2xl">
-              <SearchIcon className="size-4 text-neutral-400" />
-            </div>
+            <form className="grid grid-cols-[30px_auto_30px] ">
+              <div className="gray pl-4 flex-center rounded-l-2xl">
+                <SearchIcon className="size-4 text-neutral-400" />
+              </div>
 
-            <input
-              type="text"
-              value={search}
-              onChange={handleSearch}
-              className="gray w-full text-sml h-[48px] px-4 font-medium focus:outline-none placeholder:text-neutral-500"
-              placeholder="Search..."
-            />
+              <input
+                type="text"
+                value={search}
+                onChange={handleSearch}
+                className="gray w-full text-sml h-[48px] px-4 font-medium focus:outline-none placeholder:text-neutral-500"
+                placeholder="Search..."
+              />
 
-            <button
-              type="button"
-              className="gray pr-4 flex-center rounded-r-2xl cursor-pointer"
-              onClick={() => setSearch("")}
-            >
-              {search && <CloseIcon className="size-4.5 text-neutral-400" />}
-            </button>
-          </form>
-        </div>
+              <button
+                type="button"
+                className="gray pr-4 flex-center rounded-r-2xl cursor-pointer"
+                onClick={() => setSearch("")}
+              >
+                {search && <CloseIcon className="size-4.5 text-neutral-400" />}
+              </button>
+            </form>
+          </div>
 
-        <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
-          {!!rendered_saved_collections?.length && (
-            <div className="flex flex-col">
-              <p className="text-sml font-medium px-4">Saved in</p>
-              <ul className="flex flex-col h-full p-2 ">
-                {rendered_saved_collections}
-              </ul>
-            </div>
-          )}
+          <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
+            {!!rendered_saved_collections?.length && (
+              <div className="flex flex-col">
+                <p className="text-sml font-medium px-4">Saved in</p>
+                <ul className="flex flex-col h-full p-2 ">
+                  {rendered_saved_collections}
+                </ul>
+              </div>
+            )}
 
-          {rendered_available_collections && (
-            <div className="flex flex-col">
-              <p className="text-sml font-medium px-4">Your collections</p>
-              <ul className="flex flex-col h-full p-2 ">
-                {rendered_available_collections}
-              </ul>
-            </div>
-          )}
-        </div>
+            {rendered_available_collections && (
+              <div className="flex flex-col">
+                <p className="text-sml font-medium px-4">Your collections</p>
+                <ul className="flex flex-col h-full p-2 ">
+                  {rendered_available_collections}
+                </ul>
+              </div>
+            )}
+          </div>
 
-        <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
-          <Button onClick={closeContextMenu}>Cancel</Button>
+          <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
+            <Button onClick={closeContextMenu}>Cancel</Button>
 
-          {search ? (
-            <Button className="bg-neutral-800 text-white">
-              Create Collection
-            </Button>
-          ) : (
-            <>
-              {hasSelectionChanged ? (
-                <Button
-                  type="submit"
-                  disabled={isSavingFilm}
-                  onClick={handleSubmit}
-                  className="bg-neutral-800 text-white"
-                >
-                  Save
-                </Button>
-              ) : null}
-            </>
-          )}
+            {search ? (
+              <Button className="bg-neutral-800 text-white">
+                Create Collection
+              </Button>
+            ) : (
+              <>
+                {hasSelectionChanged ? (
+                  <Button
+                    type="submit"
+                    disabled={isSavingFilm}
+                    onClick={handleSubmit}
+                    className="bg-neutral-800 text-white"
+                  >
+                    Save
+                  </Button>
+                ) : null}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

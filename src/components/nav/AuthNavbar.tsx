@@ -30,6 +30,7 @@ function AuthNavbar({ profile }: Props) {
 
   function handleProfileContextMenu() {
     if (!rect) return;
+    console.log(rect);
 
     openContextMenu({
       type: ContextMenuEnum.PM,
@@ -50,8 +51,8 @@ function AuthNavbar({ profile }: Props) {
   });
 
   return (
-    <header className="flex items-center  sticky top-0 left-0 h-28  bg-white z-10">
-      <nav className="grid grid-cols-[50px_auto_50px]  items-center justify-between gap-2 w-full md:gap-6">
+    <header className="flex items-center sticky top-0 left-0 h-28  bg-white z-10">
+      <nav className="wrapper grid grid-cols-[50px_auto_50px] xl:grid-cols-3 items-center justify-between gap-2 md:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="font-extrabold capitalize text-xl relative">
             <FilmIcon className="size-6 text-neutral-800" />

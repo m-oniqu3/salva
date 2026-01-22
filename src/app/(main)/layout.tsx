@@ -30,7 +30,7 @@ export default async function MainLayout({ children }: Props) {
       {/* Layout UI */}
       {/* Place children where you want to render a page or nested layout */}
       <AuthNavbar profile={profile} />
-      <main>{children}</main>
+      <main className="wrapper">{children}</main>
     </div>
   );
 }

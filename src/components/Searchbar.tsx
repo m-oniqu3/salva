@@ -35,17 +35,17 @@ function Searchbar() {
 
   return (
     <form
-      className="relative grid grid-cols-[auto_50px] w-full"
+      className="relative grid grid-cols-[auto_50px] sm:grid-cols-[60px_auto_60px] w-full"
       onSubmit={handleSubmit}
     >
-      <div className="hidden w-full flex-center rounded-l-2xl gray">
+      <div className="hidden sm:flex w-full flex-center rounded-l-2xl gray">
         <FilmIcon className="size-5 text-neutral-400 animate-pulse" />
       </div>
 
       <input
         ref={searchRef}
         type="text"
-        className="gray w-full px-4 text-sml h-[48px] rounded-l-2xl font-medium focus:outline-none placeholder:text-neutral-500"
+        className="gray w-full text-sml h-12.5 rounded-l-2xl sm:rounded-none font-medium focus:outline-none placeholder:text-neutral-500"
         placeholder="Search..."
       />
 
