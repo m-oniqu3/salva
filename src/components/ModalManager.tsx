@@ -3,6 +3,7 @@
 import Prompt from "@/components/auth/Prompt";
 import CollectionCoverPicker from "@/components/collection/CollectionCoverPicker";
 import EditCollection from "@/components/collection/EditCollection";
+import FilmCollection from "@/components/collection/FilmCollection";
 import MobileMenu from "@/components/nav/MobileMenu";
 import Followers from "@/components/profile/Followers";
 import Following from "@/components/profile/Following";
@@ -45,9 +46,12 @@ function ModalManager() {
       case ModalEnum.MM:
         return <MobileMenu />;
 
+      case ModalEnum.FCM:
+        return <FilmCollection />;
+
       default:
         throw new Error(
-          "Modal type not allowed or missing. No modal to render"
+          "Modal type not allowed or missing. No modal to render",
         );
     }
   })();

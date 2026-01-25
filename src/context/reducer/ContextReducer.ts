@@ -14,14 +14,12 @@ export const initialState: ContextState = {
 
 export function contextMenuReducer(
   state: ContextState,
-  action: ContextMenuAction
+  action: ContextMenuAction,
 ) {
   switch (action.type) {
     case ContextMenuActionEnum.OPEN_CONTEXT_MENU:
-      // if the menu is the same close it
-
-      if (state.menu?.type === action.payload.type)
-        return { ...state, menu: null };
+      // if (state.menu?.type === action.payload.type)
+      //   return { ...state, menu: null };
 
       return {
         ...state,
@@ -30,6 +28,18 @@ export function contextMenuReducer(
 
     case ContextMenuActionEnum.CLOSE_CONTEXT_MENU:
       return { ...state, menu: null };
+
+    case ContextMenuActionEnum.UPDATE_POSITION:
+      // Only update position if menu is open
+      if (!state.menu) return state;
+
+      return {
+        ...state,
+        menu: {
+          ...state.menu,
+          position: action.payload,
+        },
+      };
 
     default:
       return state;

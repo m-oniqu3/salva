@@ -6,14 +6,8 @@ import { createClient } from "@utils/supabase/server";
 
 type Response = Result<CollectionMeta[] | null>;
 
-/**
- *
- * Fetches all user collections
- * Fetches which collections already contain this film
- * Reorders collections so: “Saved in” collections appear first & Everything else follows
- *
- */
-export async function getCollectionsMeta(filmID: number): Response {
+// Fetches all user collections
+export async function getCollectionsMeta(): Response {
   try {
     const supabase = await createClient();
     const { data: auth } = await supabase.auth.getUser();

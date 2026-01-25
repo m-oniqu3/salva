@@ -1,20 +1,18 @@
 "use client";
 
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
-import { useContextMenu } from "@/context/useContextMenu";
-import useClientRect from "@/hooks/useClientRect";
+import { useModal } from "@/context/useModal";
 import { MostRecentCollection } from "@/types/collection";
-import { ContextMenuEnum } from "@/types/context-menu";
+import { ModalEnum } from "@/types/modal";
 import { TMDBFilm } from "@/types/tmdb";
 import { QueryClient } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
-import { MouseEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
   mostRecentCollection: MostRecentCollection | null;
   film: TMDBFilm;
-  userID: string;
 };
 
 function FilmMeta(props: Props) {
@@ -22,85 +20,18 @@ function FilmMeta(props: Props) {
     film,
     film: { id, title },
     mostRecentCollection,
-    userID,
   } = props;
 
-  const {
-    openContextMenu,
-    state: { menu },
-  } = useContextMenu();
-  const qc = new QueryClient();
-  const { ref: filmRef, rect } = useClientRect<HTMLButtonElement>();
+  const { openModal } = useModal();
 
-  const [activeFilm, setActiveFilm] = useState<number | null>(null);
+  const qc = new QueryClient();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  function handleCollectionPickerContextMenu(e: MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
-    if (!rect) return;
-
-    const MENU_WIDTH = 320;
-    const MENU_HEIGHT = 360; // estimate or known height
-    const PADDING = 16;
-
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    // Start by positioning below the trigger
-    let left = rect.left;
-    const top = rect.top + 8;
-
-    // Clamp horizontally
-    if (left + MENU_WIDTH > viewportWidth - PADDING) {
-      left = viewportWidth - MENU_WIDTH - PADDING;
-    }
-
-    // if (left < PADDING) {
-    //   left = PADDING;
-    // }
-
-    // // Clamp vertically
-    // if (top + MENU_HEIGHT > viewportHeight - PADDING) {
-    //   // flip above trigger if it doesn't fit below
-    //   top = rect.top - MENU_HEIGHT - 8;
-    // }
-
-    // if (top < PADDING) {
-    //   top = PADDING;
-    // }
-
-    setActiveFilm(id);
-    openContextMenu({
-      type: ContextMenuEnum.CPM,
-      position: { top: top + 20, left },
-      payload: { userID, film },
-    });
+  function handleFilmCollectionModal() {
+    openModal({ type: ModalEnum.FCM, payload: { film } });
   }
-
-  useEffect(() => {
-    if (menu && menu.type !== ContextMenuEnum.CPM) {
-      setActiveFilm(null);
-    }
-
-    if (!menu) {
-      setActiveFilm(null);
-    }
-  }, [menu]);
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", () => {
-  //     setActiveFilm(null);
-  //     closeContextMenu();
-  //   });
-
-  //   return () => {
-  //     window.removeEventListener("resize", () => {
-  //       setActiveFilm(null);
-  //       closeContextMenu();
-  //     });
-  //   };
-  // }, [closeContextMenu]);
 
   async function handleSaveFilm() {
     if (!film) return;
@@ -138,10 +69,10 @@ function FilmMeta(props: Props) {
   return (
     <div
       key={id}
-      className={`absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
+      className={`absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity`}
     >
       <div
-        className={`absolute top-0 left-0 w-full h-full p-4 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100 ${activeFilm === id ? "opacity-100" : "opacity-0"}`}
+        className={`absolute top-0 left-0 w-full h-full p-4 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}
       >
         <div className="grid grid-cols-2 items-center justify-between w-full">
           <div className="grid grid-cols-2 items-center sm:gap-2">
@@ -156,9 +87,8 @@ function FilmMeta(props: Props) {
             </>
 
             <button
-              ref={filmRef}
               className="flex-center cursor-pointer w-fit"
-              onClick={handleCollectionPickerContextMenu}
+              onClick={handleFilmCollectionModal}
             >
               <ChevronDownIcon className="size-6 text-white" />
             </button>

@@ -2,9 +2,9 @@ import FilmMeta from "@/components/films/FilmMeta";
 import { MostRecentCollection } from "@/types/collection";
 import { TMDBFilm } from "@/types/tmdb";
 import {
-  dehydrate,
   HydrationBoundary,
   QueryClient,
+  dehydrate,
 } from "@tanstack/react-query";
 import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
 import Image from "next/image";
@@ -26,8 +26,8 @@ async function Film(props: Props) {
   } = props;
 
   await queryClient.prefetchQuery({
-    queryKey: ["collection", "meta", id],
-    queryFn: () => getCollectionsMeta(id),
+    queryKey: ["collection", "meta"],
+    queryFn: () => getCollectionsMeta(),
   });
 
   return (
@@ -44,11 +44,7 @@ async function Film(props: Props) {
         />
 
         {userID && (
-          <FilmMeta
-            film={film}
-            mostRecentCollection={mostRecentCollection}
-            userID={userID}
-          />
+          <FilmMeta film={film} mostRecentCollection={mostRecentCollection} />
         )}
       </figure>
     </HydrationBoundary>

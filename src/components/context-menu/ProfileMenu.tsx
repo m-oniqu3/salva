@@ -1,33 +1,25 @@
 "use client";
 
 import { useContextMenu } from "@/context/useContextMenu";
+import { ContextMenuEnum } from "@/types/context-menu";
 
 function ProfileMenu() {
   const {
     state: { menu },
   } = useContextMenu();
 
-  const { top, left, right, bottom } = menu?.position ?? {
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  };
+  if (!menu) return null;
+  if (menu.type !== ContextMenuEnum.PM) return null;
+
+  const { top, right } = menu.position;
 
   return (
-    <div
-      className="fixed top-28 left-0 z-10 w-full"
-      // style={{ top, left, right, bottom }}
+    <ul
+      className="absolute z-10 context-panel border border-gray-100 w-48 h-80"
+      style={{ top, right }}
     >
-      <div className="wrapper flex justify-end">
-        <ul
-          className="context-panel bg-white border border-gray-100 w-48 h-80"
-          // style={{ top, left, right, bottom }}
-        >
-          ProfileMenu
-        </ul>
-      </div>
-    </div>
+      ProfileMenu
+    </ul>
   );
 }
 

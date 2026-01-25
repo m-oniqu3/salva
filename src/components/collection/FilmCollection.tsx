@@ -3,40 +3,40 @@
 import Button from "@/components/Button";
 import CollectionMeta from "@/components/collection/CollectionMeta";
 import { CloseIcon, SearchIcon } from "@/components/icons";
-import { useContextMenu } from "@/context/useContextMenu";
-import { ContextMenuEnum } from "@/types/context-menu";
+import { useModal } from "@/context/useModal";
+import { ModalEnum } from "@/types/modal";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
 import { getFilmCollections } from "@utils/api/collections/get-film-collections";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-function CollectionPickerMenu() {
+function FilmCollection() {
   const [search, setSearch] = useState("");
+  const [hasSelectionChanged, setHasSelectionsChanged] = useState(false);
+
+  const [isFilmSaved, setIsFilmSaved] = useState(false);
+  const [savedIDs, setSavedIDs] = useState<Set<number>>(new Set());
+  const [newIDs, setNewIDs] = useState<Set<number>>(new Set());
+  const [deletedIDs, setDeletedIDs] = useState<Set<number>>(new Set());
+  const [isSavingFilm, setIsSavingFilm] = useState(false);
+  const originalSavedIDs = useRef<number[]>([]);
 
   const {
-    state: { menu },
-    closeContextMenu,
-  } = useContextMenu();
-
+    state: { modal },
+    closeModal,
+    stopPropagation,
+  } = useModal();
   const qc = new QueryClient();
 
-  // Is Collection Picker Menu? Get the film payload.
-  const isCPM = menu?.type === ContextMenuEnum.CPM;
-  const film = isCPM ? menu.payload?.film : undefined;
-  const { top, left } = menu?.position ?? {
-    top: 0,
-    left: 0,
-  };
+  const isFCM = modal?.type === ModalEnum.FCM;
+  const film = isFCM ? modal.payload?.film : null;
 
   // Get all the user's collections.
   const collectionsMetaQuery = useQuery({
-    queryKey: ["collection", "meta", film?.id],
-    queryFn: () => {
-      if (!film?.id) throw new Error("No film ID.");
-      return getCollectionsMeta(film?.id);
-    },
+    queryKey: ["collection", "meta"],
+    queryFn: () => getCollectionsMeta(),
   });
 
   //Get the collections the film is saved in
@@ -49,102 +49,75 @@ function CollectionPickerMenu() {
     enabled: !!film?.id,
   });
 
-  const savedIDs = new Set(
-    collectionFilmsQuery?.data?.data?.map((col) => col.id) ?? [],
-  );
-
-  const [selectedCollectionIDs, setSelectedCollectionIDs] = useState({
-    addedIDs: new Set<number>(),
-    deletedIDs: new Set<number>(),
-  });
-
   // When collection-films data is ready get the collection IDs
   useEffect(() => {
     if (collectionFilmsQuery.data?.data) {
       const savedIDs =
         collectionFilmsQuery.data?.data.map((col) => col.id) ?? [];
 
-      setSelectedCollectionIDs((prev) => {
-        return { ...prev, addedIDs: new Set([...prev.addedIDs, ...savedIDs]) };
-      });
+      setSavedIDs(new Set(savedIDs));
+      originalSavedIDs.current = savedIDs;
     }
   }, [collectionFilmsQuery.data]);
 
-  const [isSavingFilm, setIsSavingFilm] = useState(false);
-  // const [isSaved, setIsSaved] = useState(false);
-
-  const [hasSelectionChanged, setHasSelectionsChanged] = useState(false);
-
-  useEffect(() => {
-    setHasSelectionsChanged(
-      selectedCollectionIDs.addedIDs.size !== 0 ||
-        selectedCollectionIDs.deletedIDs.size !== 0,
-    );
-  }, [
-    selectedCollectionIDs.addedIDs.size,
-    selectedCollectionIDs.deletedIDs.size,
-  ]);
-
-  function handleSearch(e: ChangeEvent<HTMLInputElement>) {
-    setSearch(e.target.value);
-  }
-
   // Update the selected collection IDS
-  function handleSelectedCollection(id: number) {
-    // e.stopPropagation();
-    console.log(selectedCollectionIDs, id);
-    setSelectedCollectionIDs((prev) => {
-      const copy = { ...prev };
+  function handleSavedCollections(id: number) {
+    setSavedIDs((prevSaved) => {
+      const saved = new Set(prevSaved);
 
-      if (!copy.addedIDs.has(id)) {
-        copy.addedIDs.add(id);
+      if (saved.has(id)) {
+        // remove from saved
+        saved.delete(id);
+
+        // mark for deletion
+        setDeletedIDs((prevDeleted) => {
+          const deleted = new Set(prevDeleted);
+          deleted.add(id);
+          return deleted;
+        });
       } else {
-        copy.addedIDs.delete(id);
+        // restore to saved
+        saved.add(id);
 
-        if (savedIDs.has(id)) {
-          copy.deletedIDs.add(id);
-        }
+        // undo deletion
+        setDeletedIDs((prevDeleted) => {
+          const deleted = new Set(prevDeleted);
+          deleted.delete(id);
+          return deleted;
+        });
       }
 
-      if (copy.deletedIDs.has(id)) {
-        copy.deletedIDs.delete(id);
+      return saved;
+    });
+  }
+
+  function handleAvailableCollections(id: number) {
+    setNewIDs((prev) => {
+      const copy = new Set(prev);
+
+      if (!copy.has(id)) {
+        copy.add(id);
+      } else {
+        copy.delete(id);
       }
 
       return copy;
     });
   }
 
-  async function handleSubmit() {
-    if (!film) return;
-
-    setIsSavingFilm(true);
-    closeContextMenu();
-
-    // add the film to the films table
-    // add/delete the record(s) to/from the collection_films table
-    const { data, error } = await addFilmToCollection({
-      film,
-      addedIDs: Array.from(selectedCollectionIDs.addedIDs),
-      deletedIDs: Array.from(selectedCollectionIDs.deletedIDs),
+  useEffect(() => {
+    setHasSelectionsChanged(() => {
+      if (
+        newIDs.size > 0 ||
+        deletedIDs.size > 0 ||
+        originalSavedIDs.current.length !== savedIDs.size
+      )
+        return true;
+      return false;
     });
+  }, [newIDs, deletedIDs, savedIDs]);
 
-    if (data) {
-      toast(`Updated your collections.`);
-
-      qc.invalidateQueries({
-        queryKey: ["collection", "films", film.id],
-      });
-    }
-
-    if (error) {
-      // setIsSaved(false);
-      toast("Failed to save film to your collection.");
-    }
-
-    setIsSavingFilm(false);
-    // setSelectedIDs(new Set());
-  }
-
+  // filter saved collections
   const available_collections =
     collectionsMetaQuery.data?.data?.filter((col) => {
       return !savedIDs.has(col.id);
@@ -156,10 +129,8 @@ function CollectionPickerMenu() {
         <CollectionMeta
           key={collection.id}
           collection={collection}
-          selectCollection={handleSelectedCollection}
-          collectionIsSelected={selectedCollectionIDs.addedIDs.has(
-            collection.id,
-          )}
+          selectCollection={handleAvailableCollections}
+          collectionIsSelected={newIDs.has(collection.id)}
         />
       );
     },
@@ -171,20 +142,55 @@ function CollectionPickerMenu() {
         <CollectionMeta
           key={collection.id}
           collection={collection}
-          selectCollection={handleSelectedCollection}
-          collectionIsSelected={selectedCollectionIDs.addedIDs.has(
-            collection.id,
-          )}
+          selectCollection={handleSavedCollections}
+          collectionIsSelected={savedIDs.has(collection.id)}
         />
       );
     },
   );
 
+  function handleSearch(e: ChangeEvent<HTMLInputElement>) {
+    setSearch(e.target.value);
+  }
+
+  //Save the film to collections
+  async function handleSubmit() {
+    if (!film) return;
+
+    setIsSavingFilm(true);
+    setIsFilmSaved(true);
+    closeModal();
+
+    const filmCollectionData = {
+      film,
+      newIDs: [...newIDs],
+      deletedIDs: [...deletedIDs],
+    };
+    const { data, error } = await addFilmToCollection(filmCollectionData);
+
+    if (data) {
+      toast(`Updated your collections.`);
+
+      qc.invalidateQueries({
+        queryKey: ["collection", "films", film.id],
+      });
+    }
+
+    if (error) {
+      setIsFilmSaved(false);
+      toast("Failed to save film to your collection.");
+    }
+
+    setIsSavingFilm(false);
+    setNewIDs(new Set());
+    setDeletedIDs(new Set());
+    setSavedIDs(new Set());
+  }
+
   return (
     <div
-      className="absolute z-5 context-panel overflow-hidden h-110 bg-white min-[400px]:w-76 border border-gray-100 p-0 "
-      style={{ top, left, transition: "none" }}
-      onClick={(e) => e.stopPropagation()}
+      className="relative p-0 rounded-3xl overflow-hidden h-110 w-76 bg-white "
+      onClick={stopPropagation}
     >
       <div className="grid grid-rows-[110px_1fr_64px] h-full">
         <div className="flex flex-col gap-4 p-4 border-b border-gray-50 ">
@@ -234,7 +240,7 @@ function CollectionPickerMenu() {
         </div>
 
         <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
-          <Button onClick={closeContextMenu}>Cancel</Button>
+          <Button onClick={closeModal}>Cancel</Button>
 
           {search ? (
             <Button className="bg-neutral-800 text-white">
@@ -260,30 +266,4 @@ function CollectionPickerMenu() {
   );
 }
 
-export default CollectionPickerMenu;
-
-// {
-//   isLoading && (
-//     <div className="h-full grid place-items-center">
-//       <LoadingIcon className="size-4.5 animate-spin" />
-//     </div>
-//   );
-// }
-
-// {
-//   (!result?.data?.collections || result.error) && (
-//     <div className="h-full flex flex-col items-center justify-center gap-1">
-//       <h1 className="text-lg font-semibold">Intermission</h1>
-//       <p className="text-sml">
-//         We couldn’t roll your collections. Try again.
-//       </p>
-//       <Button className="bg-neutral-800 text-white" onClick={refetch}>
-//         {isRefetching ? (
-//           <LoadingIcon className="size-4 animate-spin" />
-//         ) : (
-//           "Retry"
-//         )}
-//       </Button>
-//     </div>
-//   );
-// }
+export default FilmCollection;

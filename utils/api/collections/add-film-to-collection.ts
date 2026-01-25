@@ -5,16 +5,16 @@ import { Result } from "@/types/result";
 import { TMDBFilm } from "@/types/tmdb";
 import { createClient } from "@utils/supabase/server";
 
-type Props = {
+type FilmCollectionData = {
   film: TMDBFilm;
-  addedIDs: number[]; // collection IDs to add to
-  deletedIDs: number[]; // collection IDs to remove from
+  newIDs: number[]; // collection IDs to add to
+  deletedIDs: number[]; // collection IDs to remove from}
 };
 
-export async function addFilmToCollection(props: Props): Result<number | null> {
-  const { film, addedIDs, deletedIDs } = props;
-
-  console.log(props);
+export async function addFilmToCollection(
+  filmCollectionData: FilmCollectionData,
+): Result<number | null> {
+  const { film, newIDs, deletedIDs } = filmCollectionData;
 
   try {
     const supabase = await createClient();
@@ -60,8 +60,8 @@ export async function addFilmToCollection(props: Props): Result<number | null> {
     }
 
     // Add film to selected collections
-    if (addedIDs.length > 0) {
-      const inserts = addedIDs.map((collectionID) => ({
+    if (newIDs.length > 0) {
+      const inserts = newIDs.map((collectionID) => ({
         user_id: user.id,
         film_id: filmID,
         collection_id: collectionID,

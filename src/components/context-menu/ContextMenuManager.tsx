@@ -14,8 +14,6 @@ function ContextMenuManager() {
     closeContextMenu,
   } = useContextMenu();
 
-  console.log(menu, "Context Menu");
-
   const renderedMenu = (() => {
     if (!menu) return null;
 
