@@ -19,7 +19,7 @@ async function Film(props: Props) {
 
   return (
     <Link href={`/film/${media_type}/${id}`}>
-      <figure className="group relative">
+      <figure className="group relative h-full">
         <Image
           key={id}
           src={poster_path}

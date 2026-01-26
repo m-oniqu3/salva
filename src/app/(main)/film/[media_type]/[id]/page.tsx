@@ -1,3 +1,4 @@
+import FilmDetails from "@/components/films/FilmDetails";
 import { MediaType } from "@/types/tmdb";
 import { getFilmById } from "@utils/api/films/get-film-by-id";
 import { redirect } from "next/navigation";
@@ -18,11 +19,13 @@ async function page({ params }: Props) {
     redirect("/");
   }
 
+  // Check if media type is valid
   if (!MediaTypes.includes(media_type as MediaType)) {
     console.log(`Invalid media type: ${media_type}`);
     redirect("/");
   }
 
+  // Check if film id is valid
   if (isNaN(Number(id))) {
     return <div>Invalid film ID</div>;
   }
@@ -33,9 +36,17 @@ async function page({ params }: Props) {
     return <div>could not find film</div>;
   }
 
+  if (!data) {
+    return <p>no film found</p>;
+  }
+
   console.log(data);
 
-  return <div>{id}</div>;
+  return (
+    <div>
+      <FilmDetails film={data} media_type={media_type as MediaType} />
+    </div>
+  );
 }
 
 export default page;

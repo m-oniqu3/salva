@@ -1,5 +1,5 @@
 import { Result } from "@/types/result";
-import { MediaType, Movie, TVShow } from "@/types/tmdb";
+import { MediaType, Movie, TMDBConfig, TVShow } from "@/types/tmdb";
 
 const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -14,18 +14,35 @@ export async function getFilmById<T extends MediaType>(
   filmID: number,
 ): Result<FilmByType[T] | null> {
   try {
-    const response = await fetch(`${BASE_URL}/${media_type}/${filmID}`, {
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-      },
-    });
+    // Fetch film and config in parallel
+    const [filmRes, configRes] = await Promise.all([
+      fetch(`${BASE_URL}/${media_type}/${filmID}`, {
+        headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
+      }),
+      fetch(`${BASE_URL}/configuration`, {
+        headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
+      }),
+    ]);
 
-    assertTMDBResponse(response, "Fetch Request");
+    assertTMDBResponse(filmRes, "Fetch Film By ID");
+    assertTMDBResponse(configRes, "Fetch TMDB Config");
 
-    const filmDetails = (await response.json()) as FilmByType[T];
+    const film = (await filmRes.json()) as FilmByType[T];
+    const config = (await configRes.json()) as TMDBConfig;
+
+    if (!film || !config) return { data: null, error: null };
+
+    // Compute poster URL
+    const poster_path = film.poster_path
+      ? `${config.images.base_url}w500${film.poster_path}`
+      : null;
+
+    const backdrop_path = film.backdrop_path
+      ? `${config.images.base_url}w780${film.backdrop_path}`
+      : null;
 
     return {
-      data: filmDetails ?? null,
+      data: { ...film, poster_path, backdrop_path },
       error: null,
     };
   } catch (error) {
