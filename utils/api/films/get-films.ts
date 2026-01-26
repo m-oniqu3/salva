@@ -60,6 +60,7 @@ export async function getFilms(q: string): Promise<TMDBFilm[] | null> {
   return results;
 }
 
+// Checks response and throws appropriate errors
 function assertTMDBResponse(
   response: Response,
   label: string,

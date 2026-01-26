@@ -87,3 +87,47 @@ export type TMDBConfig = {
   images: TMDBImagesConfig;
   change_keys: TMDBChangeKey[];
 };
+
+// Films
+
+export type MediaType = "movie" | "tv";
+
+export type FilmBase = {
+  id: number;
+
+  overview: string;
+  tagline: string | null;
+
+  poster_path: string | null;
+  backdrop_path: string | null;
+
+  vote_average: number;
+  vote_count: number;
+  popularity: number;
+
+  genres: Array<{
+    id: number;
+    name: string;
+  }>;
+};
+
+export type Movie = FilmBase & {
+  title: string;
+  original_title: string;
+
+  release_date: string | null;
+  runtime: number | null;
+  status: string;
+};
+
+export type TVShow = FilmBase & {
+  name: string;
+  original_name: string;
+
+  first_air_date: string | null;
+  last_air_date: string | null;
+  status: string;
+
+  number_of_seasons: number;
+  number_of_episodes: number;
+};
