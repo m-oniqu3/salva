@@ -82,7 +82,7 @@ function FilmMeta(props: Props) {
   return (
     <div
       key={id}
-      className={`absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity`}
+      className={`absolute size-full inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity`}
     >
       <div
         className={`absolute top-0 left-0 w-full h-full p-4 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}

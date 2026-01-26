@@ -1,6 +1,8 @@
 import FilmDetails from "@/components/films/FilmDetails";
 import { MediaType } from "@/types/tmdb";
 import { getFilmById } from "@utils/api/films/get-film-by-id";
+import { getProfile } from "@utils/api/profile/get-profile";
+import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -41,10 +43,22 @@ async function page({ params }: Props) {
   }
 
   console.log(data);
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  const { data: profile } = await getProfile({
+    username: null,
+    id: auth.user?.id,
+  });
 
   return (
     <div>
-      <FilmDetails film={data} media_type={media_type as MediaType} />
+      <FilmDetails
+        film={data}
+        media_type={media_type as MediaType}
+        user={
+          profile ? { id: profile.user_id, username: profile.username } : null
+        }
+      />
     </div>
   );
 }

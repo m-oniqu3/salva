@@ -118,11 +118,22 @@ export type Movie = FilmBase & {
   release_date: string | null;
   runtime: number | null;
   status: string;
+
+  production_companies: Array<{
+    id: number;
+    name: string;
+  }>;
 };
 
 export type TVShow = FilmBase & {
   name: string;
   original_name: string;
+
+  created_by: Array<{
+    id: number;
+    name: string;
+    original_name: string;
+  }>;
 
   first_air_date: string | null;
   last_air_date: string | null;
