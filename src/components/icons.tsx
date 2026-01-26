@@ -232,14 +232,13 @@ export function CloseIcon({ className }: IconProps) {
       viewBox="0 0 24 24"
       width={24}
       height={24}
-      color={"#000000"}
       fill={"none"}
       className={className}
     >
       <path
         d="M18 6L6.00081 17.9992M17.9992 18L6 6.00085"
-        stroke="#141B34"
-        strokeWidth="1.5"
+        stroke="currentColor"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -459,6 +458,29 @@ export function ChevronRightIcon({ className }: IconProps) {
   );
 }
 
+export function CheckIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+// export function Icon({ className }: IconProps) {
+//   return;
+// }
+// export function Icon({ className }: IconProps) {
+//   return;
+// }
 // export function Icon({ className }: IconProps) {
 //   return;
 // }

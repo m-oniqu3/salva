@@ -2,6 +2,7 @@
 
 import AddElementMenu from "@/components/context-menu/AddElementMenu";
 import CollectionOptionsMenu from "@/components/context-menu/CollectionOptionsMenu";
+import CollectionPickerMenu from "@/components/context-menu/CollectionPickerMenu";
 import ContextMenu from "@/components/context-menu/ContextMenu";
 import ProfileMenu from "@/components/context-menu/ProfileMenu";
 import { useContextMenu } from "@/context/useContextMenu";
@@ -25,6 +26,9 @@ function ContextMenuManager() {
 
       case ContextMenuEnum.AEM:
         return <AddElementMenu />;
+
+      case ContextMenuEnum.CPM:
+        return <CollectionPickerMenu />;
 
       default:
         return null;

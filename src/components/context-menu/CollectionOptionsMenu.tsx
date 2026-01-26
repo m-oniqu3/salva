@@ -2,6 +2,7 @@
 
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
+import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import toggleCollectionPrivacy from "@utils/api/collections/toggle-collection-privacy";
 
@@ -13,10 +14,13 @@ function CollectionOptionsMenu() {
   } = useContextMenu();
 
   if (!menu) return null;
+  if (menu.type !== ContextMenuEnum.COM) return null;
   if (!menu.payload?.collectionSummary)
     throw new Error(
-      "Collection Summary must be provided to" + CollectionOptionsMenu.name
+      "Collection Summary must be provided to" + CollectionOptionsMenu.name,
     );
+
+  const { top, left } = menu.position;
 
   const collectionSummary = menu.payload.collectionSummary;
 
@@ -52,7 +56,7 @@ function CollectionOptionsMenu() {
     closeContextMenu();
 
     const { data, error } = await toggleCollectionPrivacy(
-      collectionSummary.collection.id
+      collectionSummary.collection.id,
     );
 
     if (!error) {
@@ -107,7 +111,8 @@ function CollectionOptionsMenu() {
 
   return (
     <div
-      className="context-panel w-full min-[400px]:w-48"
+      className="context-panel absolute z-5 w-full min-[400px]:w-48"
+      style={{ top, left }}
       onClick={(e) => e.stopPropagation()}
     >
       <ul className="">{rendered_collection_options}</ul>

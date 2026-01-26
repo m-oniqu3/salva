@@ -3,8 +3,10 @@ import ModalManager from "@/components/ModalManager";
 import { ContextMenuProvider } from "@/context/ContextMenuContext";
 import { ModalContextProvider } from "@/context/ModalContext";
 import Provider from "@/context/Provider";
+import { RecentlySavedFilmProvider } from "@/context/RecentlySavedFilmContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 // const geistSans = Geist({
@@ -39,18 +41,23 @@ type LayoutProps = {
 
 export default async function RootLayout({ children }: LayoutProps) {
   return (
-    <html lang="en" className="wrapper">
-      <body className={`${inter.variable} antialiased relative`}>
+    <html lang="en">
+      <body className={`${inter.variable} antialiased  wrapper`} id="body">
         <Provider>
-          <ModalContextProvider>
-            <ContextMenuProvider>
-              <ModalManager />
-              <ContextMenuManager />
-              {children}
-              <div id="modal" />
-              <div id="context-menu" />
-            </ContextMenuProvider>
-          </ModalContextProvider>
+          <RecentlySavedFilmProvider>
+            <ModalContextProvider>
+              <ContextMenuProvider>
+                <Toaster position="bottom-right" />
+                <ModalManager />
+
+                {children}
+                <div id="modal" />
+                <div id="context-menu">
+                  <ContextMenuManager />
+                </div>
+              </ContextMenuProvider>
+            </ModalContextProvider>
+          </RecentlySavedFilmProvider>
         </Provider>
       </body>
     </html>

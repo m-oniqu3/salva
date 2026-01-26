@@ -1,4 +1,5 @@
 import { CollectionSummary } from "@/types/collection";
+import { TMDBFilm } from "@/types/tmdb";
 
 export enum ModalEnum {
   CCM = "CREATE_COLLECTION_MODAL",
@@ -8,6 +9,7 @@ export enum ModalEnum {
   F = "FOLLOWERS_MODAL",
   FL = "FOLLOWING_MODAL",
   MM = "MOBILE_MENU",
+  FCM = "FILM_COLLECTION_MODAL",
 }
 
 type ModalState<K extends ModalEnum, P = null> = {
@@ -40,6 +42,14 @@ type FollowingModal = ModalState<
 
 type MobileMenuModal = ModalState<ModalEnum.MM>;
 
+type FilmCollectionModal = ModalState<
+  ModalEnum.FCM,
+  {
+    film: TMDBFilm;
+    userID: string | null;
+  }
+>;
+
 export type Modal =
   | CreateCollectionModal
   | EditCollectionModal
@@ -47,4 +57,5 @@ export type Modal =
   | AuthModal
   | FollowersModal
   | FollowingModal
-  | MobileMenuModal;
+  | MobileMenuModal
+  | FilmCollectionModal;

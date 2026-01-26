@@ -9,7 +9,7 @@ const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN;
 const BASE_URL = "https://api.themoviedb.org/3";
 
 export async function getFilms(q: string): Promise<TMDBFilm[] | null> {
-  const filmQuery = fetch(BASE_URL + "/search/movie?query=" + q, {
+  const filmQuery = fetch(BASE_URL + "/search/multi?query=" + q, {
     headers: { Authorization: "Bearer " + ACCESS_TOKEN },
   });
 
@@ -32,18 +32,29 @@ export async function getFilms(q: string): Promise<TMDBFilm[] | null> {
   //get images
 
   const results: TMDBFilm[] = films.results.reduce(
-    (acc: TMDBFilm[], cur: TMDBFilm) => {
+    (
+      acc: TMDBFilm[],
+      cur: {
+        media_type: string;
+        poster_path: string;
+        id: number;
+        title: string;
+        name: string;
+      },
+    ) => {
+      if (cur.media_type !== "movie" && cur.media_type !== "tv") return acc;
       if (!cur.poster_path) return acc;
 
       acc.push({
         id: cur.id,
-        title: cur.title,
+        title: cur.media_type === "movie" ? cur.title : cur.name,
         poster_path: buildTMDBImageUrl(config.images, "w500", cur.poster_path),
+        media_type: cur.media_type,
       });
 
       return acc;
     },
-    [] as TMDBFilm[]
+    [],
   );
 
   return results;
@@ -51,7 +62,7 @@ export async function getFilms(q: string): Promise<TMDBFilm[] | null> {
 
 function assertTMDBResponse(
   response: Response,
-  label: string
+  label: string,
 ): asserts response {
   if (response.ok) return;
 
@@ -71,7 +82,7 @@ function assertTMDBResponse(
 export function buildTMDBImageUrl(
   config: TMDBImagesConfig,
   size: TMDBImageSize,
-  path: string
+  path: string,
 ) {
   return `${config.secure_base_url}${size}${path}`;
 }

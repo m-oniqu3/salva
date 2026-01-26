@@ -34,3 +34,16 @@ export type CollectionSummary = {
     description: string;
   };
 };
+
+export type MostRecentCollection = {
+  id: number;
+  name: string;
+};
+
+export type CollectionMeta = {
+  id: number;
+  name: string;
+  is_private: boolean;
+  cover_image: string | null;
+  films_count: number;
+};

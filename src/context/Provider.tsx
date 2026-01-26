@@ -17,12 +17,12 @@ function Provider(props: Props) {
             staleTime: Infinity,
           },
         },
-      })
+      }),
   );
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+      <ReactQueryDevtools initialIsOpen={false} position="right" />
       {children}
     </QueryClientProvider>
   );

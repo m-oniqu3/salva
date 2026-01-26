@@ -32,7 +32,7 @@ async function CollectionList({ username }: Props) {
   });
 
   return (
-    <div className="grid grid-cols-2 gap-12 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:gap-10 lg:grid-cols-3  xl:grid-cols-4 ">
       {previews}
     </div>
   );

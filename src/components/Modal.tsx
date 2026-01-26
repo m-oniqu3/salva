@@ -1,5 +1,8 @@
+"use client";
+
+import { useModal } from "@/context/useModal";
 import Portal from "@components/Portal";
-import React from "react";
+import React, { useEffect } from "react";
 
 type Props = {
   children: React.ReactNode;
@@ -8,6 +11,20 @@ type Props = {
 
 function Modal(props: Props) {
   const { children, closeModal } = props;
+
+  const {
+    state: { modal },
+  } = useModal();
+
+  useEffect(() => {
+    if (modal) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [modal]);
 
   return (
     <Portal selector="#modal" close={closeModal}>

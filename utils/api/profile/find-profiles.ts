@@ -1,3 +1,5 @@
+"use server";
+
 import { Result } from "@/types/result";
 import { ProfileSnippet } from "@/types/user";
 import { createClient } from "@utils/supabase/server";
