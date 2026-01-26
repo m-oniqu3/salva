@@ -46,6 +46,7 @@ type FilmCollectionModal = ModalState<
   ModalEnum.FCM,
   {
     film: TMDBFilm;
+    userID: string | null;
   }
 >;
 

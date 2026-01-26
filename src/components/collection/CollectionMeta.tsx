@@ -42,10 +42,8 @@ function CollectionMeta(props: Props) {
         <p className="text-sml text-zinc-500">{films_count} films</p>
       </div>
 
-      <button
-        type="button"
-        onClick={() => selectCollection(id)}
-        className={`size-3  border border-neutral-800 rounded-full cursor-pointer ${collectionIsSelected ? "bg-neutral-800" : ""}`}
+      <div
+        className={`size-3 border border-neutral-800 rounded-full cursor-pointer ${collectionIsSelected ? "bg-neutral-800" : ""}`}
       />
     </li>
   );

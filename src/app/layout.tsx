@@ -3,6 +3,7 @@ import ModalManager from "@/components/ModalManager";
 import { ContextMenuProvider } from "@/context/ContextMenuContext";
 import { ModalContextProvider } from "@/context/ModalContext";
 import Provider from "@/context/Provider";
+import { RecentlySavedFilmProvider } from "@/context/RecentlySavedFilmContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
@@ -43,22 +44,20 @@ export default async function RootLayout({ children }: LayoutProps) {
     <html lang="en">
       <body className={`${inter.variable} antialiased  wrapper`} id="body">
         <Provider>
-          <ModalContextProvider>
-            <ContextMenuProvider>
-              <Toaster position="bottom-right" />
-              <ModalManager />
+          <RecentlySavedFilmProvider>
+            <ModalContextProvider>
+              <ContextMenuProvider>
+                <Toaster position="bottom-right" />
+                <ModalManager />
 
-              {children}
-              <div id="modal" />
-              <div
-                id="context-menu"
-
-                // className="absolute wrapper z-5 top-0 left-0  h-full bg-purple-300/40"
-              >
-                <ContextMenuManager />
-              </div>
-            </ContextMenuProvider>
-          </ModalContextProvider>
+                {children}
+                <div id="modal" />
+                <div id="context-menu">
+                  <ContextMenuManager />
+                </div>
+              </ContextMenuProvider>
+            </ModalContextProvider>
+          </RecentlySavedFilmProvider>
         </Provider>
       </body>
     </html>

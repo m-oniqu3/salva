@@ -12,13 +12,14 @@ type Response = Result<MostRecentCollection | null>;
  * @returns CollectionMeta | null
  * @description Gets the collection meta for the collection the user last saved a film to.
  */
-export async function getMostRecentCollection(userID: string): Response {
-  if (!userID) {
-    return { data: null, error: "User ID is required" };
-  }
-
+export async function getMostRecentCollection(): Response {
   try {
     const supabase = await createClient();
+    const auth = await supabase.auth.getUser();
+
+    if (!auth.data.user) {
+      throw new Error("No user present ");
+    }
 
     const { data, error } = await supabase
       .from("collection_films")
@@ -30,7 +31,7 @@ export async function getMostRecentCollection(userID: string): Response {
           )
         `,
       )
-      .eq("user_id", userID)
+      .eq("user_id", auth.data.user.id)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();

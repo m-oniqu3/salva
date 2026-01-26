@@ -1,7 +1,12 @@
 import Film from "@/components/films/Film";
-import getUser from "@/server-actions/get-user";
-import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
 import { getFilms } from "@utils/api/films/get-films";
+import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -11,15 +16,24 @@ type Props = {
 
 async function page({ params }: Props) {
   const { slug } = await params;
+  const queryClient = new QueryClient();
 
   if (!slug) {
     console.log("No film present to search");
     redirect("/");
   }
 
-  const [films, user] = await Promise.all([
+  const supabase = await createClient();
+  const auth = await supabase.auth.getUser();
+
+  const [films, profile] = await Promise.all([
     getFilms(slug),
-    createClient().then((data) => getUser(data)),
+    getProfile({ username: null, id: auth.data.user?.id }),
+
+    queryClient.prefetchQuery({
+      queryKey: ["collection", "meta", auth.data.user?.id ?? ""],
+      queryFn: () => getCollectionsMeta(),
+    }),
   ]);
 
   if (!films || films.length === 0) {
@@ -27,25 +41,26 @@ async function page({ params }: Props) {
     return <p>no films</p>;
   }
 
-  const mostRecentCollection = user.data?.id
-    ? (await getMostRecentCollection(user.data.id)).data
-    : null;
-
   const rendered_films = films.map((film) => {
     return (
       <Film
         key={film.id}
         film={film}
-        userID={user.data?.id ?? null}
-        mostRecentCollection={mostRecentCollection}
+        user={
+          profile.data
+            ? { id: profile.data.user_id, username: profile.data.username }
+            : null
+        }
       />
     );
   });
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 sm:gap-16 lg:grid-cols-3 xl:grid-cols-4 ">
-      {rendered_films}
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 sm:gap-16 lg:grid-cols-3 xl:grid-cols-4 ">
+        {rendered_films}
+      </div>
+    </HydrationBoundary>
   );
 }
 
