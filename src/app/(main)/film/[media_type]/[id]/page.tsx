@@ -1,4 +1,5 @@
 import FilmDetails from "@/components/films/FilmDetails";
+import SimilarFilms from "@/components/films/SimilarFilms";
 import { MediaType } from "@/types/tmdb";
 import {
   dehydrate,
@@ -56,6 +57,10 @@ async function page({ params }: Props) {
     id: auth.user?.id,
   });
 
+  const user = profile
+    ? { id: profile.user_id, username: profile.username }
+    : null;
+
   if (auth.user?.id) {
     queryClient.prefetchQuery({
       queryKey: ["collection", "meta", auth.user?.id ?? ""],
@@ -65,14 +70,24 @@ async function page({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <FilmDetails
-        film={data.film}
-        credits={data.credits}
-        media_type={media_type as MediaType}
-        user={
-          profile ? { id: profile.user_id, username: profile.username } : null
-        }
-      />
+      <div className="overflow-y-hidden">
+        <div className="fixed top-0 left-0 h-screen w-screen bg-white z-10 overflow-y-hidden">
+          <FilmDetails
+            film={data.film}
+            credits={data.credits}
+            recommendations={data.recommendations}
+            media_type={media_type as MediaType}
+            user={user}
+          />
+        </div>
+
+        <div className="py-20 absolute top-[100dvh] left-0 w-full bg-white z-10 overflow-y-scroll no-scrollbar">
+          <SimilarFilms
+            films={data.similar.concat(data.recommendations)}
+            user={user}
+          />
+        </div>
+      </div>
     </HydrationBoundary>
   );
 }

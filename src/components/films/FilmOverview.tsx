@@ -1,5 +1,6 @@
 "use client";
 
+import Film from "@/components/films/Film";
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
 import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
@@ -16,9 +17,10 @@ import { toast } from "sonner";
 
 type Props = {
   film: Movie | TVShow;
-  credits: Credits;
   media_type: MediaType;
   user: { id: string; username: string } | null;
+  credits: Credits;
+  recommendations: TMDBFilm[];
 };
 function joinArray(array: Array<{ name: string }>) {
   return array.map((el) => el.name).join(", ");
@@ -30,7 +32,7 @@ function truncate(text: string, max: number) {
 }
 
 function FilmOverview(props: Props) {
-  const { film, media_type, user, credits } = props;
+  const { film, media_type, user, credits, recommendations } = props;
 
   const title = "title" in film ? film.title : film.name;
 
@@ -140,11 +142,15 @@ function FilmOverview(props: Props) {
     setIsCrewTruncated((prev) => !prev);
   }
 
+  const rendered_recommendations = recommendations.map((rec) => {
+    return <Film key={film.id} film={rec} user={user} />;
+  });
+
   return (
-    <section className="relative bg-white h-screen w-full max-w-100 flex flex-col gap-8 border-l border-gray-50 overflow-y-scroll no-scrollbar">
-      <header className="h-28 w-full sticky top-0 left-0 flex-center border-b border-gray-50 bg-white ">
+    <section className="relative bg-white h-screen w-full max-w-100 grid grid-rows-[100px_auto] border-l border-gray-50 overflow-y-scroll no-scrollbar">
+      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50 bg-white ">
         <div className="wrapper grid grid-cols-[1fr_auto] gap-4 items-center ">
-          <div className="grid grid-cols-[1fr_auto] items-center w-fit sm:gap-2">
+          <div className="grid grid-cols-2 items-center w-fit sm:gap-2">
             {!isLoadingRecentCollection ? (
               <p className="hidden sm:block text-neutral-800 font-medium overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
                 {isFilmRecentlySaved && user && (
@@ -193,7 +199,7 @@ function FilmOverview(props: Props) {
         </div>
       </header>
 
-      <article className="flex flex-col gap-4 wrapper ">
+      <article className="flex flex-col gap-4 wrapper py-12">
         <p className="text-sml text-zinc-500">{formattedDate}</p>
         <h1 className="font-semibold text-xl text-neutral-800">{title}</h1>
 
@@ -253,17 +259,25 @@ function FilmOverview(props: Props) {
         </div>
 
         {film.backdrop_path && (
-          <figure className="">
+          <figure className="py-8">
             <Image
               src={film.backdrop_path}
               alt={"title" in film ? film.title : film.name}
               width={100}
               height={100}
               quality={75}
-              className="object-cover h-56 w-full gray "
+              className="object-cover h-48 w-full gray"
             />
           </figure>
         )}
+
+        {/* {recommendations.length > 0 && (
+          <div className="flex flex-col gap-4 py-4">
+            <h2 className="font-semibold text-md">More Like {title}</h2>
+
+            <ul className="grid grid-cols-2 ">{rendered_recommendations}</ul>
+          </div>
+        )} */}
       </article>
     </section>
   );

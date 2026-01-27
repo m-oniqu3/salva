@@ -1,9 +1,11 @@
 import { Result } from "@/types/result";
 import {
   Credits,
+  FilmRecommendation,
   MediaType,
   Movie,
   TMDBConfig,
+  TMDBFilm,
   TMDBImagesConfig,
   TMDBImageSize,
   TVShow,
@@ -17,22 +19,15 @@ type FilmByType = {
   tv: TVShow;
 };
 
-type FilmRec = {
-  id: number;
-  name?: string;
-  title?: string;
-  poster_path: string | null;
-};
-
 type FilmRecResponse = {
-  results: FilmRec[];
+  results: FilmRecommendation[];
 };
 
 export type FilmWithExtras<T> = {
   film: T;
   credits: Credits;
-  similar: FilmRec[];
-  recommendations: FilmRec[];
+  similar: TMDBFilm[];
+  recommendations: TMDBFilm[];
 };
 
 export async function getFilmById<T extends MediaType>(
@@ -79,8 +74,11 @@ export async function getFilmById<T extends MediaType>(
       data: {
         film,
         credits: baseFilm.credits,
-        similar: normalizeList(baseFilm.similar ?? [], config),
-        recommendations: normalizeList(baseFilm.recommendations ?? [], config),
+        similar: normalizeList(baseFilm.similar.results ?? [], config),
+        recommendations: normalizeList(
+          baseFilm.recommendations.results ?? [],
+          config,
+        ),
       },
       error: null,
     };
@@ -94,15 +92,22 @@ export async function getFilmById<T extends MediaType>(
   }
 }
 
-function normalizeList(data: FilmRecResponse, config: TMDBConfig) {
-  return data.results
-    .filter((film) => !film.poster_path)
-    .map((film) => {
-      const url = buildTMDBImageUrl(config.images, "w500", film.poster_path!);
-      const title = "title" in film ? film.title! : film.name!;
+function normalizeList(data: FilmRecommendation[], config: TMDBConfig) {
+  return (
+    data
+      // .filter((film) => film.poster_path)
+      .map((film) => {
+        const url = buildTMDBImageUrl(config.images, "w500", film.poster_path!);
+        const title = "title" in film ? film.title! : film.name!;
 
-      return { ...film, title, poster_path: url };
-    });
+        return {
+          id: film.id,
+          title,
+          poster_path: url,
+          media_type: film.media_type,
+        };
+      })
+  );
 }
 
 // Checks response and throws appropriate errors

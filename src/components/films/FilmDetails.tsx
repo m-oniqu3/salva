@@ -3,15 +3,16 @@
 import FilmMeta from "@/components/films/FilmMeta";
 import FilmOverview from "@/components/films/FilmOverview";
 import { ChevronLeftIcon } from "@/components/icons";
-import { Credits, MediaType, Movie, TVShow } from "@/types/tmdb";
+import { Credits, MediaType, Movie, TMDBFilm, TVShow } from "@/types/tmdb";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 type Props = {
   film: Movie | TVShow;
-  credits: Credits;
   media_type: MediaType;
   user: { id: string; username: string } | null;
+  credits: Credits;
+  recommendations: TMDBFilm[];
 };
 
 function FilmDetails(props: Props) {
@@ -21,12 +22,12 @@ function FilmDetails(props: Props) {
   const router = useRouter();
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-screen z-10 bg-white">
+    <div className=" bg-white">
       <div>
         <button
           type="button"
           onClick={router.back}
-          className="gray size-8 rounded-full flex-center cursor-pointer fixed top-4 left-4 z-10"
+          className="gray size-8 rounded-full flex-center cursor-pointer fixed top-4 left-4 z-30"
         >
           <ChevronLeftIcon className="size-5" />
         </button>

@@ -154,3 +154,11 @@ export type TVShow = FilmBase & {
   number_of_seasons: number;
   number_of_episodes: number;
 };
+
+export type FilmRecommendation = {
+  id: number;
+  name?: string;
+  title?: string;
+  poster_path: string;
+  media_type: string;
+};
