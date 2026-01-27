@@ -91,6 +91,18 @@ export type TMDBConfig = {
 // Films
 
 export type MediaType = "movie" | "tv";
+export type Credit = {
+  id: number;
+  name: string;
+  character?: string;
+  job?: string;
+  profile_path: string | null;
+};
+
+export type Credits = {
+  cast: Array<Credit>;
+  crew: Array<Credit>;
+};
 
 export type FilmBase = {
   id: number;
@@ -98,8 +110,8 @@ export type FilmBase = {
   overview: string;
   tagline: string | null;
 
-  poster_path: string | null;
-  backdrop_path: string | null;
+  poster_path: string;
+  backdrop_path: string;
 
   vote_average: number;
   vote_count: number;

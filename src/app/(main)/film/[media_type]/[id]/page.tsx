@@ -1,5 +1,11 @@
 import FilmDetails from "@/components/films/FilmDetails";
 import { MediaType } from "@/types/tmdb";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
 import { getFilmById } from "@utils/api/films/get-film-by-id";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
@@ -13,6 +19,7 @@ const MediaTypes = ["movie", "tv"] as const;
 
 async function page({ params }: Props) {
   const { media_type, id } = await params;
+  const queryClient = new QueryClient();
 
   if (!media_type || !id) {
     console.log("no media type or id present");
@@ -42,7 +49,6 @@ async function page({ params }: Props) {
     return <p>no film found</p>;
   }
 
-  console.log(data);
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   const { data: profile } = await getProfile({
@@ -50,16 +56,24 @@ async function page({ params }: Props) {
     id: auth.user?.id,
   });
 
+  if (auth.user?.id) {
+    queryClient.prefetchQuery({
+      queryKey: ["collection", "meta", auth.user?.id ?? ""],
+      queryFn: () => getCollectionsMeta(),
+    });
+  }
+
   return (
-    <div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <FilmDetails
-        film={data}
+        film={data.film}
+        credits={data.credits}
         media_type={media_type as MediaType}
         user={
           profile ? { id: profile.user_id, username: profile.username } : null
         }
       />
-    </div>
+    </HydrationBoundary>
   );
 }
 

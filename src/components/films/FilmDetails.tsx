@@ -3,12 +3,13 @@
 import FilmMeta from "@/components/films/FilmMeta";
 import FilmOverview from "@/components/films/FilmOverview";
 import { ChevronLeftIcon } from "@/components/icons";
-import { MediaType, Movie, TVShow } from "@/types/tmdb";
+import { Credits, MediaType, Movie, TVShow } from "@/types/tmdb";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 type Props = {
   film: Movie | TVShow;
+  credits: Credits;
   media_type: MediaType;
   user: { id: string; username: string } | null;
 };
@@ -24,9 +25,7 @@ function FilmDetails(props: Props) {
       <div>
         <button
           type="button"
-          onClick={() => {
-            router.back();
-          }}
+          onClick={router.back}
           className="gray size-8 rounded-full flex-center cursor-pointer fixed top-4 left-4 z-10"
         >
           <ChevronLeftIcon className="size-5" />
@@ -38,12 +37,12 @@ function FilmDetails(props: Props) {
           <div className="absolute h-full inset-0 bg-[linear-gradient(to_left,white_0%,white_70%,transparent_100%)] blur-2xl" />
 
           <Image
-            src={film.backdrop_path ?? ""}
+            src={film.backdrop_path}
             alt={"title" in film ? film.title : film.name}
             width={100}
             height={100}
             quality={75}
-            className="absolute top-0 left-0 z-5 opacity-15 object-cover size-full  blur-2xl"
+            className="absolute top-0 left-0 z-5 opacity-15 object-cover size-full blur-2xl"
           />
 
           <figure className="w-full max-w-80 group relative z-10">
