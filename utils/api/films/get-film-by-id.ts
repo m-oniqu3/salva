@@ -99,7 +99,7 @@ function normalizeList(data: FilmRecommendation[], config: TMDBConfig) {
       .map((film) => {
         const url = buildTMDBImageUrl(config.images, "w500", film.poster_path!);
         const title = "title" in film ? film.title! : film.name!;
-
+        // console.log(film);
         return {
           id: film.id,
           title,

@@ -8,18 +8,18 @@ type Props = {
   user: { id: string; username: string } | null;
 };
 
-async function Film(props: Props) {
+function Film(props: Props) {
   const {
     film,
     film: { id, title, poster_path, media_type },
     user,
   } = props;
 
-  const isAuth = !!user;
+  const isAuth = !!user?.id;
 
   return (
-    <Link href={`/film/${media_type}/${id}`}>
-      <figure className="group relative h-full">
+    <Link href={`/film/${media_type}/${id}`} className="w-full">
+      <figure className="group relative size-full">
         <Image
           key={id}
           src={poster_path}

@@ -16,9 +16,9 @@ export async function getProfile(props: Props): Response {
   try {
     const { username, id } = props;
 
-    if (!username && !id) {
-      throw new Error("Cannot fetch profile. No identifier provided.");
-    }
+    // if (!username && !id) {
+    //   return { data: null, error: null };
+    // }
 
     const supabase = await createClient();
 
@@ -34,7 +34,7 @@ export async function getProfile(props: Props): Response {
     }
 
     if (!data) {
-      throw new Error("Profile not found.");
+      return { data: null, error: null };
     }
 
     return { data, error: null };

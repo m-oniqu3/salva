@@ -10,7 +10,6 @@ import { useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
 import { slugify } from "@utils/validation/slug";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -148,7 +147,7 @@ function FilmOverview(props: Props) {
 
   return (
     <section className="relative bg-white h-screen w-full max-w-100 grid grid-rows-[100px_auto] border-l border-gray-50 overflow-y-scroll no-scrollbar">
-      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50 bg-white ">
+      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-100 bg-white ">
         <div className="wrapper grid grid-cols-[1fr_auto] gap-4 items-center ">
           <div className="grid grid-cols-2 items-center w-fit sm:gap-2">
             {!isLoadingRecentCollection ? (
@@ -258,7 +257,7 @@ function FilmOverview(props: Props) {
           )}
         </div>
 
-        {film.backdrop_path && (
+        {/* {film.backdrop_path && (
           <figure className="py-8">
             <Image
               src={film.backdrop_path}
@@ -269,7 +268,7 @@ function FilmOverview(props: Props) {
               className="object-cover h-48 w-full gray"
             />
           </figure>
-        )}
+        )} */}
 
         {/* {recommendations.length > 0 && (
           <div className="flex flex-col gap-4 py-4">

@@ -1,5 +1,4 @@
-import FilmDetails from "@/components/films/FilmDetails";
-import SimilarFilms from "@/components/films/SimilarFilms";
+import FilmDetailsShell from "@/components/films/FilmDetailsShell";
 import { MediaType } from "@/types/tmdb";
 import {
   dehydrate,
@@ -13,34 +12,36 @@ import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
 
 type Props = {
-  params: Promise<{ media_type: string; id: number }>;
+  params: Promise<{ media_type: MediaType; id: number }>;
 };
 
 const MediaTypes = ["movie", "tv"] as const;
+
+function isValidParams(media_type: MediaType, id: number) {
+  if (!media_type || !id) {
+    // todo : show toast
+    redirect("/");
+  }
+
+  const isValid = MediaTypes.includes(media_type) || isNaN(Number(id));
+
+  if (isValid) return;
+
+  if (!isValid) {
+    // todo : show toast
+    console.log("Invalid Param");
+    redirect("/");
+  }
+}
 
 async function page({ params }: Props) {
   const { media_type, id } = await params;
   const queryClient = new QueryClient();
 
-  if (!media_type || !id) {
-    console.log("no media type or id present");
-    // todo : show toast
-
-    redirect("/");
-  }
-
   // Check if media type is valid
-  if (!MediaTypes.includes(media_type as MediaType)) {
-    console.log(`Invalid media type: ${media_type}`);
-    redirect("/");
-  }
+  isValidParams(media_type, id);
 
-  // Check if film id is valid
-  if (isNaN(Number(id))) {
-    return <div>Invalid film ID</div>;
-  }
-
-  const { data, error } = await getFilmById(media_type as MediaType, id);
+  const { data, error } = await getFilmById(media_type, id);
 
   if (error) {
     return <div>could not find film</div>;
@@ -70,24 +71,7 @@ async function page({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="overflow-y-hidden">
-        <div className="fixed top-0 left-0 h-screen w-screen bg-white z-10 overflow-y-hidden">
-          <FilmDetails
-            film={data.film}
-            credits={data.credits}
-            recommendations={data.recommendations}
-            media_type={media_type as MediaType}
-            user={user}
-          />
-        </div>
-
-        <div className="py-20 absolute top-[100dvh] left-0 w-full bg-white z-10 overflow-y-scroll no-scrollbar">
-          <SimilarFilms
-            films={data.similar.concat(data.recommendations)}
-            user={user}
-          />
-        </div>
-      </div>
+      <FilmDetailsShell data={data} user={user} media_type={media_type} />
     </HydrationBoundary>
   );
 }
