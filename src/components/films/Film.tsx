@@ -1,7 +1,6 @@
 import FilmMeta from "@/components/films/FilmMeta";
 import { TMDBFilm } from "@/types/tmdb";
 import Image from "next/image";
-import Link from "next/link";
 
 type Props = {
   film: TMDBFilm;
@@ -18,7 +17,7 @@ function Film(props: Props) {
   const isAuth = !!user?.id;
 
   return (
-    <Link href={`/film/${media_type}/${id}`} className="w-full">
+    <div className="w-full">
       <figure className="group relative size-full">
         <Image
           key={id}
@@ -32,7 +31,7 @@ function Film(props: Props) {
 
         {isAuth && <FilmMeta film={film} user={user} />}
       </figure>
-    </Link>
+    </div>
   );
 }
 

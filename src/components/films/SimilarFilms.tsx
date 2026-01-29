@@ -14,7 +14,10 @@ function SimilarFilms(props: Props) {
   });
 
   return (
-    <div className="wrapper grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 sm:gap-16 lg:grid-cols-3 xl:grid-cols-4 ">
+    <div
+      id="similar-films"
+      className="wrapper grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 sm:gap-16 lg:grid-cols-3 xl:grid-cols-4 "
+    >
       {rendered_films}
     </div>
   );

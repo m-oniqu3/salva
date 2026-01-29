@@ -18,6 +18,18 @@ function FilmDetailsShell(props: Props) {
   const { data, user, media_type } = props;
 
   const router = useRouter();
+  const similarFilmsRef = useRef<HTMLDivElement | null>(null);
+
+  function scrollToTargetSection() {
+    console.log("scr");
+    console.log(similarFilmsRef.current);
+    if (similarFilmsRef.current) {
+      similarFilmsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }
 
   const [isIntersecting, setIsIntersecting] = useState(false);
   const triggerRef = useRef<HTMLDivElement | null>(null);
@@ -26,10 +38,7 @@ function FilmDetailsShell(props: Props) {
     if (!triggerRef.current) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        console.log(entry.isIntersecting, entry.intersectionRatio);
-        setIsIntersecting(entry.isIntersecting);
-      },
+      ([entry]) => setIsIntersecting(entry.isIntersecting),
       { threshold: 0 },
     );
 
@@ -38,7 +47,7 @@ function FilmDetailsShell(props: Props) {
   }, []);
 
   return (
-    <div className="overflow-y-scroll h-full w-full  z-50">
+    <div className="overflow-y-scroll h-full w-full z-50">
       <button
         type="button"
         onClick={router.back}
@@ -47,11 +56,11 @@ function FilmDetailsShell(props: Props) {
         <ChevronLeftIcon className="size-5" />
       </button>
 
-      {/* <div
+      <div
         className={`bg-white absolute top-0 left-0 h-[110dvh] w-full   z-30  transition-opacity duration-200 ease-in-out  ${isIntersecting ? "opacity-100 block" : "opacity-0 hidden"}`}
-      /> */}
+      />
 
-      <div className=" h-screen w-screen fixed top-0 left-0 z-20">
+      <div className="h-screen w-screen fixed top-0 left-0 z-20">
         <FilmDetails
           film={data.film}
           credits={data.credits}
@@ -59,12 +68,19 @@ function FilmDetailsShell(props: Props) {
           media_type={media_type}
           user={user}
           isIntersecting={isIntersecting}
+          onScrollToSection={scrollToTargetSection}
         />
       </div>
 
-      <div className="bg-white pb-20 absolute top-[110dvh] left-0 h-fit w-full z-20 ">
-        <div ref={triggerRef} className="h-1 w-full" />
-        <SimilarFilms films={data.recommendations} user={user} />
+      <div
+        ref={similarFilmsRef}
+        className="bg-white pb-20 absolute top-[110dvh] left-0 h-fit w-full z-20 "
+      >
+        <div ref={triggerRef} className="w-full" />
+        <SimilarFilms
+          films={data.recommendations.concat(data.similar)}
+          user={user}
+        />
       </div>
     </div>
   );

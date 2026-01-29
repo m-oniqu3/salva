@@ -10,6 +10,7 @@ import { addFilmToCollection } from "@utils/api/collections/add-film-to-collecti
 import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
 import { slugify } from "@utils/validation/slug";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -32,6 +33,9 @@ function FilmMeta(props: Props) {
   const recentlySavedFilm = savedFilms[id];
 
   const { openModal } = useModal();
+  const router = useRouter();
+  const pathname = usePathname();
+  console.log(pathname);
 
   const { data: recentCollection, isLoading: isLoadingRecentCollection } =
     useQuery({
@@ -79,15 +83,26 @@ function FilmMeta(props: Props) {
     }
   }
 
+  function handleNavigation() {
+    const route = `/film/${film.media_type}/${id}`;
+    if (pathname === route) return;
+
+    router.push(route);
+  }
+
   return (
     <div
+      onClick={handleNavigation}
       key={id}
-      className={`absolute size-full inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity`}
+      className={`absolute size-full inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer`}
     >
       <div
-        className={`absolute top-0 left-0 w-full h-full p-4 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}
+        className={`absolute top-0 left-0 w-full h-full p-4 z-10 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}
       >
-        <div className="grid grid-cols-2  sm:grid-cols-[auto_auto] items-center justify-between w-full">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="grid grid-cols-2  sm:grid-cols-[auto_auto] items-center justify-between w-full"
+        >
           <div className="grid grid-cols-2 items-center sm:gap-2">
             <>
               <p className="sm:hidden font-semibold text-white line-clamp-1">

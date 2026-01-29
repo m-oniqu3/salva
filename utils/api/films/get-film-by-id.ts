@@ -104,7 +104,7 @@ function normalizeList(data: FilmRecommendation[], config: TMDBConfig) {
           id: film.id,
           title,
           poster_path: url,
-          media_type: film.media_type,
+          media_type: film.media_type ?? ("title" in film ? "movie" : "tv"),
         };
       })
   );

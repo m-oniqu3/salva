@@ -1,6 +1,5 @@
 "use client";
 
-import Avatar from "@/components/Avatar";
 import { useModal } from "@/context/useModal";
 import useFollowStates from "@/hooks/useFollowStates";
 import { ModalEnum } from "@/types/modal";
@@ -104,11 +103,11 @@ function ProfileSummary({ profile, userID }: Props) {
     <section className="py-4 max-w-[450px]">
       <article className="flex flex-col gap-1">
         {/* Avatar */}
-        <Avatar
+        {/* <Avatar
           avatar={avatar}
           username={username}
           className={"size-8 rounded-full text-lg lg:size-10"}
-        />
+        /> */}
 
         {/* Name */}
         <div className="mt-2">

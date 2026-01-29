@@ -91,7 +91,7 @@ function CollectionSummary({ summary, userID }: Props) {
     <div className="">
       <section className="flex flex-col max-w-[450px] relative">
         <article className="flex flex-col gap-1">
-          <h1 className="font-bold text-lg max-w-lg text-neutral-800">
+          <h1 className="font-bold text-md max-w-lg text-neutral-800">
             {name}
           </h1>
 
@@ -136,7 +136,7 @@ function CollectionSummary({ summary, userID }: Props) {
               <Avatar
                 avatar={avatar}
                 username={username}
-                className={"size-9 rounded-full"}
+                className={"size-8.5 rounded-full"}
               />
 
               {!isCollectionOwner && (
@@ -152,18 +152,18 @@ function CollectionSummary({ summary, userID }: Props) {
 
             {isCollectionOwner && (
               <div className="flex gap-3">
-                <div className="gray size-9 flex items-center justify-center rounded-full">
+                <div className="gray size-8.5 flex items-center justify-center rounded-full">
                   <UserAddIcon className="size-3.5 text-neutral-800/60" />
                 </div>
 
-                <button className="rounded-full size-9 flex justify-center items-center gray cursor-pointer">
+                <button className="rounded-full size-8.5 flex justify-center items-center gray cursor-pointer">
                   <SolidSparkleIcon className="size-3.5 text-neutral-800/60" />
                 </button>
 
                 <button
                   ref={addElementBtn.ref}
                   onClick={handleAddElementMenu}
-                  className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
+                  className="rounded-full size-8.5 flex justify-center items-center gray cursor-pointer"
                   name="Add Element"
                 >
                   <AddIcon className="size-3.5 text-neutral-800/60" />
@@ -172,7 +172,7 @@ function CollectionSummary({ summary, userID }: Props) {
                 <button
                   ref={optionsBtn.ref}
                   onClick={handleCollectionOptions}
-                  className="rounded-full size-9 flex justify-center items-center gray cursor-pointer"
+                  className="rounded-full size-8.5 flex justify-center items-center gray cursor-pointer"
                   name="Collection Options"
                 >
                   <MoreHorizontalIcon className="size-3.5 text-neutral-800/60" />

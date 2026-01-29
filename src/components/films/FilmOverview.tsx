@@ -1,6 +1,5 @@
 "use client";
 
-import Film from "@/components/films/Film";
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
 import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
@@ -141,13 +140,9 @@ function FilmOverview(props: Props) {
     setIsCrewTruncated((prev) => !prev);
   }
 
-  const rendered_recommendations = recommendations.map((rec) => {
-    return <Film key={film.id} film={rec} user={user} />;
-  });
-
   return (
     <section className="relative bg-white h-screen w-full max-w-100 grid grid-rows-[100px_auto] border-l border-gray-50 overflow-y-scroll no-scrollbar">
-      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-100 bg-white ">
+      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50 bg-white ">
         <div className="wrapper grid grid-cols-[1fr_auto] gap-4 items-center ">
           <div className="grid grid-cols-2 items-center w-fit sm:gap-2">
             {!isLoadingRecentCollection ? (
@@ -268,14 +263,6 @@ function FilmOverview(props: Props) {
               className="object-cover h-48 w-full gray"
             />
           </figure>
-        )} */}
-
-        {/* {recommendations.length > 0 && (
-          <div className="flex flex-col gap-4 py-4">
-            <h2 className="font-semibold text-md">More Like {title}</h2>
-
-            <ul className="grid grid-cols-2 ">{rendered_recommendations}</ul>
-          </div>
         )} */}
       </article>
     </section>
