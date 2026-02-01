@@ -3,10 +3,7 @@
 import ErrorState from "@/components/ErrorState";
 import Film from "@/components/films/Film";
 import InfiniteScroll from "@/components/InfiniteScroll";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getFilms } from "@utils/api/films/get-films";
-
-import { calculateRange } from "@utils/validation/paginate";
+import useAllFilms from "@/hooks/useAllFilms";
 
 type Props = {
   user: { id: string; username: string };
@@ -18,35 +15,16 @@ function AllFilms(props: Props) {
   const {
     isLoading,
     data,
+    error,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
     refetch,
-  } = useInfiniteQuery({
-    queryKey: ["all-films", user.id],
-    queryFn: ({ pageParam }) =>
-      getFilms({
-        userID: user?.id,
-        range: calculateRange(pageParam, 20),
-      }),
-
-    initialPageParam: 0,
-
-    getNextPageParam: (lastPage, allPages) => {
-      if (!lastPage?.data?.length) return undefined;
-      return allPages.length;
-    },
-    enabled: Boolean(user?.id),
+  } = useAllFilms({
+    userID: user.id,
   });
 
-  const films = data?.pages
-    ? data.pages.flatMap((cur) => {
-        if (!cur?.data) return [];
-        return cur.data;
-      })
-    : null;
-
-  if (data?.pages[0]?.error) {
+  if (error) {
     return (
       <ErrorState
         title="Reel Jammed"
@@ -57,7 +35,7 @@ function AllFilms(props: Props) {
     );
   }
 
-  if (!films || films.length === 0) {
+  if (!data || data.length === 0) {
     return (
       <ErrorState
         title="Nothing in the Archives"
@@ -68,8 +46,9 @@ function AllFilms(props: Props) {
     );
   }
 
-  const rendered_films = films.map((film, i) => {
-    return <Film key={film.id + i} film={film} user={user} />;
+  const rendered_films = data.map((film) => {
+    const tmdbFilm = { ...film, id: film.filmID };
+    return <Film key={film.id} film={tmdbFilm} user={user} />;
   });
 
   return (

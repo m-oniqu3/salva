@@ -1,10 +1,10 @@
 "use server";
 
 import { Result } from "@/types/result";
-import { TMDBFilm } from "@/types/tmdb";
+import { SavedTMDBFilm } from "@/types/tmdb";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Result<TMDBFilm[] | null>;
+type Response = Result<SavedTMDBFilm[] | null>;
 
 type Props = {
   userID: string;
@@ -44,7 +44,10 @@ export async function getFilms(props: Props): Response {
     if (filmMetasError) throw filmMetasError;
     if (!filmMetas) return { data: null, error: null };
 
-    const filmIDs = filmMetas.map((film) => film.film_id);
+    const metaMap = new Map(
+      filmMetas.map((entry) => [entry.film_id, entry.id]),
+    );
+    const filmIDs = Array.from(metaMap.keys());
 
     // Get the films
     const { data, error } = await supabase
@@ -58,7 +61,18 @@ export async function getFilms(props: Props): Response {
     const filmsById = new Map(data.map((f) => [f.id, f]));
 
     const orderedFilms = filmIDs
-      .map((id) => filmsById.get(id))
+      .map((id) => {
+        const film = filmsById.get(id);
+        const cfid = metaMap.get(id);
+
+        if (!film || !cfid) return;
+
+        return {
+          ...film,
+          id: cfid,
+          filmID: id,
+        };
+      })
       .filter((f) => f !== undefined);
 
     return { data: orderedFilms, error: null };

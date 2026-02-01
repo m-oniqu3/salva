@@ -1,3 +1,4 @@
+import ErrorState from "@/components/ErrorState";
 import AuthNavbar from "@/components/nav/AuthNavbar";
 import getUser from "@/server-actions/get-user";
 import { getProfile } from "@utils/api/profile/get-profile";
@@ -13,17 +14,27 @@ export default async function MainLayout({ children }: Props) {
   const supabase = await createClient();
   const { data: user } = await getUser(supabase);
 
-  const { data: profile } = await getProfile({
-    username: null,
-    id: user?.id,
-  });
+  if (!user) {
+    return (
+      <ErrorState
+        title="Director’s Cut Only"
+        message="Sign in to curate your collections like a true cinephile."
+        buttonLabel="Sign In"
+        link="/login"
+      />
+    );
+  }
 
-  //todo : handle error case when there is no profile
+  const { data: profile, error } = await getProfile({ id: user.id });
 
-  // if (error) {
-  //   console.log(error);
-  //   redirect("/");
-  // }
+  if (error || !profile) {
+    return (
+      <ErrorState
+        title="The reel broke! 🍿"
+        message="We couldn’t load your profile due to a server hiccup. Give it another shot!"
+      />
+    );
+  }
 
   return (
     <div className="">

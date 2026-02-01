@@ -83,6 +83,14 @@ export type TMDBFilm = {
   media_type: string;
 };
 
+export type SavedTMDBFilm = {
+  id: number;
+  filmID: number;
+  title: string;
+  poster_path: string;
+  media_type: string;
+};
+
 export type TMDBConfig = {
   images: TMDBImagesConfig;
   change_keys: TMDBChangeKey[];
