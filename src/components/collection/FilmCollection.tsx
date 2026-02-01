@@ -170,15 +170,20 @@ function FilmCollection() {
 
   //Save the film to collections
   async function handleSubmit() {
-    if (!film) return;
+    const collections = collectionsMetaQuery.data?.data;
+    if (!film || !collections) return;
 
     setIsSavingFilm(true);
+
+    const firstCollection = collections.find(
+      (col) => col.id === [...newIDs][0],
+    );
+
+    if (!firstCollection) return;
+
     setRecentlySavedFilm({
       filmID: film.id,
-      collection:
-        collectionsMetaQuery.data?.data?.find(
-          (col) => col.id === [...newIDs][0],
-        )?.name ?? "",
+      collection: firstCollection.name,
       collectionAmt: newIDs.size,
     });
     closeModal();

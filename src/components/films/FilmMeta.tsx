@@ -1,5 +1,6 @@
 "use client";
 
+import RecentCollection from "@/components/collection/RecentCollection";
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
 import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
@@ -8,8 +9,6 @@ import { TMDBFilm } from "@/types/tmdb";
 import { useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
-import { slugify } from "@utils/validation/slug";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -30,7 +29,7 @@ function FilmMeta(props: Props) {
     useRecentlySavedFilm();
   const isFilmRecentlySaved =
     !!savedFilms[id] && savedFilms[id].collectionAmt > 0;
-  const recentlySavedFilm = savedFilms[id];
+  const recentlySavedFilm = (isFilmRecentlySaved && savedFilms[id]) || null;
 
   const { openModal } = useModal();
   const router = useRouter();
@@ -103,43 +102,20 @@ function FilmMeta(props: Props) {
           className="grid grid-cols-2  sm:grid-cols-[auto_auto] items-center justify-between w-full"
         >
           <div className="grid grid-cols-2 items-center sm:gap-2">
-            <>
-              <p className="sm:hidden font-semibold text-white line-clamp-1">
-                ...
-              </p>
+            <RecentCollection
+              isLoadingRecentCollection={isLoadingRecentCollection}
+              recentCollection={recentCollection?.data}
+              isFilmRecentlySaved={isFilmRecentlySaved}
+              recentlySavedFilm={recentlySavedFilm}
+              username={user?.username ?? null}
+            />
 
-              {!isLoadingRecentCollection ? (
-                <p className="hidden sm:block  font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
-                  {isFilmRecentlySaved && user && (
-                    <Link
-                      href={`/${user.username}/${slugify(recentlySavedFilm.collection)}`}
-                      className="underline-offset-2 hover:underline"
-                    >
-                      {!recentlySavedFilm.collection
-                        ? "Saved"
-                        : `${recentlySavedFilm.collection}  ${recentlySavedFilm.collectionAmt > 1 ? `+ ${(recentlySavedFilm.collectionAmt - 1).toString().padStart(2, "0")} ` : ""}`}
-                    </Link>
-                  )}
-
-                  {!isFilmRecentlySaved && recentCollection?.data
-                    ? recentCollection.data.name
-                    : "..."}
-                </p>
-              ) : (
-                <p className="hidden sm:block  font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
-                  ...
-                </p>
-              )}
-            </>
-
-            {
-              <button
-                className="flex-center cursor-pointer w-fit"
-                onClick={handleFilmCollectionModal}
-              >
-                <ChevronDownIcon className="size-6 text-white" />
-              </button>
-            }
+            <button
+              className="flex-center cursor-pointer w-fit"
+              onClick={handleFilmCollectionModal}
+            >
+              <ChevronDownIcon className="size-6 text-white" />
+            </button>
           </div>
 
           <button

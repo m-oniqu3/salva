@@ -55,7 +55,12 @@ async function page() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="pb-20">
-        <h1 className="font-semibold text-md py-10">All Films</h1>
+        <div className="py-10">
+          <h1 className="font-semibold text-md">All Films</h1>
+          <p className="text-sml">
+            {"Here are all the films you've saved so far."}
+          </p>
+        </div>
         <AllFilms user={user} />
       </div>
     </HydrationBoundary>
