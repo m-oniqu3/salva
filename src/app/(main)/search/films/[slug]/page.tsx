@@ -5,7 +5,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
-import { getFilms } from "@utils/api/films/get-films";
+import { searchFilms } from "@utils/api/films/search-films";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -27,7 +27,7 @@ async function page({ params }: Props) {
   const auth = await supabase.auth.getUser();
 
   const [films, profile] = await Promise.all([
-    getFilms(slug),
+    searchFilms(slug),
     getProfile({ username: null, id: auth.data.user?.id }),
 
     queryClient.prefetchQuery({
@@ -57,9 +57,7 @@ async function page({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 sm:gap-16 lg:grid-cols-3 xl:grid-cols-4 ">
-        {rendered_films}
-      </div>
+      <div className="content-grid">{rendered_films}</div>
     </HydrationBoundary>
   );
 }

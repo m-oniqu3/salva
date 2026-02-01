@@ -35,7 +35,6 @@ function FilmMeta(props: Props) {
   const { openModal } = useModal();
   const router = useRouter();
   const pathname = usePathname();
-  console.log(pathname);
 
   const { data: recentCollection, isLoading: isLoadingRecentCollection } =
     useQuery({

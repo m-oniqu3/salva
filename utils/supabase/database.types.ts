@@ -93,21 +93,21 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          media_type: string | null
+          media_type: string
           poster_path: string
           title: string
         }
         Insert: {
           created_at?: string
           id?: number
-          media_type?: string | null
-          poster_path: string
-          title: string
+          media_type?: string
+          poster_path?: string
+          title?: string
         }
         Update: {
           created_at?: string
           id?: number
-          media_type?: string | null
+          media_type?: string
           poster_path?: string
           title?: string
         }

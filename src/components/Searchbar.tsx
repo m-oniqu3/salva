@@ -45,7 +45,7 @@ function Searchbar() {
       <input
         ref={searchRef}
         type="text"
-        className="gray w-full text-sml h-12.5 rounded-l-2xl sm:rounded-none font-medium focus:outline-none placeholder:text-neutral-500"
+        className="gray w-full text-sml h-12.5 px-4 rounded-l-2xl sm:px-0 sm:rounded-none font-medium focus:outline-none placeholder:text-neutral-500"
         placeholder="Search..."
       />
 

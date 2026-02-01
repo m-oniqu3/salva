@@ -10,7 +10,7 @@ type Props = {
 function Film(props: Props) {
   const {
     film,
-    film: { id, title, poster_path, media_type },
+    film: { id, title, poster_path },
     user,
   } = props;
 

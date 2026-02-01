@@ -1,89 +1,73 @@
-import {
-  TMDBConfig,
-  TMDBFilm,
-  TMDBImagesConfig,
-  TMDBImageSize,
-} from "@/types/tmdb";
+"use server";
 
-const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN;
-const BASE_URL = "https://api.themoviedb.org/3";
+import { Result } from "@/types/result";
+import { TMDBFilm } from "@/types/tmdb";
+import { createClient } from "@utils/supabase/server";
 
-export async function getFilms(q: string): Promise<TMDBFilm[] | null> {
-  const filmQuery = fetch(BASE_URL + "/search/multi?query=" + q, {
-    headers: { Authorization: "Bearer " + ACCESS_TOKEN },
-  });
+type Response = Result<TMDBFilm[] | null>;
 
-  const configQuery = fetch("https://api.themoviedb.org/3/configuration", {
-    headers: { Authorization: "Bearer " + ACCESS_TOKEN },
-  });
+type Props = {
+  userID: string;
+  range: [number, number];
+  collectionID?: number;
+};
 
-  const [filmRes, configRes] = await Promise.all([filmQuery, configQuery]);
+export async function getFilms(props: Props): Response {
+  try {
+    const { userID, range, collectionID } = props;
+    const [page, end] = range;
 
-  assertTMDBResponse(filmRes, "Film request");
-  assertTMDBResponse(configRes, "Config request");
+    // cacheTag("films", collectionID?.toString() ?? "");
 
-  const films = await filmRes.json();
-  const config: TMDBConfig = await configRes.json();
+    const supabase = await createClient();
 
-  if (!films) {
-    return null;
+    //if no id then get all the films
+    const getAllFilmsQuery = supabase
+      .from("collection_films")
+      .select("id, film_id")
+      .eq("user_id", userID)
+      .order("created_at", { ascending: false })
+      .range(page, end);
+
+    const getAllFilmsForCollection = supabase
+      .from("collection_films")
+      .select("id,film_id")
+      .eq("collection_id", collectionID as number)
+      .eq("user_id", userID)
+      .order("created_at", { ascending: false })
+      .range(page, end);
+
+    const query = collectionID ? getAllFilmsForCollection : getAllFilmsQuery;
+
+    const { data: filmMetas, error: filmMetasError } = await query;
+
+    if (filmMetasError) throw filmMetasError;
+    if (!filmMetas) return { data: null, error: null };
+
+    const filmIDs = filmMetas.map((film) => film.film_id);
+
+    // Get the films
+    const { data, error } = await supabase
+      .from("films")
+      .select("id,title,media_type,poster_path")
+      .in("id", filmIDs);
+
+    if (error) throw error;
+    if (!data) return { data: null, error: null };
+
+    const filmsById = new Map(data.map((f) => [f.id, f]));
+
+    const orderedFilms = filmIDs
+      .map((id) => filmsById.get(id))
+      .filter((f) => f !== undefined);
+
+    return { data: orderedFilms, error: null };
+  } catch (error) {
+    console.log("Error in " + getFilms.name, error);
+
+    const err =
+      error instanceof Error ? error.message : "Could not fetch film.";
+
+    return { data: null, error: err };
   }
-
-  //get images
-
-  const results: TMDBFilm[] = films.results.reduce(
-    (
-      acc: TMDBFilm[],
-      cur: {
-        media_type: string;
-        poster_path: string;
-        id: number;
-        title: string;
-        name: string;
-      },
-    ) => {
-      if (cur.media_type !== "movie" && cur.media_type !== "tv") return acc;
-      if (!cur.poster_path) return acc;
-
-      acc.push({
-        id: cur.id,
-        title: cur.media_type === "movie" ? cur.title : cur.name,
-        poster_path: buildTMDBImageUrl(config.images, "w500", cur.poster_path),
-        media_type: cur.media_type,
-      });
-
-      return acc;
-    },
-    [],
-  );
-
-  return results;
-}
-
-// Checks response and throws appropriate errors
-function assertTMDBResponse(
-  response: Response,
-  label: string,
-): asserts response {
-  if (response.ok) return;
-
-  const status = response.status;
-
-  if (status === 401) {
-    throw new Error(`${label}: Invalid TMDB API key`);
-  }
-
-  if (status === 429) {
-    throw new Error(`${label}: Too many requests. Please slow down.`);
-  }
-
-  throw new Error(`${label}: TMDB request failed (${status})`);
-}
-
-export function buildTMDBImageUrl(
-  config: TMDBImagesConfig,
-  size: TMDBImageSize,
-  path: string,
-) {
-  return `${config.secure_base_url}${size}${path}`;
 }

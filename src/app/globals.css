@@ -90,6 +90,10 @@ body {
     @apply text-red-500 text-xs font-semibold h-4
   }
 
+  .content-grid {
+    @apply grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+  }
+
 }
 
 @utility gray {
@@ -99,6 +103,8 @@ body {
 @utility no-scrollbar {
   @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
+
+
 
 /* @layer utilities {
   .text-sml {

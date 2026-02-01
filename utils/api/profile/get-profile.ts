@@ -16,9 +16,9 @@ export async function getProfile(props: Props): Response {
   try {
     const { username, id } = props;
 
-    // if (!username && !id) {
-    //   return { data: null, error: null };
-    // }
+    if (!username && !id) {
+      return { data: null, error: null };
+    }
 
     const supabase = await createClient();
 

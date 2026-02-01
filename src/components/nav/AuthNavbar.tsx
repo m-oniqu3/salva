@@ -92,7 +92,9 @@ function AuthNavbar({ profile }: Props) {
                 Create
               </Button>
 
-              <BookmarkIcon className="size-4" />
+              <Link href={"/films"}>
+                <BookmarkIcon className="size-4" />
+              </Link>
 
               {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
               <Avatar

@@ -40,7 +40,7 @@ async function page({ params }: Props) {
         title="This page is not available."
         message="Sorry, you can't access this."
         link="/"
-        label="Home"
+        buttonLabel="Home"
       />
     );
   }
