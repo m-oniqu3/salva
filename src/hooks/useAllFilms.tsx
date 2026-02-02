@@ -15,11 +15,13 @@ function useAllFilms(props: Props) {
 
   const query = useInfiniteQuery({
     queryKey: ["all-films", collectionID ?? "", userID],
-    queryFn: ({ pageParam }) =>
-      getFilms({
+    queryFn: ({ pageParam }) => {
+      return getFilms({
         userID,
         range: calculateRange(pageParam, limit),
-      }),
+        collectionID,
+      });
+    },
 
     initialPageParam: 0,
 
@@ -41,7 +43,7 @@ function useAllFilms(props: Props) {
   return {
     ...query,
     data: films,
-    error: query.data?.pages?.[0].error,
+    error: query.data?.pages?.[0]?.error,
   };
 }
 

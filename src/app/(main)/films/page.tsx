@@ -20,9 +20,10 @@ async function page() {
     return (
       <ErrorState
         title="Director’s Cut Only"
-        message="Sign in to curate your collections like a true cinephile."
-        buttonLabel="Sign In"
+        message="Log in to curate your collections like a true cinephile."
+        buttonLabel="Log In"
         link="/login"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-center text-center w-3xs"
       />
     );
   }
@@ -61,7 +62,7 @@ async function page() {
             {"Here are all the films you've saved so far."}
           </p>
         </div>
-        <AllFilms user={user} />
+        <AllFilms user={user} target={{ userID: user.id }} />
       </div>
     </HydrationBoundary>
   );

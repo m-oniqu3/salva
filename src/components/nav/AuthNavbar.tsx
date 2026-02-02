@@ -52,13 +52,13 @@ function AuthNavbar({ profile }: Props) {
 
   return (
     <header className="flex items-center sticky top-0 left-0 h-28 z-10 bg-white w-full">
-      <nav className="w-full grid grid-cols-[50px_auto_50px] xl:grid-cols-3 items-center justify-between gap-2 md:gap-6">
+      <nav className="w-full grid grid-cols-[50px_auto_50px] lg:grid-cols-3 items-center justify-between gap-2 md:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="font-extrabold capitalize text-xl relative">
             <FilmIcon className="size-6 text-neutral-800" />
           </Link>
 
-          <ul className="hidden lg:flex gap-6 items-center">
+          <ul className="hidden lg:flex gap-4 items-center">
             {rendered_links}
           </ul>
         </div>

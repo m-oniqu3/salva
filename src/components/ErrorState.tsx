@@ -23,11 +23,9 @@ export default function ErrorState(props: Props) {
   } = props;
 
   return (
-    <article
-      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 ${className}`}
-    >
-      <h1 className="text-lg font-semibold">{title}</h1>
-      <p className="text-sml text-center">{message}</p>
+    <article className={`flex flex-col max-w-xs ${className}`}>
+      <h1 className="text-md font-semibold">{title}</h1>
+      <p className="text-sml">{message}</p>
 
       {onClick ? (
         <Button className="mt-3 bg-neutral-800 text-white" onClick={onClick}>

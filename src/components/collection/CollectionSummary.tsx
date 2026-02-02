@@ -91,7 +91,7 @@ function CollectionSummary({ summary, userID }: Props) {
     <div className="">
       <section className="flex flex-col max-w-[450px] relative">
         <article className="flex flex-col gap-1">
-          <h1 className="font-bold text-md max-w-lg text-neutral-800">
+          <h1 className="font-semibold text-base max-w-lg text-neutral-800">
             {name}
           </h1>
 

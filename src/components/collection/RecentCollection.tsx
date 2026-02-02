@@ -51,7 +51,7 @@ function RecentCollection(props: Props) {
   return (
     <>
       <p className="sm:hidden font-semibold text-white line-clamp-1">...</p>
-      <p className="hidden sm:block  font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
+      <p className="hidden sm:block font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
         {content}
       </p>
     </>

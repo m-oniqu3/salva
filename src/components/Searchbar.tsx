@@ -49,9 +49,13 @@ function Searchbar() {
         placeholder="Search..."
       />
 
-      <div className=" w-full flex-center rounded-r-2xl gray">
+      <button
+        type="submit"
+        onClick={handleSubmit}
+        className="cursor-pointer w-full flex-center rounded-r-2xl gray"
+      >
         <SearchIcon className="size-4 text-neutral-400" />
-      </div>
+      </button>
     </form>
   );
 }

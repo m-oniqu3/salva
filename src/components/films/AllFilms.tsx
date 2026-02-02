@@ -2,15 +2,17 @@
 
 import ErrorState from "@/components/ErrorState";
 import Film from "@/components/films/Film";
+import { LoadingIcon } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import useAllFilms from "@/hooks/useAllFilms";
 
 type Props = {
-  user: { id: string; username: string };
+  user: { id: string; username: string } | null;
+  target: { userID: string; collectionID?: number };
 };
 
 function AllFilms(props: Props) {
-  const { user } = props;
+  const { user, target } = props;
 
   const {
     isLoading,
@@ -21,8 +23,17 @@ function AllFilms(props: Props) {
     fetchNextPage,
     refetch,
   } = useAllFilms({
-    userID: user.id,
+    userID: target.userID,
+    collectionID: target.collectionID,
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex-center w-full">
+        <LoadingIcon className="size-5" />
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -40,8 +51,6 @@ function AllFilms(props: Props) {
       <ErrorState
         title="Nothing in the Archives"
         message="Your saved films will appear here once you start collecting."
-        buttonLabel="Explore Films"
-        link="/"
       />
     );
   }

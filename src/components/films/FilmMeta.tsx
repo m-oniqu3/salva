@@ -95,7 +95,7 @@ function FilmMeta(props: Props) {
       className={`absolute size-full inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer`}
     >
       <div
-        className={`absolute top-0 left-0 w-full h-full p-4 z-10 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}
+        className={`absolute top-0 left-0 w-full h-full p-4 z-5 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}
       >
         <div
           onClick={(e) => e.stopPropagation()}

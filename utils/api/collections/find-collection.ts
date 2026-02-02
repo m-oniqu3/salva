@@ -32,7 +32,7 @@ export async function findCollection(username: string, slug: string): Response {
 
     const { data, error } = await supabase
       .from("collections")
-      .select("id, name, is_private, cover_image, slug, description")
+      .select(`id, name, is_private, cover_image, slug, description`)
       .eq("user_id", user_id)
       .eq("slug", slug)
       .single();

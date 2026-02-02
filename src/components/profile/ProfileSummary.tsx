@@ -111,7 +111,7 @@ function ProfileSummary({ profile, userID }: Props) {
 
         {/* Name */}
         <div className="mt-2">
-          <h2 className="font-semibold text-md capitalize text-neutral-800 ">
+          <h2 className="font-semibold text-lg capitalize text-neutral-800 ">
             <span>{firstname ? `${firstname} ${lastname}` : username}</span>
           </h2>
         </div>

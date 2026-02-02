@@ -1,7 +1,8 @@
 import CollectionSummary from "@/components/collection/CollectionSummary";
 import ErrorState from "@/components/ErrorState";
-import getUser from "@/server-actions/get-user";
+import AllFilms from "@/components/films/AllFilms";
 import { findCollection } from "@utils/api/collections/find-collection";
+import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 
 type Props = {
@@ -12,26 +13,25 @@ async function page({ params }: Props) {
   const { collection: slug, profile: username } = await params;
   const supabase = await createClient();
 
-  const [collection, user] = await Promise.all([
+  const [collection, authUserProfile] = await Promise.all([
     findCollection(username, slug),
-    getUser(supabase),
+    supabase.auth
+      .getUser()
+      .then((auth) => getProfile({ id: auth.data.user?.id })),
   ]);
 
-  if (collection.error) {
-    return <p>{collection.error}</p>;
-  }
-
-  if (!collection.data) {
+  if (collection.error || !collection.data) {
     return <p>no collection found</p>;
   }
 
   const {
     user: { user_id: collectionOwnerID },
-    collection: { is_private },
+    collection: { id, is_private },
   } = collection.data;
 
   // What's visible to any user? Public collections OR owned private ones.
-  const isOwnedByCurrentUser = user.data?.id === collectionOwnerID;
+  const isOwnedByCurrentUser =
+    authUserProfile.data?.user_id === collectionOwnerID;
   const canAccess = !is_private || isOwnedByCurrentUser;
 
   if (!canAccess) {
@@ -49,9 +49,19 @@ async function page({ params }: Props) {
     <div className="py-8 flex flex-col gap-20">
       <CollectionSummary
         summary={collection.data}
-        userID={user.data?.id ?? null}
+        userID={authUserProfile.data?.user_id ?? null}
       />
-      <p className="">films for collection</p>
+      <AllFilms
+        user={
+          authUserProfile.data
+            ? {
+                id: authUserProfile.data.user_id,
+                username: authUserProfile.data.username,
+              }
+            : null
+        }
+        target={{ userID: collectionOwnerID, collectionID: id }}
+      />
     </div>
   );
 }
