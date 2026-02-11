@@ -4,15 +4,16 @@ import ErrorState from "@/components/ErrorState";
 import Film from "@/components/films/Film";
 import { LoadingIcon } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
-import useAllFilms from "@/hooks/useAllFilms";
+import useAllFilms from "@/hooks/useGetFilms";
+import { UserMeta } from "@/types/user";
 
 type Props = {
-  user: { id: string; username: string } | null;
-  target: { userID: string; collectionID?: number };
+  user: UserMeta;
+  targetUser: { userID: string; collectionID?: number };
 };
 
-function AllFilms(props: Props) {
-  const { user, target } = props;
+function Films(props: Props) {
+  const { user, targetUser } = props;
 
   const {
     isLoading,
@@ -23,8 +24,8 @@ function AllFilms(props: Props) {
     fetchNextPage,
     refetch,
   } = useAllFilms({
-    userID: target.userID,
-    collectionID: target.collectionID,
+    userID: targetUser.userID,
+    collectionID: targetUser.collectionID,
   });
 
   if (isLoading) {
@@ -71,4 +72,4 @@ function AllFilms(props: Props) {
   );
 }
 
-export default AllFilms;
+export default Films;

@@ -19,7 +19,7 @@ function ModalManager() {
     closeModal,
   } = useModal();
 
-  console.log("MM", state);
+  // console.log("MM", state);
 
   const rendered_modal = (() => {
     if (!modal) return null;

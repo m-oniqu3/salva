@@ -1,10 +1,11 @@
 import FilmMeta from "@/components/films/FilmMeta";
 import { TMDBFilm } from "@/types/tmdb";
+import { UserMeta } from "@/types/user";
 import Image from "next/image";
 
 type Props = {
   film: TMDBFilm;
-  user: { id: string; username: string } | null;
+  user: UserMeta;
 };
 
 function Film(props: Props) {
@@ -14,7 +15,7 @@ function Film(props: Props) {
     user,
   } = props;
 
-  const isAuth = !!user?.id;
+  const isAuth = !!user?.userID;
 
   return (
     <div className="w-full">

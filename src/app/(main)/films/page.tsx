@@ -1,5 +1,5 @@
 import ErrorState from "@/components/ErrorState";
-import AllFilms from "@/components/films/AllFilms";
+import AllFilms from "@/components/films/Films";
 import {
   dehydrate,
   HydrationBoundary,

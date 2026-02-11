@@ -22,7 +22,8 @@ export type CollectionSummary = {
     user_id: string;
     username: string;
     avatar: string | null;
-    firstname: string | null;
+    firstname: string;
+    lastname: string;
   };
 
   collection: {
@@ -32,6 +33,7 @@ export type CollectionSummary = {
     cover_image: string | null;
     slug: string | null;
     description: string;
+    filmCount: number;
   };
 };
 

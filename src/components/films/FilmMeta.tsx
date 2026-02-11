@@ -6,6 +6,7 @@ import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { TMDBFilm } from "@/types/tmdb";
+import { UserMeta } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
@@ -15,7 +16,7 @@ import { toast } from "sonner";
 
 type Props = {
   film: TMDBFilm;
-  user: { id: string; username: string } | null;
+  user: UserMeta;
 };
 
 function FilmMeta(props: Props) {
@@ -37,7 +38,7 @@ function FilmMeta(props: Props) {
 
   const { data: recentCollection, isLoading: isLoadingRecentCollection } =
     useQuery({
-      queryKey: ["collection", "recent", user?.id],
+      queryKey: ["collection", "recent", user?.userID],
       queryFn: () => getMostRecentCollection(),
     });
 
@@ -46,7 +47,7 @@ function FilmMeta(props: Props) {
   function handleFilmCollectionModal() {
     openModal({
       type: ModalEnum.FCM,
-      payload: { film, userID: user?.id ?? null },
+      payload: { film, userID: user?.userID ?? null },
     });
   }
 

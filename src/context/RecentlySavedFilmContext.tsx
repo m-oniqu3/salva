@@ -32,8 +32,6 @@ export function RecentlySavedFilmProvider({
 }) {
   const [savedFilms, setSavedFilms] = useState<SavedFilms>({});
 
-  console.log(savedFilms);
-
   function addFilm(data: Data) {
     const { filmID, collection, collectionAmt } = data;
 

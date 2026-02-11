@@ -10,7 +10,7 @@ type Props = {
   collectionID?: number;
 };
 
-function useAllFilms(props: Props) {
+function useGetFilms(props: Props) {
   const { userID, limit = 20, collectionID } = props;
 
   const query = useInfiniteQuery({
@@ -47,4 +47,4 @@ function useAllFilms(props: Props) {
   };
 }
 
-export default useAllFilms;
+export default useGetFilms;
