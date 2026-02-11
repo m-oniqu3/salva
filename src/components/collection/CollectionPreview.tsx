@@ -7,8 +7,9 @@ type Props = {
   username: string;
 };
 
-function CollectionPreview({ preview, username }: Props) {
-  //https://picsum.photos/id/237/200/300
+//https://picsum.photos/id/237/200/300
+function CollectionPreview(props: Props) {
+  const { preview, username } = props;
 
   const { is_private, name, cover_image, slug } = preview;
 

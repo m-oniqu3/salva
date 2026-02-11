@@ -41,7 +41,7 @@ async function page({ params }: Props) {
   if (!canAccess) {
     return (
       <ErrorState
-        title="This page is not available."
+        heading="This page is not available."
         message="Sorry, you can't access this."
         link="/"
         buttonLabel="Home"

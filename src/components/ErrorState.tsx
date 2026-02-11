@@ -4,8 +4,8 @@ import Button from "@/components/Button";
 import Link from "next/link";
 
 type Props = {
-  title?: string;
-  message?: string;
+  heading: string;
+  message: string;
   link?: string; // if provided, renders a Link
   buttonLabel?: string;
   onClick?: () => void; // if provided, renders a Button with click handler
@@ -14,17 +14,17 @@ type Props = {
 
 export default function ErrorState(props: Props) {
   const {
-    title = "Something went wrong",
-    message = "We couldn't load this content. Please try again.",
+    heading,
+    message,
     link,
-    buttonLabel = "Home",
+    buttonLabel,
     onClick,
     className = "",
   } = props;
 
   return (
     <article className={`flex flex-col max-w-xs ${className}`}>
-      <h1 className="text-md font-semibold">{title}</h1>
+      <h1 className="text-md font-semibold">{heading}</h1>
       <p className="text-sml">{message}</p>
 
       {onClick ? (

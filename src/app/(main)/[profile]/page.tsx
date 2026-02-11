@@ -1,6 +1,6 @@
-import CollectionList from "@/components/collection/CollectionList";
+import Collections from "@/components/collection/Collections";
+import ErrorState from "@/components/ErrorState";
 import ProfileSummary from "@/components/profile/ProfileSummary";
-import getUser from "@/server-actions/get-user";
 import {
   dehydrate,
   HydrationBoundary,
@@ -13,6 +13,7 @@ import { getFollowingCount } from "@utils/api/user/get-following-count";
 import { createClient } from "@utils/supabase/server";
 
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 type Props = {
   params: Promise<{ profile: string }>;
 };
@@ -27,18 +28,24 @@ async function page({ params }: Props) {
 
   const [profileDetails, userDetails] = await Promise.all([
     getProfile({ username }),
-    getUser(supabase),
+    supabase.auth.getUser(),
   ]);
 
-  const { data: user } = userDetails;
+  const { user } = userDetails.data;
   const { data: profile } = profileDetails;
 
   const userID = user?.id ?? null;
 
   if (!profile) {
-    return <div>Profile does not exist </div>;
+    return (
+      <ErrorState
+        heading="Scene not found."
+        message="The profile you’re looking for didn’t make the final cut."
+      />
+    );
   }
 
+  const isCollectionOwner = profile.user_id === user?.id;
   const targetUserID = profile.user_id;
 
   Promise.all([
@@ -68,7 +75,13 @@ async function page({ params }: Props) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col py-12 gap-24 ">
         <ProfileSummary profile={profile} userID={userID} />
-        <CollectionList username={username} />
+
+        <Suspense fallback={<p>Loading collections...</p>}>
+          <Collections
+            username={username}
+            isCollectionOwner={isCollectionOwner}
+          />
+        </Suspense>
       </div>
     </HydrationBoundary>
   );

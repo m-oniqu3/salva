@@ -6,15 +6,10 @@ import { Result } from "@/types/result";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Result<Array<CollectionPreview> | null>;
+type GetCollectionsResponse = Result<Array<CollectionPreview> | null>;
 
-/**
- *
- * @param username string
- * @returns Response
- * @description gets the collections for a user
- */
-export async function getCollections(username: string): Response {
+// Gets the collections for the given user
+export async function getCollections(username: string): GetCollectionsResponse {
   try {
     const supabase = await createClient();
 
@@ -29,7 +24,7 @@ export async function getCollections(username: string): Response {
     if (profileError || !profile) {
       console.error(
         "Error getting profile while fetching collections:",
-        profileError
+        profileError,
       );
       return { data: null, error: profileError ?? "No profile found." };
     }
