@@ -24,7 +24,7 @@ export default async function MainLayout({ children }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-12 pb-20">
+    <div className="flex flex-col gap-8 pb-20">
       <AuthNavbar profile={profile} />
       <main className="wrapper ">{children}</main>
     </div>

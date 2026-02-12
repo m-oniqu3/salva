@@ -1,9 +1,10 @@
 import Film from "@/components/films/Film";
 import { TMDBFilm } from "@/types/tmdb";
+import { UserMeta } from "@/types/user";
 
 type Props = {
   films: TMDBFilm[];
-  user: { id: string; username: string } | null;
+  user: UserMeta;
 };
 
 function SimilarFilms(props: Props) {

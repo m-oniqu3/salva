@@ -4,12 +4,13 @@ import Film from "@/components/films/Film";
 import FilmOverview from "@/components/films/FilmOverview";
 import { ChevronDownIcon } from "@/components/icons";
 import { Credits, MediaType, Movie, TMDBFilm, TVShow } from "@/types/tmdb";
+import { UserMeta } from "@/types/user";
 import Image from "next/image";
 
 type Props = {
   film: Movie | TVShow;
   media_type: MediaType;
-  user: { id: string; username: string } | null;
+  user: UserMeta;
   credits: Credits;
   recommendations: TMDBFilm[];
   isIntersecting: boolean;
@@ -49,16 +50,16 @@ function FilmDetails(props: Props) {
             className={`absolute h-full inset-0  blur-2xl transition-colors duration-100 ease-in-out  ${isIntersecting ? "bg-white" : "bg-[linear-gradient(to_left,white_0%,white_70%,transparent_100%)]"}`}
           />
 
-          {!isIntersecting && (
+          {/* {!isIntersecting && (
             <Image
               src={film.backdrop_path}
               alt={title}
               width={100}
               height={100}
               quality={75}
-              className={`absolute top-0 left-0 z-5 opacity-15 object-cover size-full blur-2xl }`}
+              className={`absolute top-0 left-0 z-5 opacity-15 object-cover size-full blur-3xl }`}
             />
-          )}
+          )} */}
 
           <div
             className={`h-full w-full max-w-72 flex-center z-10 transition-transform duration-300 ease-in-out ${isIntersecting ? "opacity-0 pointer-events-none" : "opacity-100 "}`}

@@ -4,13 +4,14 @@ import FilmDetails from "@/components/films/FilmDetails";
 import SimilarFilms from "@/components/films/SimilarFilms";
 import { ChevronLeftIcon } from "@/components/icons";
 import { MediaType, Movie, TVShow } from "@/types/tmdb";
+import { type UserMeta } from "@/types/user";
 import { FilmWithExtras } from "@utils/api/films/get-film-by-id";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
   data: FilmWithExtras<Movie | TVShow>;
-  user: { id: string; username: string } | null;
+  user: UserMeta;
   media_type: MediaType;
 };
 
@@ -21,8 +22,6 @@ function FilmDetailsShell(props: Props) {
   const similarFilmsRef = useRef<HTMLDivElement | null>(null);
 
   function scrollToTargetSection() {
-    console.log("scr");
-    console.log(similarFilmsRef.current);
     if (similarFilmsRef.current) {
       similarFilmsRef.current.scrollIntoView({
         behavior: "smooth",

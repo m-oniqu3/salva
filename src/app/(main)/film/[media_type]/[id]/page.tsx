@@ -1,5 +1,6 @@
 import FilmDetailsShell from "@/components/films/FilmDetailsShell";
 import { MediaType } from "@/types/tmdb";
+import { type UserMeta } from "@/types/user";
 import {
   dehydrate,
   HydrationBoundary,
@@ -54,12 +55,11 @@ async function page({ params }: Props) {
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   const { data: profile } = await getProfile({
-    username: null,
     id: auth.user?.id,
   });
 
-  const user = profile
-    ? { id: profile.user_id, username: profile.username }
+  const user: UserMeta = profile
+    ? { userID: profile.user_id, username: profile.username }
     : null;
 
   if (auth.user?.id) {
