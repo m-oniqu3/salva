@@ -1,24 +1,28 @@
 "use client";
 
-import { FilmIcon, SearchIcon } from "@/components/icons";
+import { CloseIcon, FilmIcon, SearchIcon } from "@/components/icons";
 import { slugify } from "@utils/validation/slug";
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useRef } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 const pages = new Set(["films", "collections", "profiles"]);
 
 function Searchbar() {
-  const searchRef = useRef<HTMLInputElement | null>(null);
+  const [search, setSearch] = useState("");
   const router = useRouter();
 
   const pathname = usePathname();
   const [, page] = pathname.split("/").slice(1) as unknown as string[];
 
+  function handleSearch(e: ChangeEvent<HTMLInputElement>) {
+    setSearch(e.target.value);
+  }
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    if (!searchRef.current) return;
-    const slug = slugify(searchRef.current.value);
+    if (!search) return;
+    const slug = slugify(search);
 
     if (page) {
       if (!pages.has(page)) {
@@ -33,6 +37,9 @@ function Searchbar() {
     router.replace("/search/films/" + slug);
   }
 
+  function clearSearch() {
+    setSearch("");
+  }
   return (
     <form
       className="relative grid grid-cols-[auto_50px] sm:grid-cols-[60px_auto_60px] w-full"
@@ -43,19 +50,30 @@ function Searchbar() {
       </div>
 
       <input
-        ref={searchRef}
         type="text"
+        value={search}
+        onChange={handleSearch}
         className="gray w-full text-sml h-12.5 px-4 rounded-l-2xl sm:px-0 sm:rounded-none font-medium focus:outline-none placeholder:text-neutral-500"
         placeholder="Search..."
       />
 
-      <button
-        type="submit"
-        onClick={handleSubmit}
-        className="cursor-pointer w-full flex-center rounded-r-2xl gray"
-      >
-        <SearchIcon className="size-4 text-neutral-400" />
-      </button>
+      {search ? (
+        <button
+          type="button"
+          onClick={clearSearch}
+          className="cursor-pointer w-full flex-center rounded-r-2xl gray"
+        >
+          <CloseIcon className="size-4 text-neutral-400" />
+        </button>
+      ) : (
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="cursor-pointer w-full flex-center rounded-r-2xl gray"
+        >
+          <SearchIcon className="size-4 text-neutral-400" />
+        </button>
+      )}
     </form>
   );
 }
