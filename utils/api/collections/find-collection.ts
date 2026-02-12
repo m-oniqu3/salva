@@ -11,6 +11,19 @@ export async function findCollection(username: string, slug: string): Response {
   try {
     const supabase = await createClient();
 
+    // Get the user from the username
+    const { data: profile, error: profileErr } = await supabase
+      .from("profiles")
+      .select("user_id")
+      .eq("username", username)
+      .single();
+
+    if (profileErr) throw profileErr;
+
+    if (!profile) {
+      return { data: null, error: null };
+    }
+
     // Get the collection,its film count its owner
     const { data, error } = await supabase
       .from("collections")
@@ -20,7 +33,7 @@ export async function findCollection(username: string, slug: string): Response {
          films:collection_films(id)
         `,
       )
-      .eq("user.username", username)
+      .eq("user_id", profile.user_id)
       .eq("slug", slug)
       .single();
 
@@ -32,7 +45,7 @@ export async function findCollection(username: string, slug: string): Response {
 
     const summary: CollectionSummary = {
       user: data.user,
-      collection: { ...data, filmCount: data.films.length },
+      collection: { ...data, film_count: data.films.length },
     };
 
     return { data: summary, error: null };

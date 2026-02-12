@@ -35,7 +35,7 @@ function SearchLayout({ children }: Props) {
   });
 
   return (
-    <div className="flex flex-col gap-24 py-12">
+    <div className="pages">
       <header>
         <nav className="h-20 flex items-center justify-between">
           <Button className="gray hidden md:flex">

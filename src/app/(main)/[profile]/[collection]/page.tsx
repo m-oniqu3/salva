@@ -25,19 +25,23 @@ async function page({ params }: Props) {
 
   if (collection.error) {
     return (
-      <ErrorState
-        heading="The director called cut."
-        message="There was a problem loading your collections. Try refreshing the page."
-      />
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="The director called cut."
+          message="There was a problem loading your collections. Try refreshing the page."
+        />
+      </div>
     );
   }
 
   if (!collection.data) {
     return (
-      <ErrorState
-        heading="Scene not found."
-        message="This collection doesn’t exist — or it’s no longer available to view."
-      />
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="Scene not found."
+          message="This collection doesn’t exist — or it’s no longer available to view."
+        />
+      </div>
     );
   }
 
@@ -54,12 +58,14 @@ async function page({ params }: Props) {
 
   if (!canAccess) {
     return (
-      <ErrorState
-        heading="This page is not available."
-        message="Sorry, you can't access this."
-        link="/"
-        buttonLabel="Home"
-      />
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="This page is not available."
+          message="Sorry, you can't access this."
+          link="/"
+          buttonLabel="Home"
+        />
+      </div>
     );
   }
 
@@ -70,7 +76,7 @@ async function page({ params }: Props) {
     : null;
 
   return (
-    <div className=" flex flex-col gap-24">
+    <div className="pages">
       <CollectionSummary
         summary={collection.data}
         userID={user?.user_id ?? null}

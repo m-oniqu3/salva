@@ -4,7 +4,7 @@ import ErrorState from "@/components/ErrorState";
 import Film from "@/components/films/Film";
 import { LoadingIcon } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
-import useAllFilms from "@/hooks/useGetFilms";
+import useGetFilms from "@/hooks/useGetFilms";
 import { UserMeta } from "@/types/user";
 
 type Props = {
@@ -23,7 +23,7 @@ function Films(props: Props) {
     hasNextPage,
     fetchNextPage,
     refetch,
-  } = useAllFilms({
+  } = useGetFilms({
     userID: targetUser.userID,
     collectionID: targetUser.collectionID,
   });
@@ -38,21 +38,25 @@ function Films(props: Props) {
 
   if (error) {
     return (
-      <ErrorState
-        heading="Reel Jammed"
-        message="We couldn’t load your saved films. Try again in a moment."
-        buttonLabel="Try Again"
-        onClick={refetch}
-      />
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="Reel Jammed"
+          message="We couldn’t load your saved films. Try again in a moment."
+          buttonLabel="Try Again"
+          onClick={refetch}
+        />
+      </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <ErrorState
-        heading="Nothing in the Archives"
-        message="Your saved films will appear here once you start collecting."
-      />
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="Nothing in the Archives"
+          message="Your saved films will appear here once you start collecting."
+        />
+      </div>
     );
   }
 

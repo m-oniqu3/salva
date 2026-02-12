@@ -20,7 +20,7 @@ type Props = { summary: CollectionSummary; userID: string | null };
 function CollectionSummary({ summary, userID }: Props) {
   const {
     user: { user_id: collectionOwnerID, username, avatar, firstname },
-    collection: { name, is_private: isPrivate, description, filmCount },
+    collection: { name, is_private: isPrivate, description, film_count },
   } = summary;
 
   const isCollectionOwner = userID === collectionOwnerID;
@@ -111,7 +111,7 @@ function CollectionSummary({ summary, userID }: Props) {
 
             {isPrivate && <span>&#xb7;</span>}
 
-            <p className="">{filmCount} films</p>
+            <p className="">{film_count} films</p>
 
             <span>&#xb7;</span>
 

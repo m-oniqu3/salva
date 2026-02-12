@@ -90,8 +90,16 @@ body {
     @apply text-red-500 text-xs font-semibold h-4
   }
 
+  .pages {
+    @apply flex flex-col gap-16
+  }
+
   .content-grid {
-    @apply grid grid-cols-2 gap-12 sm:grid-cols-2 md:grid-cols-2 sm:gap-12 lg:grid-cols-3 xl:grid-cols-4
+    @apply grid grid-cols-2 gap-8 sm:grid-cols-2 md:grid-cols-2 sm:gap-12 lg:grid-cols-3 xl:grid-cols-4
+  }
+
+  .error-state-wrapper {
+    @apply grid place-items-center h-[50vh] w-full
   }
 
 }

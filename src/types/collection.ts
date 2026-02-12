@@ -13,7 +13,8 @@ export type CollectionPreview = {
   name: string;
   is_private: boolean;
   cover_image: string | null;
-  slug: string | null;
+  slug: string;
+  film_count: number;
 };
 
 export type CollectionSummary = {
@@ -33,7 +34,7 @@ export type CollectionSummary = {
     cover_image: string | null;
     slug: string | null;
     description: string;
-    filmCount: number;
+    film_count: number;
   };
 };
 

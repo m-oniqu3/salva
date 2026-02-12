@@ -75,7 +75,7 @@ async function page({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col gap-24 ">
+      <div className="pages">
         <ProfileSummary profile={profile} userID={userID} />
 
         <Suspense fallback={<p>Loading collections...</p>}>

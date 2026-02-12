@@ -1,4 +1,5 @@
 import Film from "@/components/films/Film";
+import { UserMeta } from "@/types/user";
 import {
   dehydrate,
   HydrationBoundary,
@@ -41,18 +42,12 @@ async function page({ params }: Props) {
     return <p>no films</p>;
   }
 
+  const user: UserMeta = profile.data
+    ? { userID: profile.data.user_id, username: profile.data.username }
+    : null;
+
   const rendered_films = films.map((film) => {
-    return (
-      <Film
-        key={film.id}
-        film={film}
-        user={
-          profile.data
-            ? { id: profile.data.user_id, username: profile.data.username }
-            : null
-        }
-      />
-    );
+    return <Film key={film.id} film={film} user={user} />;
   });
 
   return (

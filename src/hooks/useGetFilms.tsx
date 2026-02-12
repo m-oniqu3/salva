@@ -14,7 +14,7 @@ function useGetFilms(props: Props) {
   const { userID, limit = 20, collectionID } = props;
 
   const query = useInfiniteQuery({
-    queryKey: ["all-films", collectionID ?? "", userID],
+    queryKey: ["films", collectionID ?? "", userID],
     queryFn: ({ pageParam }) => {
       return getFilms({
         userID,
