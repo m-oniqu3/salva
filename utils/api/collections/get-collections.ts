@@ -1,63 +1,68 @@
 "use server";
 
-import getUser from "@/server-actions/get-user";
 import { CollectionPreview } from "@/types/collection";
 import { Result } from "@/types/result";
-import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
+import { calculateRange } from "@utils/validation/paginate";
 
-type Response = Result<Array<CollectionPreview> | null>;
+type GetCollectionsResponse = Result<Array<CollectionPreview> | null>;
 
-/**
- *
- * @param username string
- * @returns Response
- * @description gets the collections for a user
- */
-export async function getCollections(username: string): Response {
+type Props = {
+  username: string;
+  page: number;
+};
+
+// Gets the collections for the given user
+export async function getCollections(props: Props): GetCollectionsResponse {
   try {
+    const { username, page } = props;
+    const [start, end] = calculateRange(page, 10);
+
     const supabase = await createClient();
 
-    const { data: user } = await getUser(supabase);
+    // Get the user from the username
+    const { data: profile, error: profileErr } = await supabase
+      .from("profiles")
+      .select("user_id")
+      .eq("username", username)
+      .single();
 
-    //get the profile
-    const { data: profile, error: profileError } = await getProfile({
-      username,
+    if (profileErr) throw profileErr;
+
+    if (!profile) {
+      return { data: null, error: null };
+    }
+
+    const { data, error } = await supabase
+      .from("collections")
+      .select(
+        `id, name, is_private, cover_image, slug,
+         films:collection_films(id)
+        `,
+      )
+      .eq("user_id", profile.user_id)
+      .order("created_at", { ascending: false })
+      .range(start, end);
+
+    if (error) throw error;
+
+    const collections: Array<CollectionPreview> = data.map((col) => {
+      return {
+        ...col,
+        film_count: col.films.length,
+      };
     });
 
-    //handle !user case separately
-    if (profileError || !profile) {
-      console.error(
-        "Error getting profile while fetching collections:",
-        profileError
-      );
-      return { data: null, error: profileError ?? "No profile found." };
-    }
-
-    const canGetPrivateCollection = profile.user_id === user?.id;
-
-    //only get private boards if is current user
-    let query = supabase
-      .from("collections")
-      .select("id, name, is_private, cover_image, slug")
-      .eq("user_id", profile.user_id)
-      .order("created_at", { ascending: false });
-
-    //filter out private & public collections
-    if (!canGetPrivateCollection) {
-      query = query.eq("is_private", false);
-    }
-
-    const { data: collections, error } = await query;
-
-    if (error) {
-      console.error("Error fetching collections:", error.message);
-      return { data: null, error: "Failed to fetch collections." };
-    }
-
     return { data: collections, error: null };
-  } catch (err) {
-    console.error("Unexpected error in getCollections:", err);
-    return { data: null, error: "Unexpected error fetching collections." };
+  } catch (error) {
+    console.error("Unexpected error in getCollections:", error);
+
+    return {
+      data: null,
+      error:
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while fetching the collection.",
+    };
   }
 }

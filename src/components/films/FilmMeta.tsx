@@ -1,21 +1,22 @@
 "use client";
 
+import RecentCollection from "@/components/collection/RecentCollection";
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
 import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { TMDBFilm } from "@/types/tmdb";
+import { UserMeta } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
-import { slugify } from "@utils/validation/slug";
-import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
   film: TMDBFilm;
-  user: { id: string; username: string } | null;
+  user: UserMeta;
 };
 
 function FilmMeta(props: Props) {
@@ -29,13 +30,15 @@ function FilmMeta(props: Props) {
     useRecentlySavedFilm();
   const isFilmRecentlySaved =
     !!savedFilms[id] && savedFilms[id].collectionAmt > 0;
-  const recentlySavedFilm = savedFilms[id];
+  const recentlySavedFilm = (isFilmRecentlySaved && savedFilms[id]) || null;
 
   const { openModal } = useModal();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const { data: recentCollection, isLoading: isLoadingRecentCollection } =
     useQuery({
-      queryKey: ["collection", "recent", user?.id],
+      queryKey: ["collection", "recent", user?.userID],
       queryFn: () => getMostRecentCollection(),
     });
 
@@ -44,7 +47,7 @@ function FilmMeta(props: Props) {
   function handleFilmCollectionModal() {
     openModal({
       type: ModalEnum.FCM,
-      payload: { film, userID: user?.id ?? null },
+      payload: { film, userID: user?.userID ?? null },
     });
   }
 
@@ -79,53 +82,41 @@ function FilmMeta(props: Props) {
     }
   }
 
+  function handleNavigation() {
+    const route = `/film/${film.media_type}/${id}`;
+    if (pathname === route) return;
+
+    router.push(route);
+  }
+
   return (
     <div
+      onClick={handleNavigation}
       key={id}
-      className={`absolute inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity`}
+      className={`absolute size-full inset-0 bg-neutral-700/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer`}
     >
       <div
-        className={`absolute top-0 left-0 w-full h-full p-4 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}
+        className={`absolute top-0 left-0 w-full h-full p-4 z-5 sm:p-8 grid grid-rows-[auto_1fr] opacity-0 group-hover:opacity-100`}
       >
-        <div className="grid grid-cols-2  sm:grid-cols-[auto_auto] items-center justify-between w-full">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="grid grid-cols-2  sm:grid-cols-[auto_auto] items-center justify-between w-full"
+        >
           <div className="grid grid-cols-2 items-center sm:gap-2">
-            <>
-              <p className="sm:hidden font-semibold text-white line-clamp-1">
-                ...
-              </p>
+            <RecentCollection
+              isLoadingRecentCollection={isLoadingRecentCollection}
+              recentCollection={recentCollection?.data}
+              isFilmRecentlySaved={isFilmRecentlySaved}
+              recentlySavedFilm={recentlySavedFilm}
+              username={user?.username ?? null}
+            />
 
-              {!isLoadingRecentCollection ? (
-                <p className="hidden sm:block  font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
-                  {isFilmRecentlySaved && user && (
-                    <Link
-                      href={`/${user.username}/${slugify(recentlySavedFilm.collection)}`}
-                      className="underline-offset-2 hover:underline"
-                    >
-                      {!recentlySavedFilm.collection
-                        ? "Saved"
-                        : `${recentlySavedFilm.collection}  ${recentlySavedFilm.collectionAmt > 1 ? `+ ${(recentlySavedFilm.collectionAmt - 1).toString().padStart(2, "0")} ` : ""}`}
-                    </Link>
-                  )}
-
-                  {!isFilmRecentlySaved && recentCollection?.data
-                    ? recentCollection.data.name
-                    : "..."}
-                </p>
-              ) : (
-                <p className="hidden sm:block  font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
-                  ...
-                </p>
-              )}
-            </>
-
-            {
-              <button
-                className="flex-center cursor-pointer w-fit"
-                onClick={handleFilmCollectionModal}
-              >
-                <ChevronDownIcon className="size-6 text-white" />
-              </button>
-            }
+            <button
+              className="flex-center cursor-pointer w-fit"
+              onClick={handleFilmCollectionModal}
+            >
+              <ChevronDownIcon className="size-6 text-white" />
+            </button>
           </div>
 
           <button

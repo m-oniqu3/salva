@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-
+  experimental: {
+    useCache: true,
+  },
   images: {
     remotePatterns: [
       new URL("https://i.pinimg.com/**"),
@@ -13,6 +15,7 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
       new URL("https://image.tmdb.org/t/p/**"),
+      new URL("http://image.tmdb.org/t/p/**"),
     ],
     qualities: [25, 50, 75],
   },

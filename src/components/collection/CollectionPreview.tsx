@@ -7,10 +7,11 @@ type Props = {
   username: string;
 };
 
-function CollectionPreview({ preview, username }: Props) {
-  //https://picsum.photos/id/237/200/300
+//https://picsum.photos/id/237/200/300
+function CollectionPreview(props: Props) {
+  const { preview, username } = props;
 
-  const { is_private, name, cover_image, slug } = preview;
+  const { is_private, name, cover_image, slug, film_count } = preview;
 
   const cover = cover_image ? (
     <Image
@@ -27,16 +28,18 @@ function CollectionPreview({ preview, username }: Props) {
 
   return (
     <Link href={`/${username}/${slug}`} className="flex flex-col gap-4 ">
-      <figure className="relative w-full h-32 sm:h-40 overflow-hidden">
+      <figure className="relative w-full aspect-[3/4] overflow-hidden">
         {cover}
       </figure>
 
       <div className="">
-        <h3 className="font-semibold line-clamp-1 w-full text-sml">{name}</h3>
+        <h3 className="font-semibold line-clamp-1 w-full text-sml sm:text-sm">
+          {name}
+        </h3>
 
         <div className="flex items-center font-semibold gap-1">
           <p className="text-xs font-medium text-zinc-500">
-            {name.length.toString().padStart(2, "0")} elements
+            {film_count} {film_count === 1 ? "film" : "films"}
           </p>
 
           {is_private && (

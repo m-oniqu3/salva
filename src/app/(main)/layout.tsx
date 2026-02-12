@@ -13,24 +13,20 @@ export default async function MainLayout({ children }: Props) {
   const supabase = await createClient();
   const { data: user } = await getUser(supabase);
 
-  const { data: profile } = await getProfile({
-    username: null,
-    id: user?.id,
-  });
+  // if no user then i dont want to fetch the profile
 
-  //todo : handle error case when there is no profile
+  let profile = null;
 
-  // if (error) {
-  //   console.log(error);
-  //   redirect("/");
-  // }
+  if (user) {
+    const { data } = await getProfile({ id: user.id });
+
+    if (data) profile = data;
+  }
 
   return (
-    <div className="">
-      {/* Layout UI */}
-      {/* Place children where you want to render a page or nested layout */}
+    <div className="flex flex-col gap-8 pb-20">
       <AuthNavbar profile={profile} />
-      <main className="">{children}</main>
+      <main className="wrapper ">{children}</main>
     </div>
   );
 }

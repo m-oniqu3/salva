@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingIcon } from "@/components/icons";
 import React, { useEffect, useRef } from "react";
 
 type Props = {
@@ -20,7 +21,8 @@ function InfiniteScroll(props: Props) {
       entries.forEach((entry) => {
         if (
           entry.isIntersecting &&
-          (!isLoadingMoreData || !isLoadingIntialData)
+          !isLoadingMoreData &&
+          !isLoadingIntialData
         ) {
           fetchMoreData();
         }
@@ -47,11 +49,11 @@ function InfiniteScroll(props: Props) {
       <>{children}</>
 
       <div ref={observerElement} id="obs">
-        {/* {isLoadingMoreData && !isLoadingIntialData && (
-          <div className="flex justify-center items-center h-20">
+        {isLoadingMoreData && !isLoadingIntialData && (
+          <div className="flex justify-center items-center pt-20">
             <LoadingIcon className="size-5" />
           </div>
-        )} */}
+        )}
       </div>
     </>
   );

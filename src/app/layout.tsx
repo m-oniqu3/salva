@@ -42,7 +42,7 @@ type LayoutProps = {
 export default async function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased  wrapper`} id="body">
+      <body className={`${inter.variable} antialiased`} id="body">
         <Provider>
           <RecentlySavedFilmProvider>
             <ModalContextProvider>

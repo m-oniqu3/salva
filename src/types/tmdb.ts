@@ -83,7 +83,90 @@ export type TMDBFilm = {
   media_type: string;
 };
 
+export type SavedTMDBFilm = {
+  id: number;
+  filmID: number;
+  title: string;
+  poster_path: string;
+  media_type: string;
+};
+
 export type TMDBConfig = {
   images: TMDBImagesConfig;
   change_keys: TMDBChangeKey[];
+};
+
+// Films
+
+export type MediaType = "movie" | "tv";
+export type Credit = {
+  id: number;
+  name: string;
+  character?: string;
+  job?: string;
+  profile_path: string | null;
+};
+
+export type Credits = {
+  cast: Array<Credit>;
+  crew: Array<Credit>;
+};
+
+export type FilmBase = {
+  id: number;
+
+  overview: string;
+  tagline: string | null;
+
+  poster_path: string;
+  backdrop_path: string;
+
+  vote_average: number;
+  vote_count: number;
+  popularity: number;
+
+  genres: Array<{
+    id: number;
+    name: string;
+  }>;
+};
+
+export type Movie = FilmBase & {
+  title: string;
+  original_title: string;
+
+  release_date: string | null;
+  runtime: number | null;
+  status: string;
+
+  production_companies: Array<{
+    id: number;
+    name: string;
+  }>;
+};
+
+export type TVShow = FilmBase & {
+  name: string;
+  original_name: string;
+
+  created_by: Array<{
+    id: number;
+    name: string;
+    original_name: string;
+  }>;
+
+  first_air_date: string | null;
+  last_air_date: string | null;
+  status: string;
+
+  number_of_seasons: number;
+  number_of_episodes: number;
+};
+
+export type FilmRecommendation = {
+  id: number;
+  name?: string;
+  title?: string;
+  poster_path: string;
+  media_type: string;
 };

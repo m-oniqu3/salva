@@ -1,57 +1,90 @@
 import CollectionSummary from "@/components/collection/CollectionSummary";
 import ErrorState from "@/components/ErrorState";
-import getUser from "@/server-actions/get-user";
+import Films from "@/components/films/Films";
+import { UserMeta } from "@/types/user";
 import { findCollection } from "@utils/api/collections/find-collection";
+import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
+import { canAccessCollection } from "@utils/validation/canAccessCollection";
 
 type Props = {
   params: Promise<{ profile: string; collection: string }>;
 };
 
 async function page({ params }: Props) {
-  const { collection: slug, profile: username } = await params;
+  const { profile: username, collection: collection_slug } = await params;
+
   const supabase = await createClient();
 
-  const [collection, user] = await Promise.all([
-    findCollection(username, slug),
-    getUser(supabase),
+  const [collection, currentUserProfile] = await Promise.all([
+    findCollection(username, collection_slug),
+    supabase.auth
+      .getUser()
+      .then((auth) => getProfile({ id: auth.data.user?.id })),
   ]);
 
   if (collection.error) {
-    return <p>{collection.error}</p>;
+    return (
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="The director called cut."
+          message="There was a problem loading your collections. Try refreshing the page."
+        />
+      </div>
+    );
   }
 
   if (!collection.data) {
-    return <p>no collection found</p>;
+    return (
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="Scene not found."
+          message="This collection doesn’t exist — or it’s no longer available to view."
+        />
+      </div>
+    );
   }
 
   const {
     user: { user_id: collectionOwnerID },
-    collection: { is_private },
+    collection: { id, is_private },
   } = collection.data;
 
-  // What's visible to any user? Public collections OR owned private ones.
-  const isOwnedByCurrentUser = user.data?.id === collectionOwnerID;
-  const canAccess = !is_private || isOwnedByCurrentUser;
+  const canAccess = canAccessCollection({
+    collectionOwnerID: collectionOwnerID,
+    isPrivate: is_private,
+    currentUserID: currentUserProfile.data?.user_id,
+  });
 
   if (!canAccess) {
     return (
-      <ErrorState
-        title="This page is not available."
-        message="Sorry, you can't access this."
-        link="/"
-        label="Home"
-      />
+      <div className="error-state-wrapper">
+        <ErrorState
+          heading="This page is not available."
+          message="Sorry, you can't access this."
+          link="/"
+          buttonLabel="Home"
+        />
+      </div>
     );
   }
 
+  const user = currentUserProfile.data;
+
+  const currentUser: UserMeta = user
+    ? { userID: user.user_id, username: user?.username }
+    : null;
+
   return (
-    <div className="py-8 flex flex-col gap-20">
+    <div className="pages">
       <CollectionSummary
         summary={collection.data}
-        userID={user.data?.id ?? null}
+        userID={user?.user_id ?? null}
       />
-      <p className="">films for collection</p>
+      <Films
+        user={currentUser}
+        targetUser={{ userID: collectionOwnerID, collectionID: id }}
+      />
     </div>
   );
 }

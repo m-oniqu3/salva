@@ -87,27 +87,35 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "collections_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       films: {
         Row: {
           created_at: string
           id: number
-          media_type: string | null
+          media_type: string
           poster_path: string
           title: string
         }
         Insert: {
           created_at?: string
           id?: number
-          media_type?: string | null
-          poster_path: string
-          title: string
+          media_type?: string
+          poster_path?: string
+          title?: string
         }
         Update: {
           created_at?: string
           id?: number
-          media_type?: string | null
+          media_type?: string
           poster_path?: string
           title?: string
         }
