@@ -1,13 +1,8 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
-import {
-  AddIcon,
-  MoreHorizontalIcon,
-  PrivateIcon,
-  SolidSparkleIcon,
-  UserAddIcon,
-} from "@/components/icons";
+import CollectionToolbar from "@/components/collection/CollectionToolbar";
+import { PrivateIcon } from "@/components/icons";
 import { useContextMenu } from "@/context/useContextMenu";
 import useClientRect from "@/hooks/useClientRect";
 import type { CollectionSummary } from "@/types/collection";
@@ -133,7 +128,7 @@ function CollectionSummary({ summary, userID }: Props) {
             )} */}
           </div>
 
-          <div className="flex gap-3 mt-4">
+          <div className="flex flex-wrap gap-3 mt-4">
             <div className="flex gap-3 items-center">
               <Avatar
                 avatar={avatar}
@@ -143,8 +138,7 @@ function CollectionSummary({ summary, userID }: Props) {
 
               {!isCollectionOwner && (
                 <figcaption className="text-sml">
-                  By
-                  <span>&nbsp;</span>
+                  By &nbsp;
                   <Link href={`/${username}`} className="font-bold">
                     {firstname || username}
                   </Link>
@@ -153,6 +147,14 @@ function CollectionSummary({ summary, userID }: Props) {
             </div>
 
             {isCollectionOwner && (
+              <CollectionToolbar
+                isCollectionPrivate={isPrivate}
+                isCollectionOwner={isCollectionOwner}
+                // user={{ avatar, username, firstname }}
+              />
+            )}
+
+            {/* {isCollectionOwner && (
               <div className="flex gap-3">
                 <div className="gray size-8.5 flex items-center justify-center rounded-full">
                   <UserAddIcon className="size-3.5 text-neutral-800/60" />
@@ -180,7 +182,7 @@ function CollectionSummary({ summary, userID }: Props) {
                   <MoreHorizontalIcon className="size-3.5 text-neutral-800/60" />
                 </button>
               </div>
-            )}
+            )} */}
           </div>
         </article>
       </section>
