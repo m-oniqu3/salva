@@ -111,9 +111,11 @@ function CollectionSummary({ summary, userID }: Props) {
 
             {isPrivate && <span>&#xb7;</span>}
 
-            <p className="">{film_count} films</p>
+            <p className="">
+              {film_count} {film_count === 1 ? "film" : "films"}
+            </p>
 
-            <span>&#xb7;</span>
+            {/* <span>&#xb7;</span>
 
             <p className="font-semibold flex gap-1">
               <span>{description?.length ? description?.length - 12 : 8}</span>
@@ -128,7 +130,7 @@ function CollectionSummary({ summary, userID }: Props) {
 
                 <button className="cursor-pointer">Follow</button>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="flex gap-3 mt-4">

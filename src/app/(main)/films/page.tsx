@@ -1,5 +1,5 @@
 import ErrorState from "@/components/ErrorState";
-import AllFilms from "@/components/films/Films";
+import Films from "@/components/films/Films";
 import {
   dehydrate,
   HydrationBoundary,
@@ -19,7 +19,7 @@ async function page() {
   if (!auth.user) {
     return (
       <ErrorState
-        title="Director’s Cut Only"
+        heading="Director’s Cut Only"
         message="Log in to curate your collections like a true cinephile."
         buttonLabel="Log In"
         link="/login"
@@ -33,20 +33,20 @@ async function page() {
   if (error || !profile) {
     return (
       <ErrorState
-        title="The reel broke! 🍿"
+        heading="The reel broke! 🍿"
         message="We couldn’t load your profile due to a server hiccup. Give it another shot!"
       />
     );
   }
 
-  const user = { id: profile.user_id, username: profile.username };
+  const user = { userID: profile.user_id, username: profile.username };
 
   // prefetch the films
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ["all-films", user.id],
+    queryKey: ["films", user.userID],
     queryFn: ({ pageParam }) =>
       getFilms({
-        userID: user?.id,
+        userID: user?.userID,
         range: calculateRange(pageParam, 20),
       }),
 
@@ -57,12 +57,12 @@ async function page() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="pb-20">
         <div className="py-10">
-          <h1 className="font-semibold text-md">All Films</h1>
+          <h1 className="font-semibold text-md sm:text-lg">All Films</h1>
           <p className="text-sml">
             {"Here are all the films you've saved so far."}
           </p>
         </div>
-        <AllFilms user={user} target={{ userID: user.id }} />
+        <Films user={user} targetUser={{ userID: user.userID }} />
       </div>
     </HydrationBoundary>
   );

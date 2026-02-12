@@ -142,8 +142,8 @@ function FilmOverview(props: Props) {
   }
 
   return (
-    <section className="relative bg-white h-screen w-full max-w-100 grid grid-rows-[100px_auto] border-l border-gray-50 overflow-y-scroll no-scrollbar">
-      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50 bg-white ">
+    <section className="relative bg-white h-screen w-full max-w-125 grid grid-rows-[100px_auto] border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
+      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
         <div className="wrapper grid grid-cols-[1fr_auto] gap-4 items-center ">
           <div className="grid grid-cols-2 items-center w-fit sm:gap-2">
             {!isLoadingRecentCollection ? (

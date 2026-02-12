@@ -3,12 +3,13 @@
 import { CloseIcon, FilmIcon, SearchIcon } from "@/components/icons";
 import { slugify } from "@utils/validation/slug";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 
 const pages = new Set(["films", "collections", "profiles"]);
 
 function Searchbar() {
   const [search, setSearch] = useState("");
+  const searchRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
   const pathname = usePathname();
@@ -39,7 +40,12 @@ function Searchbar() {
 
   function clearSearch() {
     setSearch("");
+
+    if (searchRef.current) {
+      searchRef.current.focus();
+    }
   }
+
   return (
     <form
       className="relative grid grid-cols-[auto_50px] sm:grid-cols-[60px_auto_60px] w-full"
@@ -51,6 +57,7 @@ function Searchbar() {
 
       <input
         type="text"
+        ref={searchRef}
         value={search}
         onChange={handleSearch}
         className="gray w-full text-sml h-12.5 px-4 rounded-l-2xl sm:px-0 sm:rounded-none font-medium focus:outline-none placeholder:text-neutral-500"

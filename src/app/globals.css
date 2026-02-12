@@ -91,7 +91,7 @@ body {
   }
 
   .pages {
-    @apply flex flex-col gap-16
+    @apply flex flex-col gap-20
   }
 
   .content-grid {
