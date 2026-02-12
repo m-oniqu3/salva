@@ -20,17 +20,13 @@ export default async function MainLayout({ children }: Props) {
   if (user) {
     const { data } = await getProfile({ id: user.id });
 
-    if (data) {
-      profile = data;
-    }
+    if (data) profile = data;
   }
 
   return (
     <>
-      {/* Layout UI */}
-      {/* Place children where you want to render a page or nested layout */}
       <AuthNavbar profile={profile} />
-      <main className="">{children}</main>
+      <main className="wrapper">{children}</main>
     </>
   );
 }

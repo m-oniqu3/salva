@@ -23,19 +23,23 @@ export default function ErrorState(props: Props) {
   } = props;
 
   return (
-    <article className={`flex flex-col max-w-xs ${className}`}>
-      <h1 className="text-md font-semibold">{heading}</h1>
-      <p className="text-sml">{message}</p>
+    <section className="grid place-items-center size-full">
+      <article
+        className={`size-full flex flex-col justify-center items-center text-center max-w-xs ${className}`}
+      >
+        <h1 className="text-md font-semibold">{heading}</h1>
+        <p className="text-sml">{message}</p>
 
-      {onClick ? (
-        <Button className="mt-3 bg-neutral-800 text-white" onClick={onClick}>
-          {buttonLabel}
-        </Button>
-      ) : link ? (
-        <Link href={link} className="mt-3">
-          <Button className="bg-neutral-800 text-white">{buttonLabel}</Button>
-        </Link>
-      ) : null}
-    </article>
+        {onClick ? (
+          <Button className="mt-3 bg-neutral-800 text-white" onClick={onClick}>
+            {buttonLabel}
+          </Button>
+        ) : link ? (
+          <Link href={link} className="mt-3">
+            <Button className="bg-neutral-800 text-white">{buttonLabel}</Button>
+          </Link>
+        ) : null}
+      </article>
+    </section>
   );
 }

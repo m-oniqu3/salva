@@ -23,8 +23,22 @@ async function page({ params }: Props) {
       .then((auth) => getProfile({ id: auth.data.user?.id })),
   ]);
 
-  if (collection.error || !collection.data) {
-    return <p>no collection found</p>;
+  if (collection.error) {
+    return (
+      <ErrorState
+        heading="The director called cut."
+        message="There was a problem loading your collections. Try refreshing the page."
+      />
+    );
+  }
+
+  if (!collection.data) {
+    return (
+      <ErrorState
+        heading="Scene not found."
+        message="This collection doesn’t exist — or it’s no longer available to view."
+      />
+    );
   }
 
   const {
@@ -56,7 +70,7 @@ async function page({ params }: Props) {
     : null;
 
   return (
-    <div className="py-12 flex flex-col gap-24">
+    <div className=" flex flex-col gap-24">
       <CollectionSummary
         summary={collection.data}
         userID={user?.user_id ?? null}

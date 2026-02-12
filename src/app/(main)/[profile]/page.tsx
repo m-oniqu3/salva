@@ -12,7 +12,6 @@ import { getFollowing } from "@utils/api/user/get-following";
 import { getFollowingCount } from "@utils/api/user/get-following-count";
 import { createClient } from "@utils/supabase/server";
 
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 type Props = {
   params: Promise<{ profile: string }>;
@@ -21,7 +20,8 @@ type Props = {
 async function page({ params }: Props) {
   const { profile: username } = await params;
 
-  if (!username) redirect("/");
+  //maybe reduntant
+  // if (!username) redirect("/");
 
   const supabase = await createClient();
   const queryClient = new QueryClient();
@@ -38,10 +38,12 @@ async function page({ params }: Props) {
 
   if (!profile) {
     return (
-      <ErrorState
-        heading="Scene not found."
-        message="The profile you’re looking for didn’t make the final cut."
-      />
+      <div className="h-[50dvh] w-full">
+        <ErrorState
+          heading="Scene not found."
+          message="The profile you’re looking for didn’t make the final cut."
+        />
+      </div>
     );
   }
 
@@ -73,7 +75,7 @@ async function page({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col py-12 gap-24 ">
+      <div className="flex flex-col gap-24 ">
         <ProfileSummary profile={profile} userID={userID} />
 
         <Suspense fallback={<p>Loading collections...</p>}>

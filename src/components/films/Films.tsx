@@ -31,7 +31,7 @@ function Films(props: Props) {
   if (isLoading) {
     return (
       <div className="flex-center w-full">
-        <LoadingIcon className="size-5" />
+        <LoadingIcon className="size-5 animate-spin" />
       </div>
     );
   }
@@ -39,7 +39,7 @@ function Films(props: Props) {
   if (error) {
     return (
       <ErrorState
-        title="Reel Jammed"
+        heading="Reel Jammed"
         message="We couldn’t load your saved films. Try again in a moment."
         buttonLabel="Try Again"
         onClick={refetch}
@@ -50,7 +50,7 @@ function Films(props: Props) {
   if (!data || data.length === 0) {
     return (
       <ErrorState
-        title="Nothing in the Archives"
+        heading="Nothing in the Archives"
         message="Your saved films will appear here once you start collecting."
       />
     );
