@@ -3,7 +3,7 @@ import { findCollection } from "@utils/api/collections/find-collection";
 
 function useFindCollection(username: string, slug: string) {
   const q = useQuery({
-    queryKey: ["collection", "find", `/${username}/${slug}`],
+    queryKey: ["collection", "find", `${username}-${slug}`],
     queryFn: () => findCollection(username, slug),
     enabled: !!username && !!slug,
   });

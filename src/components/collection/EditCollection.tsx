@@ -57,7 +57,14 @@ function EditCollection() {
   }, [data, form]);
 
   function openImagePickerModal() {
-    openModal({ type: ModalEnum.IPM });
+    if (!collectionSummary) return;
+
+    openModal({
+      type: ModalEnum.IPM,
+      payload: {
+        collectionSummary: collectionSummary,
+      },
+    });
   }
 
   function onSubmitForm(input: EditedCollection) {
@@ -71,28 +78,29 @@ function EditCollection() {
   }
 
   return (
-    <div
-      className="panel flex flex-col max-w-sm mx-auto"
+    <form
+      className="panel flex flex-col gap-4 max-w-sm mx-auto"
       onClick={stopPropagation}
     >
-      <header className="relative pb-10">
+      <header className="relative">
         <h1 className="text-lg font-semibold text-neutral-800">
           Edit Collection
         </h1>
-        <p className="text-sml">Edit your collection.</p>
+        <p className="text-sml">Adjust the details of your collection.</p>
 
         <button
           onClick={closeModal}
           className="absolute top-0 right-0 cursor-pointer"
         >
-          <CloseIcon className="size-5" />
+          <CloseIcon className="size-4" />
         </button>
       </header>
-      <form
-        className="relative flex flex-col gap-4  h-full"
+
+      <div
+        className="relative flex flex-col gap-2  h-full"
         onSubmit={form.handleSubmit(onSubmitForm)}
       >
-        {/* name */}
+        {/* cover */}
         <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-sml text-neutral-800">
             Collection Cover
@@ -156,8 +164,8 @@ function EditCollection() {
             "Edit Collection"
           )}
         </Button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
 

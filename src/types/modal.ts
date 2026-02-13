@@ -26,7 +26,12 @@ type EditCollectionModal = ModalState<
   }
 >;
 
-type ImagePickerModal = ModalState<ModalEnum.IPM>;
+type ImagePickerModal = ModalState<
+  ModalEnum.IPM,
+  {
+    collectionSummary: CollectionSummary;
+  }
+>;
 
 type AuthModal = ModalState<ModalEnum.A>;
 

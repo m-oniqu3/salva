@@ -64,7 +64,7 @@ body {
   }
 
   .panel {
-    @apply bg-white h-full max-h-[500px] p-8 rounded-2xl w-full overflow-scroll no-scrollbar
+    @apply bg-white h-full max-h-[500px] p-4 rounded-3xl w-full overflow-scroll no-scrollbar
   }
 
   .context-panel {

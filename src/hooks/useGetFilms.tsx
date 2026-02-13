@@ -16,6 +16,7 @@ function useGetFilms(props: Props) {
   const query = useInfiniteQuery({
     queryKey: ["films", collectionID ?? "", userID],
     queryFn: ({ pageParam }) => {
+      if (!userID) throw new Error("User iD is required to retrieve films ");
       return getFilms({
         userID,
         range: calculateRange(pageParam, limit),

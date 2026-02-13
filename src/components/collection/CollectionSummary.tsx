@@ -2,7 +2,7 @@
 
 import Avatar from "@/components/Avatar";
 import CollectionToolbar from "@/components/collection/CollectionToolbar";
-import { PrivateIcon } from "@/components/icons";
+import { SolidLockClosedIcon } from "@/components/icons";
 import { useContextMenu } from "@/context/useContextMenu";
 import useClientRect from "@/hooks/useClientRect";
 import type { CollectionSummary } from "@/types/collection";
@@ -15,7 +15,7 @@ type Props = { summary: CollectionSummary; userID: string | null };
 function CollectionSummary({ summary, userID }: Props) {
   const {
     user: { user_id: collectionOwnerID, username, avatar, firstname },
-    collection: { name, is_private: isPrivate, description, film_count },
+    collection: { id, name, is_private: isPrivate, description, film_count },
   } = summary;
 
   const isCollectionOwner = userID === collectionOwnerID;
@@ -86,7 +86,7 @@ function CollectionSummary({ summary, userID }: Props) {
     <div className="">
       <section className="flex flex-col max-w-[450px] relative">
         <article className="flex flex-col gap-1">
-          <h1 className="font-semibold text-base max-w-lg text-neutral-800">
+          <h1 className="font-semibold text-base max-w-lg text-neutral-800 ">
             {name}
           </h1>
 
@@ -98,34 +98,15 @@ function CollectionSummary({ summary, userID }: Props) {
             {isPrivate && (
               <p className="flex gap-1 font-semibold">
                 Private
-                <span>
-                  <PrivateIcon className="size-4" />
-                </span>
+                <SolidLockClosedIcon className="size-4" />
               </p>
             )}
 
             {isPrivate && <span>&#xb7;</span>}
 
-            <p className="">
-              {film_count} {film_count === 1 ? "film" : "films"}
+            <p>
+              {film_count}&nbsp;{film_count === 1 ? "film" : "films"}
             </p>
-
-            {/* <span>&#xb7;</span>
-
-            <p className="font-semibold flex gap-1">
-              <span>{description?.length ? description?.length - 12 : 8}</span>
-              <span>
-                {description?.length === 1 ? "Follower" : "Followers"}
-              </span>
-            </p>
-
-            {!isCollectionOwner && (
-              <div className="flex gap-1">
-                <span>&#xb7;</span>
-
-                <button className="cursor-pointer">Follow</button>
-              </div>
-            )} */}
           </div>
 
           <div className="flex flex-wrap gap-3 mt-4">
@@ -150,6 +131,7 @@ function CollectionSummary({ summary, userID }: Props) {
               <CollectionToolbar
                 isCollectionPrivate={isPrivate}
                 isCollectionOwner={isCollectionOwner}
+                summary={summary}
                 // user={{ avatar, username, firstname }}
               />
             )}
