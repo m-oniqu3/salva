@@ -2,14 +2,12 @@
 
 import RecentCollection from "@/components/collection/RecentCollection";
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
-import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
+import { useRecentlySavedFilmContext } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { TMDBFilm } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
-import { useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
-import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -26,21 +24,18 @@ function FilmMeta(props: Props) {
     user,
   } = props;
 
-  const { savedFilms, setRecentlySavedFilm, removeRecentlySavedFilm } =
-    useRecentlySavedFilm();
-  const isFilmRecentlySaved =
-    !!savedFilms[id] && savedFilms[id].collectionAmt > 0;
-  const recentlySavedFilm = (isFilmRecentlySaved && savedFilms[id]) || null;
+  const {
+    collectionLastSavedTo,
+    savedFilms,
+    setRecentlySavedFilm,
+    removeRecentlySavedFilm,
+  } = useRecentlySavedFilmContext();
+
+  const isFilmRecentlySaved = !!savedFilms[id];
 
   const { openModal } = useModal();
   const router = useRouter();
   const pathname = usePathname();
-
-  const { data: recentCollection, isLoading: isLoadingRecentCollection } =
-    useQuery({
-      queryKey: ["collection", "recent", user?.userID],
-      queryFn: () => getMostRecentCollection(),
-    });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,18 +49,18 @@ function FilmMeta(props: Props) {
   async function handleSaveFilm() {
     if (!film) return;
 
-    if (recentCollection?.data) {
+    if (collectionLastSavedTo) {
       setIsLoading(true);
 
       setRecentlySavedFilm({
         filmID: film.id,
-        collection: recentCollection.data.name,
-        collectionAmt: 1,
+        collection: collectionLastSavedTo.name,
+        savedToCollectionCount: 1,
       });
 
       const { data, error } = await addFilmToCollection({
         film,
-        newIDs: [recentCollection.data.id],
+        newIDs: [collectionLastSavedTo.id],
         deletedIDs: [],
       });
 
@@ -104,11 +99,9 @@ function FilmMeta(props: Props) {
         >
           <div className="grid grid-cols-2 items-center sm:gap-2">
             <RecentCollection
-              isLoadingRecentCollection={isLoadingRecentCollection}
-              recentCollection={recentCollection?.data}
-              isFilmRecentlySaved={isFilmRecentlySaved}
-              recentlySavedFilm={recentlySavedFilm}
+              filmID={id}
               username={user?.username ?? null}
+              className="text-white"
             />
 
             <button
@@ -121,7 +114,7 @@ function FilmMeta(props: Props) {
 
           <button
             type="button"
-            disabled={isLoading || isLoadingRecentCollection}
+            disabled={isLoading || !collectionLastSavedTo}
             onClick={handleSaveFilm}
             className={`bg-white text-neutral-800 rounded-full size-10 sm:size-12 grid place-items-center cursor-pointer ml-auto ${isFilmRecentlySaved ? " opacity-70" : ""}`}
           >

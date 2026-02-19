@@ -1,16 +1,13 @@
 "use client";
 
+import RecentCollection from "@/components/collection/RecentCollection";
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
-import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
+import { useRecentlySavedFilmContext } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { Credits, MediaType, Movie, TMDBFilm, TVShow } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
-import { useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
-import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
-import { slugify } from "@utils/validation/slug";
-import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -69,35 +66,31 @@ function FilmOverview(props: Props) {
   const [isCrewTruncated, setIsCrewTruncated] = useState(true);
   const { openModal } = useModal();
 
-  // Get collection the user last added to
-  const { data: recentCollection, isLoading: isLoadingRecentCollection } =
-    useQuery({
-      queryKey: ["collection", "recent", user?.userID],
-      queryFn: () => getMostRecentCollection(),
-    });
-
   // Get recently saved films and check if the current film was recently saved
-  const { savedFilms, setRecentlySavedFilm, removeRecentlySavedFilm } =
-    useRecentlySavedFilm();
-  const isFilmRecentlySaved =
-    !!savedFilms[film.id] && savedFilms[film.id].collectionAmt > 0;
-  const recentlySavedFilm = savedFilms[film.id];
+  const {
+    collectionLastSavedTo,
+    savedFilms,
+    setRecentlySavedFilm,
+    removeRecentlySavedFilm,
+  } = useRecentlySavedFilmContext();
+
+  const isFilmRecentlySaved = !!savedFilms[film.id];
 
   async function handleSaveFilm() {
     if (!film) return;
 
-    if (recentCollection?.data) {
+    if (collectionLastSavedTo) {
       setIsLoading(true);
 
       setRecentlySavedFilm({
         filmID: film.id,
-        collection: recentCollection.data.name,
-        collectionAmt: 1,
+        collection: collectionLastSavedTo.name,
+        savedToCollectionCount: 1,
       });
 
       const { data, error } = await addFilmToCollection({
         film: filmMeta,
-        newIDs: [recentCollection.data.id],
+        newIDs: [collectionLastSavedTo.id],
         deletedIDs: [],
       });
 
@@ -146,28 +139,10 @@ function FilmOverview(props: Props) {
       <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
         <div className="wrapper grid grid-cols-[1fr_auto] gap-4 items-center ">
           <div className="grid grid-cols-2 items-center w-fit sm:gap-2">
-            {!isLoadingRecentCollection ? (
-              <p className="hidden sm:block text-neutral-800 font-medium overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
-                {isFilmRecentlySaved && user && (
-                  <Link
-                    href={`/${user.username}/${slugify(recentlySavedFilm.collection)}`}
-                    className="underline-offset-2 hover:underline"
-                  >
-                    {!recentlySavedFilm.collection
-                      ? "Saved"
-                      : `${recentlySavedFilm.collection}  ${recentlySavedFilm.collectionAmt > 1 ? `+ ${(recentlySavedFilm.collectionAmt - 1).toString().padStart(2, "0")} ` : ""}`}
-                  </Link>
-                )}
-
-                {!isFilmRecentlySaved && recentCollection?.data
-                  ? recentCollection.data.name
-                  : "..."}
-              </p>
-            ) : (
-              <p className="hidden sm:block font-semibold text-neutral-800 overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
-                ...
-              </p>
-            )}
+            <RecentCollection
+              filmID={film.id}
+              username={user?.username ?? null}
+            />
 
             {
               <button
@@ -182,7 +157,7 @@ function FilmOverview(props: Props) {
           <button
             className="bg-neutral-800 rounded-full size-10 sm:size-12 grid place-items-center cursor-pointer"
             type="button"
-            disabled={isLoading || isLoadingRecentCollection}
+            disabled={isLoading || !collectionLastSavedTo}
             onClick={handleSaveFilm}
           >
             {isFilmRecentlySaved ? (

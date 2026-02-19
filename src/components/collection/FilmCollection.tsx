@@ -3,14 +3,13 @@
 import Button from "@/components/Button";
 import CollectionMeta from "@/components/collection/CollectionMeta";
 import { CloseIcon, LoadingIcon, SearchIcon } from "@/components/icons";
-import { useRecentlySavedFilm } from "@/context/RecentlySavedFilmContext";
+import { useRecentlySavedFilmContext } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { useQuery } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
 import { getFilmCollections } from "@utils/api/collections/get-film-collections";
-import { getMostRecentCollection } from "@utils/api/collections/get-most-recent-collection";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -24,8 +23,11 @@ function FilmCollection() {
   const [isSavingFilm, setIsSavingFilm] = useState(false);
   const originalSavedIDs = useRef<number[]>([]);
 
-  const { setRecentlySavedFilm, removeRecentlySavedFilm } =
-    useRecentlySavedFilm();
+  const {
+    setCollectionLastSavedTo,
+    setRecentlySavedFilm,
+    removeRecentlySavedFilm,
+  } = useRecentlySavedFilmContext();
 
   const {
     state: { modal },
@@ -36,11 +38,6 @@ function FilmCollection() {
   const isFCM = modal?.type === ModalEnum.FCM;
   const film = isFCM ? modal.payload?.film : null;
   const userID = isFCM ? modal.payload?.userID : null;
-
-  const recentCollectionQuery = useQuery({
-    queryKey: ["collection", "recent", userID],
-    queryFn: () => getMostRecentCollection(),
-  });
 
   // Get all the user's collections.
   const collectionsMetaQuery = useQuery({
@@ -184,8 +181,12 @@ function FilmCollection() {
     setRecentlySavedFilm({
       filmID: film.id,
       collection: firstCollection.name,
-      collectionAmt: newIDs.size,
+      savedToCollectionCount: newIDs.size,
     });
+    const lastCollection = collections.find(
+      (col) => col.id === [...newIDs][newIDs.size - 1],
+    );
+    setCollectionLastSavedTo(lastCollection ?? firstCollection);
     closeModal();
 
     const filmCollectionData = {
@@ -199,7 +200,6 @@ function FilmCollection() {
       toast(`Updated your collections.`);
 
       collectionFilmsQuery.refetch();
-      recentCollectionQuery.refetch();
 
       // qc.refetchQueries({
       //   queryKey: ["collection", "recent", userID],
@@ -208,6 +208,8 @@ function FilmCollection() {
 
     if (error) {
       removeRecentlySavedFilm(film.id);
+
+      //todo: should i set the lastCollection saved to to null?
       toast("Failed to save film to your collection.");
     }
 
