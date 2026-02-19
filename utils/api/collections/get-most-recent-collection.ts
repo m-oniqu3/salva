@@ -13,6 +13,7 @@ type Response = Result<MostRecentCollection | null>;
  * @description Gets the collection meta for the collection the user last saved a film to.
  */
 export async function getMostRecentCollection(): Response {
+  console.log("recent");
   try {
     const supabase = await createClient();
     const auth = await supabase.auth.getUser();

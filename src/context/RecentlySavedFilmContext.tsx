@@ -1,22 +1,32 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 
 type SavedFilms = Record<
   number,
-  {
-    collection: string;
-    collectionAmt: number;
-  }
+  { collection: string; savedToCollectionCount: number }
 >;
 
 type Data = {
   filmID: number;
   collection: string;
-  collectionAmt: number;
+  savedToCollectionCount: number;
 };
 
 type RecentlySavedFilmContextType = {
+  collectionLastSavedTo: { id: number; name: string } | null;
+  setCollectionLastSavedTo: Dispatch<
+    SetStateAction<{
+      id: number;
+      name: string;
+    } | null>
+  >;
   savedFilms: SavedFilms;
   setRecentlySavedFilm: (data: Data) => void;
   removeRecentlySavedFilm: (id: number) => void;
@@ -31,13 +41,17 @@ export function RecentlySavedFilmProvider({
   children: React.ReactNode;
 }) {
   const [savedFilms, setSavedFilms] = useState<SavedFilms>({});
+  const [collectionLastSavedTo, setCollectionLastSavedTo] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   function addFilm(data: Data) {
-    const { filmID, collection, collectionAmt } = data;
+    const { filmID, collection, savedToCollectionCount } = data;
 
     setSavedFilms((prev) => ({
       ...prev,
-      [filmID]: { collection, collectionAmt },
+      [filmID]: { collection, savedToCollectionCount },
     }));
   }
 
@@ -53,6 +67,8 @@ export function RecentlySavedFilmProvider({
   return (
     <RecentlySavedFilmContext.Provider
       value={{
+        collectionLastSavedTo,
+        setCollectionLastSavedTo,
         savedFilms,
         setRecentlySavedFilm: addFilm,
         removeRecentlySavedFilm: removeFilm,
@@ -63,7 +79,7 @@ export function RecentlySavedFilmProvider({
   );
 }
 
-export function useRecentlySavedFilm() {
+export function useRecentlySavedFilmContext() {
   const context = useContext(RecentlySavedFilmContext);
   if (!context) throw new Error("Missing RecentlySavedFilmProvider");
 
