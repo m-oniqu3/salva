@@ -2,51 +2,61 @@ import { type CollectionMeta } from "@/types/collection";
 import Image from "next/image";
 
 type Props = {
-  collection: CollectionMeta;
+  collections: CollectionMeta[];
   selectCollection: (id: number) => void;
-  collectionIsSelected: boolean;
+  selectedIDs: Set<number>;
+  sectionHeading: string;
 };
 
-function CollectionMeta(props: Props) {
-  const {
-    collection: { id, cover_image, films_count, name },
-    selectCollection,
-    collectionIsSelected,
-  } = props;
-
-  const image = cover_image ? (
-    <figure>
-      <Image
-        src={cover_image}
-        alt={name}
-        width={40}
-        height={40}
-        className="size-10 object-cover bg-neutral-200 rounded-xl"
-      />
-    </figure>
-  ) : (
-    <div className="size-10 bg-neutral-200 rounded-xl" />
-  );
+function SelectCollection(props: Props) {
+  const { collections, selectCollection, selectedIDs, sectionHeading } = props;
 
   return (
-    <li
-      onClick={() => selectCollection(id)}
-      className="grid place-items-center grid-cols-[40px_auto_40px] p-2 gap-4 rounded-2xl transition-all duration-300 ease-in-out cursor-pointer hover:gray"
-    >
-      {image}
+    <div className="flex flex-col">
+      <p className="text-sml font-medium px-4">{sectionHeading}</p>
+      <ul className="flex flex-col h-full p-2 ">
+        {collections.map((collection) => {
+          const { id, cover_image, films_count, name } = collection;
+          const isCollectionSelected = selectedIDs.has(id);
 
-      <div className="w-full text-start">
-        <p className="text-sml line-clamp-1 text-neutral-800 font-medium">
-          {name}
-        </p>
-        <p className="text-sml text-zinc-500">{films_count} films</p>
-      </div>
+          const image = cover_image ? (
+            <figure>
+              <Image
+                src={cover_image}
+                alt={name}
+                width={40}
+                height={40}
+                className="size-10 object-cover bg-neutral-200 rounded-xl"
+              />
+            </figure>
+          ) : (
+            <div className="size-10 bg-neutral-200 rounded-xl" />
+          );
 
-      <div
-        className={`size-3 border border-neutral-800 rounded-full cursor-pointer ${collectionIsSelected ? "bg-neutral-800" : ""}`}
-      />
-    </li>
+          return (
+            <li
+              key={id}
+              onClick={() => selectCollection(id)}
+              className="grid place-items-center grid-cols-[40px_auto_40px] p-2 gap-4 rounded-2xl transition-all duration-300 ease-in-out cursor-pointer hover:gray"
+            >
+              {image}
+
+              <div className="w-full text-start">
+                <p className="text-sml line-clamp-1 text-neutral-800 font-medium">
+                  {name}
+                </p>
+                <p className="text-sml text-zinc-500">{films_count} films</p>
+              </div>
+
+              <div
+                className={`size-3 border border-neutral-800 rounded-full cursor-pointer ${isCollectionSelected ? "bg-neutral-800" : ""}`}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 
-export default CollectionMeta;
+export default SelectCollection;

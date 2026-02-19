@@ -54,12 +54,14 @@ export async function getCollectionsMeta(): Response {
       return { data: null, error: null };
     }
 
-    const collections_meta = collections.map((collection) => {
-      return {
-        ...collection,
-        films_count: collection.collection_films.length,
-      };
-    });
+    const collections_meta = collections.map(
+      ({ collection_films, ...collection }) => {
+        return {
+          ...collection,
+          films_count: collection_films.length,
+        };
+      },
+    );
 
     return { data: collections_meta, error: null };
   } catch (error) {

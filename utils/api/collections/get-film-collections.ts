@@ -6,6 +6,7 @@ import { createClient } from "@utils/supabase/server";
 
 type Response = Result<CollectionMeta[] | null>;
 
+// Get the collections a film is saved to
 export async function getFilmCollections(filmID: number): Response {
   try {
     const supabase = await createClient();
