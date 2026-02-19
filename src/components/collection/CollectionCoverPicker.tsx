@@ -7,12 +7,9 @@ import { useModal } from "@/context/useModal";
 import useGetFilms from "@/hooks/useGetFilms";
 import { ModalEnum } from "@/types/modal";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function CollectionCoverPicker() {
-  const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
-  const triggerFileInput = () => hiddenFileInputRef.current?.click();
-
   const {
     openModal,
     closeModal,
@@ -37,6 +34,22 @@ function CollectionCoverPicker() {
     collectionID: collectionSummary?.collection.id,
   });
 
+  const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
+  const triggerFileInput = () => hiddenFileInputRef.current?.click();
+  const [selectedCover, setSelectedCover] = useState();
+
+  function handleImage() {}
+
+  // close IPM & open ECM
+  function handleBack() {
+    if (!collectionSummary) return;
+
+    openModal({
+      type: ModalEnum.ECM,
+      payload: { collectionSummary: collectionSummary },
+    });
+  }
+
   const rendered_images =
     data?.map((film) => {
       return (
@@ -51,18 +64,6 @@ function CollectionCoverPicker() {
         </figure>
       );
     }) ?? null;
-
-  //todo : get the collection images from the db for the given collection
-
-  // close IPM & open ECM
-  function handleBack() {
-    if (!collectionSummary) return;
-
-    openModal({
-      type: ModalEnum.ECM,
-      payload: { collectionSummary: collectionSummary },
-    });
-  }
 
   return (
     <div className="panel p-0 max-w-sm relative" onClick={stopPropagation}>
