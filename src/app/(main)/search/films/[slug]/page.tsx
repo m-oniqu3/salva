@@ -29,11 +29,15 @@ async function page({ params }: Props) {
 
   const [films, profile] = await Promise.all([
     searchFilms(slug),
-    getProfile({ username: null, id: auth.data.user?.id }),
+    auth.data.user && getProfile({ key: "user_id", value: auth.data.user?.id }),
 
-    queryClient.prefetchQuery({
-      queryKey: ["collection", "meta", auth.data.user?.id ?? ""],
-      queryFn: () => getCollectionsMeta(),
+    await queryClient.prefetchQuery({
+      queryKey: ["collection", "meta"],
+      queryFn: async () => {
+        const { data, error } = await getCollectionsMeta();
+        if (error) throw error;
+        return data;
+      },
     }),
   ]);
 
@@ -42,7 +46,7 @@ async function page({ params }: Props) {
     return <p>no films</p>;
   }
 
-  const user: UserMeta = profile.data
+  const user: UserMeta = profile?.data
     ? { userID: profile.data.user_id, username: profile.data.username }
     : null;
 

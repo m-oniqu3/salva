@@ -1,5 +1,5 @@
 import { type CollectionPreview } from "@/types/collection";
-import { getCollectionCoverUrl } from "@utils/api/collections/get-collection-cover-url";
+import { getCollectionCoverUrl } from "@utils/get-cover-url";
 import Image from "next/image";
 import Link from "next/link";
 

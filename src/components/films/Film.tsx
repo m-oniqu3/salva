@@ -1,6 +1,7 @@
 import FilmMeta from "@/components/films/FilmMeta";
 import { TMDBFilm } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
+import { getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
 
 type Props = {
@@ -16,13 +17,14 @@ function Film(props: Props) {
   } = props;
 
   const isAuth = !!user?.userID;
+  const url = getTMDBImageURL(poster_path);
 
   return (
     <div className="w-full">
       <figure className="group relative size-full">
         <Image
           key={id}
-          src={poster_path}
+          src={url}
           alt={title}
           width={90}
           height={90}

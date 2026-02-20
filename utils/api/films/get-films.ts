@@ -2,6 +2,7 @@
 
 import { Result } from "@/types/result";
 import { SavedTMDBFilm } from "@/types/tmdb";
+import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 
 type Response = Result<SavedTMDBFilm[] | null>;
@@ -77,11 +78,6 @@ export async function getFilms(props: Props): Response {
 
     return { data: orderedFilms, error: null };
   } catch (error) {
-    console.log("Error in " + getFilms.name, error);
-
-    const err =
-      error instanceof Error ? error.message : "Could not fetch film.";
-
-    return { data: null, error: err };
+    return formErrorMesage(error);
   }
 }
