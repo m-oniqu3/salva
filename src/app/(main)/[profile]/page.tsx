@@ -27,7 +27,7 @@ async function page({ params }: Props) {
   const queryClient = new QueryClient();
 
   const [profileDetails, userDetails] = await Promise.all([
-    getProfile({ username }),
+    getProfile({ key: "username", value: username }),
     supabase.auth.getUser(),
   ]);
 
