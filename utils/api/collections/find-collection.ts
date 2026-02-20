@@ -28,7 +28,7 @@ export async function findCollection(username: string, slug: string): Response {
     const { data, error } = await supabase
       .from("collections")
       .select(
-        `id, name, is_private, cover_image, slug, description,
+        `id, name, is_private, cover_image, cover_type, slug, description,
          user:profiles(id, avatar, username, user_id, firstname, lastname),
          films:collection_films(id)
         `,

@@ -7,6 +7,7 @@ import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { TMDBFilm } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
+import { useQueryClient } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -46,10 +47,11 @@ function FilmMeta(props: Props) {
     });
   }
 
+  const queryClient = useQueryClient();
   async function handleSaveFilm() {
-    if (!film) return;
+    try {
+      if (!film || !collectionLastSavedTo) return;
 
-    if (collectionLastSavedTo) {
       setIsLoading(true);
 
       setRecentlySavedFilm({
@@ -58,21 +60,24 @@ function FilmMeta(props: Props) {
         savedToCollectionCount: 1,
       });
 
-      const { data, error } = await addFilmToCollection({
+      const { error } = await addFilmToCollection({
         film,
         newIDs: [collectionLastSavedTo.id],
         deletedIDs: [],
       });
 
-      if (data) {
-        toast(`Saved film to your collection.`);
-      }
+      if (error) throw error;
 
-      if (error) {
-        removeRecentlySavedFilm(film.id);
-        toast("Failed to save film to your collection");
-      }
-
+      toast(`Saved film to your collection.`);
+      await queryClient.invalidateQueries({
+        queryKey: ["films"],
+        refetchType: "all",
+      });
+    } catch (error) {
+      console.log(error);
+      removeRecentlySavedFilm(film.id);
+      toast("Failed to save film to your collection");
+    } finally {
       setIsLoading(false);
     }
   }

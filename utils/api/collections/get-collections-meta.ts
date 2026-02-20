@@ -41,6 +41,7 @@ export async function getCollectionsMeta(): Response {
           name, 
           is_private, 
           cover_image,
+          cover_type,
           collection_films(id)
         `,
       )

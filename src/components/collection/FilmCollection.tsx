@@ -10,6 +10,7 @@ import useCollectionSelection from "@/hooks/useCollectionSelection";
 import useFilmCollections from "@/hooks/useFilmCollections";
 import useFilteredCollections from "@/hooks/useFilteredCollections";
 import { ModalEnum } from "@/types/modal";
+import { useQueryClient } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { ChangeEvent, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -59,7 +60,7 @@ function FilmCollection() {
   function clearSearch() {
     setSearch("");
   }
-
+  const queryClient = useQueryClient();
   //save the film to collections
   async function handleSubmit() {
     if (!film) return;
@@ -97,6 +98,10 @@ function FilmCollection() {
 
       toast("Updated your collections.");
       await collectionFilmsQuery.refetch();
+      await queryClient.invalidateQueries({
+        queryKey: ["films"],
+        refetchType: "all",
+      });
     } catch (error) {
       console.log(error);
       removeRecentlySavedFilm(film.id);
@@ -146,16 +151,16 @@ function FilmCollection() {
                     sectionHeading="Saved in"
                   />
                 )}
-
-                {available.length > 0 && (
-                  <SelectCollection
-                    collections={available}
-                    selectCollection={toggle}
-                    selectedIDs={selectedIDs}
-                    sectionHeading="Your collections"
-                  />
-                )}
               </div>
+            )}
+
+            {available.length > 0 && (
+              <SelectCollection
+                collections={available}
+                selectCollection={toggle}
+                selectedIDs={selectedIDs}
+                sectionHeading="Your collections"
+              />
             )}
           </div>
           <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">

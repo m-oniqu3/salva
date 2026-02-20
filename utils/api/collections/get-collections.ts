@@ -36,7 +36,7 @@ export async function getCollections(props: Props): GetCollectionsResponse {
     const { data, error } = await supabase
       .from("collections")
       .select(
-        `id, name, is_private, cover_image, slug,
+        `id, name, is_private, cover_image, slug,cover_type,
          films:collection_films(id)
         `,
       )

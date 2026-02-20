@@ -3,15 +3,13 @@
 import Button from "@/components/Button";
 import { AddIcon, CloseIcon, LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
-import useFindCollection from "@/hooks/useFindCollection";
 import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EditedCollection,
   EditedCollectionSchema,
 } from "@utils/validation/edit-collection";
-import { usePathname } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 function EditCollection() {
@@ -24,45 +22,29 @@ function EditCollection() {
 
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
 
-  const pathname = usePathname();
-  const [username, slug] = pathname.split("/").slice(1) as Array<string>;
-
   // const triggerFileInput = () => hiddenFileInputRef.current?.click();
 
   // Is EditCollection Modal ?
   const isECM = modal?.type === ModalEnum.ECM;
-  const collectionSummary = isECM ? modal.payload?.collectionSummary : null;
+  const collectionDetails = isECM ? modal.payload?.collectionDetails : null;
 
-  const { data } = useFindCollection(username, slug);
+  // const { data } = useFindCollection(username, slug);
 
   const form = useForm<EditedCollection>({
     resolver: zodResolver(EditedCollectionSchema),
     defaultValues: {
-      name: collectionSummary?.collection.name ?? "",
-      description: collectionSummary?.collection.description ?? "",
+      name: collectionDetails?.name ?? "",
+      description: collectionDetails?.description ?? "",
     },
   });
 
-  //When we get data we update the form
-
-  useEffect(() => {
-    if (data?.data) {
-      const collection = data.data;
-
-      form.reset({
-        name: collection.collection.name,
-        description: collection.collection.description,
-      });
-    }
-  }, [data, form]);
-
   function openImagePickerModal() {
-    if (!collectionSummary) return;
+    if (!collectionDetails) return;
 
     openModal({
       type: ModalEnum.IPM,
       payload: {
-        collectionSummary: collectionSummary,
+        collectionDetails: collectionDetails,
       },
     });
   }
@@ -79,11 +61,11 @@ function EditCollection() {
 
   return (
     <form
-      className="panel flex flex-col gap-4 max-w-sm mx-auto"
+      className="panel flex flex-col gap-4 w-80 h-115 mx-auto"
       onClick={stopPropagation}
     >
       <header className="relative">
-        <h1 className="text-lg font-semibold text-neutral-800">
+        <h1 className="text-base font-bold text-neutral-800">
           Edit Collection
         </h1>
         <p className="text-sml">Adjust the details of your collection.</p>
@@ -109,7 +91,7 @@ function EditCollection() {
           <button
             type="button"
             onClick={openImagePickerModal}
-            className="flex justify-center items-center size-24 rounded-lg gray z-0 cursor-pointer"
+            className="flex justify-center items-center size-20 rounded-lg gray z-0 cursor-pointer"
           >
             <AddIcon className="size-5 text-neutral-400" />
           </button>
@@ -140,7 +122,7 @@ function EditCollection() {
 
           <textarea
             {...form.register("description")}
-            className="input h-20 resize-none gray no-scrollbar"
+            className="input h-16 resize-none gray no-scrollbar"
             placeholder="movies i throw on when my brain is tired"
           ></textarea>
 
@@ -152,7 +134,7 @@ function EditCollection() {
         <Button
           disabled={isEditingCollection}
           type="submit"
-          className="bg-neutral-800 text-white rounded-lg h-9 mt-auto"
+          className="bg-neutral-800 text-white rounded-lg h-9"
         >
           {isEditingCollection ? (
             <div className="flex items-center justify-center gap-2">

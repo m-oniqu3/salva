@@ -1,4 +1,5 @@
 import { type CollectionPreview } from "@/types/collection";
+import { getCollectionCoverUrl } from "@utils/api/collections/get-collection-cover-url";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,11 +12,19 @@ type Props = {
 function CollectionPreview(props: Props) {
   const { preview, username } = props;
 
-  const { is_private, name, cover_image, slug, film_count } = preview;
+  const { is_private, name, cover_image, cover_type, slug, film_count } =
+    preview;
 
-  const cover = cover_image ? (
+  const imageUrl =
+    cover_type && cover_image && cover_type === "uploaded"
+      ? getCollectionCoverUrl(cover_image)
+      : cover_image;
+
+  const url = cover_image ? imageUrl : null;
+
+  const cover = url ? (
     <Image
-      src={cover_image as string}
+      src={url}
       alt={`cover image for collection:${name}`}
       width={100}
       height={50}

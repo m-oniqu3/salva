@@ -25,7 +25,7 @@ function RecentCollection(props: Props) {
       if (error) throw error;
       return data;
     },
-    // enabled: collectionLastSavedTo === null,
+    enabled: collectionLastSavedTo === null,
   });
 
   useEffect(() => {

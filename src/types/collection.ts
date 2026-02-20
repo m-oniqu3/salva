@@ -4,6 +4,7 @@ export type Collection = {
   name: string;
   description: string;
   cover_image: string | null;
+  cover_type: CollectionCover | null;
   is_private: boolean;
   created_at: string; // ISO date string
 };
@@ -13,6 +14,7 @@ export type CollectionPreview = {
   name: string;
   is_private: boolean;
   cover_image: string | null;
+  cover_type: CollectionCover | null;
   slug: string;
   film_count: number;
 };
@@ -32,6 +34,7 @@ export type CollectionSummary = {
     name: string;
     is_private: boolean;
     cover_image: string | null;
+    cover_type: CollectionCover | null;
     slug: string | null;
     description: string;
     film_count: number;
@@ -48,5 +51,17 @@ export type CollectionMeta = {
   name: string;
   is_private: boolean;
   cover_image: string | null;
+  cover_type: CollectionCover | null;
   films_count: number;
 };
+
+export type EditCollectionDetals = {
+  id: number;
+  name: string;
+  description: string | null;
+  cover_image: string | null;
+  cover_type: CollectionCover | null;
+  collection_owner_id: string;
+};
+
+export type CollectionCover = "uploaded" | "external";

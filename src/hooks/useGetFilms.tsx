@@ -15,19 +15,23 @@ function useGetFilms(props: Props) {
 
   const query = useInfiniteQuery({
     queryKey: ["films", collectionID ?? "", userID],
-    queryFn: ({ pageParam }) => {
-      if (!userID) throw new Error("User iD is required to retrieve films ");
-      return getFilms({
+    queryFn: async ({ pageParam }) => {
+      if (!userID) throw new Error("Not authenticated");
+
+      const { data, error } = await getFilms({
         userID,
         range: calculateRange(pageParam, limit),
         collectionID,
       });
+
+      if (error) throw error;
+      return data;
     },
 
     initialPageParam: 0,
 
     getNextPageParam: (lastPage, allPages) => {
-      if (!lastPage?.data?.length) return undefined;
+      if (!lastPage?.length) return undefined;
       return allPages.length;
     },
 
@@ -36,15 +40,14 @@ function useGetFilms(props: Props) {
 
   const films = query.data?.pages
     ? query.data.pages.flatMap((cur) => {
-        if (!cur?.data) return [];
-        return cur.data;
+        if (!cur) return [];
+        return cur;
       })
     : null;
 
   return {
     ...query,
     data: films,
-    error: query.data?.pages?.[0]?.error,
   };
 }
 

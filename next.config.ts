@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       },
       new URL("https://image.tmdb.org/t/p/**"),
       new URL("http://image.tmdb.org/t/p/**"),
+      new URL("https://jtbcimmdmzqsetzqofrd.supabase.co/storage/**"),
     ],
     qualities: [25, 50, 75],
   },

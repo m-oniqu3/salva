@@ -16,6 +16,7 @@ import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type Props = {
   profile: Profile | null;
@@ -28,6 +29,9 @@ function AuthNavbar({ profile }: Props) {
   const { openContextMenu } = useContextMenu();
   const { ref: profileUserMenuRef, rect } = useClientRect<HTMLButtonElement>();
 
+  const pathname = usePathname();
+
+  console.log(pathname);
   function handleProfileContextMenu() {
     if (!rect) return;
     console.log(rect);

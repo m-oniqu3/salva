@@ -1,4 +1,4 @@
-import { CollectionSummary } from "@/types/collection";
+import { EditCollectionDetals } from "@/types/collection";
 import { TMDBFilm } from "@/types/tmdb";
 
 export enum ModalEnum {
@@ -21,16 +21,12 @@ type CreateCollectionModal = ModalState<ModalEnum.CCM>;
 
 type EditCollectionModal = ModalState<
   ModalEnum.ECM,
-  {
-    collectionSummary: CollectionSummary;
-  }
+  { collectionDetails: EditCollectionDetals }
 >;
 
 type ImagePickerModal = ModalState<
   ModalEnum.IPM,
-  {
-    collectionSummary: CollectionSummary;
-  }
+  { collectionDetails: EditCollectionDetals }
 >;
 
 type AuthModal = ModalState<ModalEnum.A>;

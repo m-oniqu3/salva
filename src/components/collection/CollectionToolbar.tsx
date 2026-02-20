@@ -45,10 +45,21 @@ function CollectionToolbar(props: Props) {
   }
 
   function handleEditModal() {
+    const { id, name, description, cover_image, cover_type } =
+      summary.collection;
+    const { user_id } = summary.user;
+
     openModal({
       type: ModalEnum.ECM,
       payload: {
-        collectionSummary: summary,
+        collectionDetails: {
+          id,
+          name,
+          description,
+          cover_image,
+          cover_type,
+          collection_owner_id: user_id,
+        },
       },
     });
   }
