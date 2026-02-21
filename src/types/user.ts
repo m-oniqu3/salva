@@ -44,7 +44,4 @@ export type Follower = {
   isFollowedByViewer: boolean;
 };
 
-export type UserMeta = {
-  userID: string;
-  username: string;
-} | null;
+export type UserMeta = { userID: string; username: string } | null;

@@ -23,7 +23,7 @@ export default function ErrorState(props: Props) {
   } = props;
 
   return (
-    <section className="grid place-items-center error-state-wrapper">
+    <section className={`grid place-items-center ${className}`}>
       <article
         className={`size-full flex flex-col justify-center items-center text-center max-w-xs ${className}`}
       >

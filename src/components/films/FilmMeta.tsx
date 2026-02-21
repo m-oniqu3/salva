@@ -43,7 +43,7 @@ function FilmMeta(props: Props) {
   function handleFilmCollectionModal() {
     openModal({
       type: ModalEnum.FCM,
-      payload: { film, userID: user?.userID ?? null },
+      payload: { film, user },
     });
   }
 
@@ -72,6 +72,10 @@ function FilmMeta(props: Props) {
       await queryClient.invalidateQueries({
         queryKey: ["films"],
         refetchType: "all",
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["collections", user?.username ?? ""],
       });
     } catch (error) {
       console.log(error);

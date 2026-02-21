@@ -44,7 +44,7 @@ function FilmDetails(props: Props) {
 
   return (
     <div className="h-full bg-white">
-      <div className="grid h-full lg:grid-cols-[1fr_auto]">
+      <div className="grid h-full lg:grid-cols-[1fr_1fr]">
         <div className="h-full wrapper flex flex-col items-center ">
           <div
             className={`absolute h-full inset-0  blur-2xl transition-colors duration-100 ease-in-out  ${isIntersecting ? "bg-white" : "bg-[linear-gradient(to_left,white_0%,white_70%,transparent_100%)]"}`}

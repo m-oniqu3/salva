@@ -1,5 +1,6 @@
 import { EditCollectionDetals } from "@/types/collection";
 import { TMDBFilm } from "@/types/tmdb";
+import { UserMeta } from "@/types/user";
 
 export enum ModalEnum {
   CCM = "CREATE_COLLECTION_MODAL",
@@ -47,7 +48,7 @@ type FilmCollectionModal = ModalState<
   ModalEnum.FCM,
   {
     film: TMDBFilm;
-    userID: string | null;
+    user: UserMeta;
   }
 >;
 

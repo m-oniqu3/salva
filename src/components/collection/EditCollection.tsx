@@ -1,16 +1,27 @@
 "use client ";
 
 import Button from "@/components/Button";
-import { AddIcon, CloseIcon, LoadingIcon } from "@/components/icons";
+import {
+  AddIcon,
+  CameraIcon,
+  CloseIcon,
+  LoadingIcon,
+} from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { editCollection } from "@utils/api/collections/edit-collection";
+import { getCollectionCoverUrl } from "@utils/get-cover-url";
 import {
   EditedCollection,
   EditedCollectionSchema,
 } from "@utils/validation/edit-collection";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 function EditCollection() {
   const {
@@ -21,14 +32,20 @@ function EditCollection() {
   } = useModal();
 
   const [isEditingCollection, startEditCollectionTransition] = useTransition();
-
-  // const triggerFileInput = () => hiddenFileInputRef.current?.click();
+  const router = useRouter();
 
   // Is EditCollection Modal ?
   const isECM = modal?.type === ModalEnum.ECM;
   const collectionDetails = isECM ? modal.payload?.collectionDetails : null;
 
-  // const { data } = useFindCollection(username, slug);
+  const imageUrl =
+    collectionDetails?.cover_type &&
+    collectionDetails.cover_image &&
+    collectionDetails?.cover_type === "uploaded"
+      ? getCollectionCoverUrl(collectionDetails.cover_image)
+      : collectionDetails?.cover_image;
+
+  const url = collectionDetails?.cover_image ? imageUrl : null;
 
   const form = useForm<EditedCollection>({
     resolver: zodResolver(EditedCollectionSchema),
@@ -38,31 +55,74 @@ function EditCollection() {
     },
   });
 
+  const { errors } = form.formState;
+  const isError = !!errors.name || !!errors.description || !!errors.root;
+
   function openImagePickerModal() {
     if (!collectionDetails) return;
 
     openModal({
       type: ModalEnum.IPM,
-      payload: {
-        collectionDetails: collectionDetails,
-      },
+      payload: { collectionDetails: collectionDetails },
     });
   }
 
+  const queryClient = useQueryClient();
   function onSubmitForm(input: EditedCollection) {
     startEditCollectionTransition(async () => {
-      const formData = new FormData();
-      formData.append("name", input.name);
-      formData.append("description", input.description || "");
+      try {
+        if (!collectionDetails) return;
 
-      console.log(formData);
+        const nameChanged = input.name?.trim() !== collectionDetails.name;
+
+        const descriptionChanged =
+          (input.description ?? "").trim() !==
+          (collectionDetails.description ?? "");
+
+        if (!nameChanged && !descriptionChanged) {
+          form.setError("root", {
+            message: "No changes were made.",
+          });
+          return;
+        }
+
+        const { data, error } = await editCollection({
+          collection: {
+            id: collectionDetails.id,
+            ...(nameChanged && { name: input.name }),
+            ...(descriptionChanged && {
+              description: input.description ?? "",
+            }),
+          },
+        });
+
+        if (error) throw error;
+
+        if (!data) throw new Error("Something went wrong.");
+
+        const { slug, username } = data;
+        router.replace("/" + username + "/" + slug);
+
+        queryClient.invalidateQueries({
+          queryKey: ["collections", username],
+        });
+
+        toast("Collection Updated ");
+        closeModal();
+      } catch (error) {
+        console.log(error);
+        form.setError("root", {
+          message: "Could not update your collection.",
+        });
+      }
     });
   }
 
   return (
     <form
-      className="panel flex flex-col gap-4 w-80 h-115 mx-auto"
+      className="panel flex flex-col gap-4 w-80 h-fit mx-auto"
       onClick={stopPropagation}
+      onSubmit={form.handleSubmit(onSubmitForm)}
     >
       <header className="relative">
         <h1 className="text-base font-bold text-neutral-800">
@@ -76,33 +136,51 @@ function EditCollection() {
         >
           <CloseIcon className="size-4" />
         </button>
+
+        {errors.root && (
+          <p className="py-1 input-error">{errors.root.message}</p>
+        )}
       </header>
 
-      <div
-        className="relative flex flex-col gap-2  h-full"
-        onSubmit={form.handleSubmit(onSubmitForm)}
-      >
+      <div className="relative flex flex-col gap-3  h-full">
         {/* cover */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 pb-2">
           <label htmlFor="name" className="text-sml text-neutral-800">
-            Collection Cover
+            Cover
           </label>
 
-          <button
-            type="button"
-            onClick={openImagePickerModal}
-            className="flex justify-center items-center size-20 rounded-lg gray z-0 cursor-pointer"
-          >
-            <AddIcon className="size-5 text-neutral-400" />
-          </button>
+          {collectionDetails?.cover_image && url ? (
+            <figure className="relative size-20">
+              <div
+                className="absolute absolute-center bg-white text-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer z-10"
+                onClick={openImagePickerModal}
+              >
+                <CameraIcon className="size-5" />
+              </div>
 
-          <p className="input-error"></p>
+              <Image
+                src={url}
+                alt={collectionDetails.name}
+                width={90}
+                height={90}
+                className="object-cover size-full rounded-lg"
+              />
+            </figure>
+          ) : (
+            <button
+              type="button"
+              onClick={openImagePickerModal}
+              className="flex justify-center items-center size-20 rounded-lg gray z-0 cursor-pointer"
+            >
+              <AddIcon className="size-5 text-neutral-400" />
+            </button>
+          )}
         </div>
 
         {/* name */}
         <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-sml text-neutral-800">
-            Collection Name
+            Name
           </label>
 
           <input
@@ -111,7 +189,7 @@ function EditCollection() {
             className="input h-9 gray"
           />
 
-          <p className="input-error"></p>
+          {errors.name && <p className="input-error">{errors.name.message}</p>}
         </div>
 
         {/* description */}
@@ -126,13 +204,13 @@ function EditCollection() {
             placeholder="movies i throw on when my brain is tired"
           ></textarea>
 
-          <p className="input-error">
-            {form.formState.errors.description?.message}
-          </p>
+          {errors.description && (
+            <p className="input-error">{errors.description.message}</p>
+          )}
         </div>
 
         <Button
-          disabled={isEditingCollection}
+          disabled={isEditingCollection || isError}
           type="submit"
           className="bg-neutral-800 text-white rounded-lg h-9"
         >

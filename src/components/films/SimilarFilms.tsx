@@ -10,8 +10,8 @@ type Props = {
 function SimilarFilms(props: Props) {
   const { films, user } = props;
 
-  const rendered_films = films.map((film) => {
-    return <Film key={film.id} film={film} user={user} />;
+  const rendered_films = films.map((film, i) => {
+    return <Film key={film.id + i} film={film} user={user} />;
   });
 
   return (

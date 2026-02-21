@@ -1,6 +1,6 @@
 "use server";
 
-import { CollectionSummary } from "@/types/collection";
+import { CollectionCover, CollectionSummary } from "@/types/collection";
 import { Result } from "@/types/result";
 import { createClient } from "@utils/supabase/server";
 
@@ -45,7 +45,11 @@ export async function findCollection(username: string, slug: string): Response {
 
     const summary: CollectionSummary = {
       user: data.user,
-      collection: { ...data, film_count: data.films.length },
+      collection: {
+        ...data,
+        film_count: data.films.length,
+        cover_type: data.cover_type as CollectionCover | null,
+      },
     };
 
     return { data: summary, error: null };

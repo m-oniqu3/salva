@@ -33,6 +33,7 @@ function FilmCollection() {
 
   const isFCM = modal?.type === ModalEnum.FCM;
   const film = isFCM ? modal.payload?.film : null;
+  const user = isFCM ? modal.payload?.user : null;
 
   // Get all the user's collections.
   const { collectionFilmsQuery, collectionsMetaQuery } = useFilmCollections({
@@ -98,9 +99,13 @@ function FilmCollection() {
 
       toast("Updated your collections.");
       await collectionFilmsQuery.refetch();
-      await queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["films"],
         refetchType: "all",
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["collections", user?.username ?? ""],
       });
     } catch (error) {
       console.log(error);
