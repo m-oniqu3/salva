@@ -6,6 +6,7 @@ import { useModal } from "@/context/useModal";
 import { createCollection } from "@/server-actions/create-collection";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { QueryClient } from "@tanstack/react-query";
 import {
   NewCollection,
   NewCollectionSchema,
@@ -13,6 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 //const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -32,6 +34,8 @@ function CreateCollection() {
     },
   });
 
+  const queryClient = new QueryClient();
+
   function onSubmitForm(input: NewCollection) {
     startCreateCollectionTransition(async () => {
       const formData = new FormData();
@@ -44,14 +48,18 @@ function CreateCollection() {
 
         if (error) throw error;
 
-        if (data) {
-          const { username, slug } = data;
-          router.push("/" + username + "/" + slug);
-        }
+        if (!data) throw new Error("Something went wrong");
+
+        const { username, slug } = data;
+        router.push("/" + username + "/" + slug);
+        queryClient.invalidateQueries({
+          queryKey: ["collections", username],
+        });
 
         closeModal();
       } catch (error) {
         console.log(error);
+        toast("Soemthing went wrong");
       }
     });
   }

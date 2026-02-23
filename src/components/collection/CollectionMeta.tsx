@@ -1,5 +1,5 @@
 import { type CollectionMeta } from "@/types/collection";
-import { getCollectionCoverUrl } from "@utils/get-cover-url";
+import { getCollectionCoverUrl, getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
 
 type Props = {
@@ -20,12 +20,12 @@ function SelectCollection(props: Props) {
           const { id, cover_image, cover_type, films_count, name } = collection;
           const isCollectionSelected = selectedIDs.has(id);
 
-          const imageUrl =
-            cover_type && cover_image && cover_type === "uploaded"
+          const url =
+            cover_image && cover_type === "uploaded"
               ? getCollectionCoverUrl(cover_image)
-              : cover_image;
-
-          const url = cover_image ? imageUrl : null;
+              : cover_image
+                ? getTMDBImageURL(cover_image)
+                : null;
 
           const image = url ? (
             <figure>

@@ -1,5 +1,5 @@
 import { type CollectionPreview } from "@/types/collection";
-import { getCollectionCoverUrl } from "@utils/get-cover-url";
+import { getCollectionCoverUrl, getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,12 +15,12 @@ function CollectionPreview(props: Props) {
   const { is_private, name, cover_image, cover_type, slug, film_count } =
     preview;
 
-  const imageUrl =
-    cover_type && cover_image && cover_type === "uploaded"
+  const url =
+    cover_image && cover_type === "uploaded"
       ? getCollectionCoverUrl(cover_image)
-      : cover_image;
-
-  const url = cover_image ? imageUrl : null;
+      : cover_image
+        ? getTMDBImageURL(cover_image)
+        : null;
 
   const cover = url ? (
     <Image
@@ -37,7 +37,7 @@ function CollectionPreview(props: Props) {
 
   return (
     <Link href={`/${username}/${slug}`} className="flex flex-col gap-4 ">
-      <figure className="relative w-full aspect-[3/4] overflow-hidden">
+      <figure className="relative w-full aspect-[5/7] overflow-hidden">
         {cover}
       </figure>
 

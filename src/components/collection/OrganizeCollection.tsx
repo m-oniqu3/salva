@@ -10,8 +10,10 @@ import {
   LoadingIcon,
 } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
+import { useModal } from "@/context/useModal";
 import useGetFilms from "@/hooks/useGetFilms";
 import { CollectionSummary } from "@/types/collection";
+import { ModalEnum } from "@/types/modal";
 import { getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
 import { useState } from "react";
@@ -22,6 +24,8 @@ type Props = {
 
 function OrganizeCollection(props: Props) {
   const { collection } = props;
+
+  const { openModal } = useModal();
 
   const {
     isLoading,
@@ -92,11 +96,22 @@ function OrganizeCollection(props: Props) {
     setSelectedIDs(new Set(filmIDs));
   }
 
+  function deselectAllFilms() {
+    setSelectedIDs(new Set());
+  }
+
   function deleteFilms() {}
 
   function moveFilms() {}
 
-  function copyFilms() {}
+  function copyFilms() {
+    if (!selectedIDs) return;
+
+    openModal({
+      type: ModalEnum.MCF,
+      payload: { selectedFilmIDs: selectedIDs },
+    });
+  }
 
   const collection_actions = [
     { icon: CopyIcon, name: "copy", handler: copyFilms },
@@ -119,7 +134,7 @@ function OrganizeCollection(props: Props) {
         )}
       </header>
 
-      <div className="flex items-center justify-between bg-white sticky top-28 left-0 w-full z-10">
+      <div className="flex flex-wrap items-center justify-between bg-white sticky top-28 left-0 w-full z-10">
         <div className="flex items-center  gap-3 py-4 ">
           {collection_actions.map((action) => {
             const Icon = action.icon;
@@ -128,6 +143,7 @@ function OrganizeCollection(props: Props) {
               <button
                 disabled={!selectedIDs.size}
                 key={action.name}
+                onClick={action.handler}
                 className="rounded-full size-9.5 flex justify-center items-center gray cursor-pointer transition-colors duration-200 ease-in-out hover:bg-gray-200 disabled:opacity-70"
               >
                 <Icon className="size-4 text-neutral-800/60" />
@@ -147,8 +163,9 @@ function OrganizeCollection(props: Props) {
             </Button>
           )}
 
-          {selectedIDs && (
+          {selectedIDs.size > 0 && (
             <Button
+              onClick={deselectAllFilms}
               disabled={!data.length}
               className="gray text-neutral-800  disabled:opacity-70"
             >
@@ -195,20 +212,6 @@ function OrganizeCollection(props: Props) {
           </div>
         </InfiniteScroll>
       </section>
-
-      <footer className="fixed bottom-10 wrapper w-fit p-4 mx-auto flex items-center justify-center gap-4 bg-neutral-3s00/70 backdrop-blur-lg rounded-full h-16 z-10  left-1/2 -translate-x-1/2 ">
-        {collection_actions.map((action) => {
-          const Icon = action.icon;
-          return (
-            <button
-              key={action.name}
-              className="gray text-neutral-800 rounded-full size-10 grid place-items-center backdrop-blur-lg"
-            >
-              {<Icon className="size-5" />}
-            </button>
-          );
-        })}
-      </footer>
     </div>
   );
 }

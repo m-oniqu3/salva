@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-function useCollectionSelection(originalIDs: number[]) {
+function useCollectionSelection(originalIDs?: number[]) {
   // Single source of truth: current selected IDs
   const [selectedIDs, setSelectedIDs] = useState<Set<number>>(new Set());
   const originalSet = useRef<Set<number>>(new Set());

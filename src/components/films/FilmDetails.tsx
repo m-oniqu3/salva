@@ -5,6 +5,7 @@ import FilmOverview from "@/components/films/FilmOverview";
 import { ChevronDownIcon } from "@/components/icons";
 import { Credits, MediaType, Movie, TMDBFilm, TVShow } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
+import { getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
 
 type Props = {
@@ -32,7 +33,7 @@ function FilmDetails(props: Props) {
     return (
       <figure key={rec.id}>
         <Image
-          src={rec.poster_path}
+          src={getTMDBImageURL(rec.poster_path)}
           alt={rec.title}
           width={50}
           height={50}
@@ -68,7 +69,7 @@ function FilmDetails(props: Props) {
               film={{
                 id: film.id,
                 title: title,
-                poster_path: film.poster_path!,
+                poster_path: getTMDBImageURL(film.poster_path!),
                 media_type,
               }}
               user={user}

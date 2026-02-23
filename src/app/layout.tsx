@@ -1,5 +1,5 @@
 import ContextMenuManager from "@/components/context-menu/ContextMenuManager";
-import ModalManager from "@/components/ModalManager";
+import ModalManager from "@/components/modal/ModalManager";
 import { ContextMenuProvider } from "@/context/ContextMenuContext";
 import { ModalContextProvider } from "@/context/ModalContext";
 import Provider from "@/context/Provider";

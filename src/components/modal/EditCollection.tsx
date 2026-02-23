@@ -12,7 +12,7 @@ import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { editCollection } from "@utils/api/collections/edit-collection";
-import { getCollectionCoverUrl } from "@utils/get-cover-url";
+import { getCollectionCoverUrl, getTMDBImageURL } from "@utils/get-cover-url";
 import {
   EditedCollection,
   EditedCollectionSchema,
@@ -43,7 +43,9 @@ function EditCollection() {
     collectionDetails.cover_image &&
     collectionDetails?.cover_type === "uploaded"
       ? getCollectionCoverUrl(collectionDetails.cover_image)
-      : collectionDetails?.cover_image;
+      : collectionDetails?.cover_image
+        ? getTMDBImageURL(collectionDetails.cover_image)
+        : null;
 
   const url = collectionDetails?.cover_image ? imageUrl : null;
 
@@ -120,7 +122,7 @@ function EditCollection() {
 
   return (
     <form
-      className="panel flex flex-col gap-4 w-80 h-fit mx-auto"
+      className="panel flex flex-col gap-4 w-72 h-fit mx-auto"
       onClick={stopPropagation}
       onSubmit={form.handleSubmit(onSubmitForm)}
     >

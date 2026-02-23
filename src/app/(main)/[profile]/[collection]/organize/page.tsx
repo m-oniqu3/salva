@@ -18,7 +18,13 @@ async function page({ params }: Props) {
   const { data, error } = await findCollection(username, collection_slug);
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <ErrorState
+        heading="The Archives Are Acting Up"
+        message="We ran into an error while loading this collection. It might be temporary — try again shortly."
+        className="error-state-wrapper"
+      />
+    );
   }
 
   if (!data) {

@@ -3,7 +3,7 @@ import { useMemo } from "react";
 
 type Props = {
   allCollections: CollectionMeta[] | null;
-  savedCollections: CollectionMeta[] | undefined;
+  savedCollections?: CollectionMeta[];
   searchQuery: string;
 };
 

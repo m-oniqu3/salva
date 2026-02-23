@@ -11,6 +11,7 @@ export enum ModalEnum {
   FL = "FOLLOWING_MODAL",
   MM = "MOBILE_MENU",
   FCM = "FILM_COLLECTION_MODAL",
+  MCF = "MASS_COPY_FILMS_MODAL",
 }
 
 type ModalState<K extends ModalEnum, P = null> = {
@@ -52,6 +53,13 @@ type FilmCollectionModal = ModalState<
   }
 >;
 
+type MassCopyFilmsModal = ModalState<
+  ModalEnum.MCF,
+  {
+    selectedFilmIDs: Set<number>;
+  }
+>;
+
 export type Modal =
   | CreateCollectionModal
   | EditCollectionModal
@@ -60,4 +68,5 @@ export type Modal =
   | FollowersModal
   | FollowingModal
   | MobileMenuModal
-  | FilmCollectionModal;
+  | FilmCollectionModal
+  | MassCopyFilmsModal;
