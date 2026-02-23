@@ -47,17 +47,12 @@ type MobileMenuModal = ModalState<ModalEnum.MM>;
 
 type FilmCollectionModal = ModalState<
   ModalEnum.FCM,
-  {
-    film: TMDBFilm;
-    user: UserMeta;
-  }
+  { film: TMDBFilm; user: UserMeta }
 >;
 
 type MassCopyFilmsModal = ModalState<
   ModalEnum.MCF,
-  {
-    selectedFilmIDs: Set<number>;
-  }
+  { selectedFilmIDs: number[] }
 >;
 
 export type Modal =

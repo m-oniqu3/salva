@@ -7,7 +7,10 @@ import useCollectionSelection from "@/hooks/useCollectionSelection";
 import useFilmCollections from "@/hooks/useFilmCollections";
 import useFilteredCollections from "@/hooks/useFilteredCollections";
 import { ModalEnum } from "@/types/modal";
+import { useQueryClient } from "@tanstack/react-query";
+import { massCopyFilms } from "@utils/api/films/mass-copy-films";
 import { ChangeEvent, useState } from "react";
+import { toast } from "sonner";
 
 function MassCopyFilms() {
   const { collectionsMetaQuery } = useFilmCollections();
@@ -17,17 +20,17 @@ function MassCopyFilms() {
     state: { modal },
   } = useModal();
 
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [isSavingSelections, setIsSavingSelections] = useState(false);
 
   const {
     selectedIDs: selectedCollectionIDs,
-    changes,
     hasChanges,
     toggle,
   } = useCollectionSelection();
 
-  const { available } = useFilteredCollections({
+  const { available: collections } = useFilteredCollections({
     allCollections: collectionsMetaQuery.data ?? [],
     searchQuery: search,
   });
@@ -40,13 +43,45 @@ function MassCopyFilms() {
     setSearch("");
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    setIsSavingSelections(true);
     const isMCF = modal?.type === ModalEnum.MCF;
-    const selectdFilmIDs = isMCF ? modal.payload?.selectedFilmIDs : new Set([]);
+    const selectedFilmIDs = isMCF ? modal.payload?.selectedFilmIDs : null;
 
-    if (!selectdFilmIDs || !selectedCollectionIDs) return;
+    if (!selectedFilmIDs || !selectedCollectionIDs) return;
 
-    console.log(selectdFilmIDs, selectedCollectionIDs);
+    try {
+      toast.promise(
+        async () => {
+          const { error } = await massCopyFilms({
+            collectionIDs: Array.from(selectedCollectionIDs),
+            filmIDs: selectedFilmIDs,
+          });
+
+          if (error) throw error;
+        },
+
+        {
+          loading: "hang tight while we copy your films",
+          success: () => {
+            selectedCollectionIDs.forEach((colID) => {
+              queryClient.invalidateQueries({
+                queryKey: ["films", colID],
+              });
+            });
+
+            return "Copied your films.";
+          },
+          error: "Something went wrong. Could not copy your films.",
+        },
+      );
+
+      closeModal();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSavingSelections(false);
+    }
   }
 
   return (
@@ -74,13 +109,15 @@ function MassCopyFilms() {
           </div>
 
           <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
-            {available.length > 0 && (
+            {collections.length > 0 ? (
               <SelectCollection
-                collections={available}
+                collections={collections}
                 selectCollection={toggle}
                 selectedIDs={selectedCollectionIDs}
                 sectionHeading="Your collections"
               />
+            ) : (
+              <p className="absolute-center">empty</p>
             )}
           </div>
         </div>

@@ -105,12 +105,22 @@ function OrganizeCollection(props: Props) {
   function moveFilms() {}
 
   function copyFilms() {
-    if (!selectedIDs) return;
+    if (!selectedIDs || !data) return;
+
+    const filmIDs = data.reduce((acc, cur) => {
+      if (selectedIDs.has(cur.id)) {
+        acc.push(cur.filmID);
+      }
+
+      return acc;
+    }, [] as number[]);
 
     openModal({
       type: ModalEnum.MCF,
-      payload: { selectedFilmIDs: selectedIDs },
+      payload: { selectedFilmIDs: filmIDs },
     });
+
+    setSelectedIDs(new Set([]));
   }
 
   const collection_actions = [
