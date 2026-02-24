@@ -26,6 +26,7 @@ function MassCopyFilms() {
 
   const {
     selectedIDs: selectedCollectionIDs,
+    clearSelection: clearCollectionSelection,
     hasChanges,
     toggle,
   } = useCollectionSelection();
@@ -45,10 +46,13 @@ function MassCopyFilms() {
 
   async function handleSubmit() {
     setIsSavingSelections(true);
-    const isMCF = modal?.type === ModalEnum.MCF;
-    const selectedFilmIDs = isMCF ? modal.payload?.selectedFilmIDs : null;
 
-    if (!selectedFilmIDs || !selectedCollectionIDs) return;
+    const isMCF = modal?.type === ModalEnum.MCF;
+    const payload = isMCF ? modal?.payload : null;
+
+    if (!payload || !selectedCollectionIDs) return;
+
+    const { selectedFilmIDs, clearSelection: clearFilmSelection } = payload;
 
     try {
       toast.promise(
@@ -62,10 +66,13 @@ function MassCopyFilms() {
         },
 
         {
-          loading: "hang tight while we copy your films",
+          loading: "Hang tight while we copy your films",
           success: () => {
-            selectedCollectionIDs.forEach((colID) => {
-              queryClient.invalidateQueries({
+            clearFilmSelection();
+            clearCollectionSelection();
+
+            selectedCollectionIDs.forEach(async (colID) => {
+              await queryClient.invalidateQueries({
                 queryKey: ["films", colID],
               });
             });
@@ -128,7 +135,6 @@ function MassCopyFilms() {
 
         {hasChanges ? (
           <Button
-            type="submit"
             disabled={isSavingSelections || !hasChanges}
             onClick={handleSubmit}
             className="bg-neutral-800 text-white disabled:opacity-50"

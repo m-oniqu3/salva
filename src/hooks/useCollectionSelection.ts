@@ -37,15 +37,13 @@ function useCollectionSelection(originalIDs?: number[]) {
     });
   }
 
-  function reset(newIDs: number[]) {
-    const ids = new Set(newIDs);
-    setSelectedIDs(ids);
-    originalSet.current = ids;
+  function clearSelection() {
+    setSelectedIDs(new Set());
   }
 
   return {
     selectedIDs,
-    reset,
+    clearSelection,
     changes,
     hasChanges,
     toggle,

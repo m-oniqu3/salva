@@ -96,11 +96,22 @@ function OrganizeCollection(props: Props) {
     setSelectedIDs(new Set(filmIDs));
   }
 
-  function deselectAllFilms() {
+  function clearSelection() {
     setSelectedIDs(new Set());
   }
 
-  function deleteFilms() {}
+  function deleteFilms() {
+    if (!selectedIDs) return;
+
+    openModal({
+      type: ModalEnum.MDF,
+      payload: {
+        selectedFilmIDs: Array.from(selectedIDs),
+        collectionID: collection.collection.id,
+        clearSelection,
+      },
+    });
+  }
 
   function moveFilms() {}
 
@@ -117,10 +128,8 @@ function OrganizeCollection(props: Props) {
 
     openModal({
       type: ModalEnum.MCF,
-      payload: { selectedFilmIDs: filmIDs },
+      payload: { selectedFilmIDs: filmIDs, clearSelection },
     });
-
-    setSelectedIDs(new Set([]));
   }
 
   const collection_actions = [
@@ -175,7 +184,7 @@ function OrganizeCollection(props: Props) {
 
           {selectedIDs.size > 0 && (
             <Button
-              onClick={deselectAllFilms}
+              onClick={clearSelection}
               disabled={!data.length}
               className="gray text-neutral-800  disabled:opacity-70"
             >

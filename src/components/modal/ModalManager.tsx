@@ -6,6 +6,7 @@ import CreateCollection from "@/components/modal/CreateCollection";
 import EditCollection from "@/components/modal/EditCollection";
 import FilmCollection from "@/components/modal/FilmCollection";
 import MassCopyFilms from "@/components/modal/MassCopyFilms";
+import MassDeleteFilms from "@/components/modal/MassDeleteFilms";
 import Modal from "@/components/modal/Modal";
 import MobileMenu from "@/components/nav/MobileMenu";
 import Followers from "@/components/profile/Followers";
@@ -52,6 +53,9 @@ function ModalManager() {
 
       case ModalEnum.MCF:
         return <MassCopyFilms />;
+
+      case ModalEnum.MDF:
+        return <MassDeleteFilms />;
 
       default:
         throw new Error(
