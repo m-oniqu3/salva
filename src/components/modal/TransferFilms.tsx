@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from "@/components/Button";
-import SelectCollection from "@/components/collection/CollectionMeta";
 import CollectionSearchbar from "@/components/collection/CollectionSearchbar";
+import SelectCollection from "@/components/collection/SelectionCollection";
 import { LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import useCollectionSelection from "@/hooks/useCollectionSelection";
@@ -27,7 +27,7 @@ function TransferFilms() {
 
   const isMCF = modal?.type === ModalEnum.TRANSFER_FILMS;
   const isCopyAction = isMCF && modal?.payload?.type === "copy" ? true : false;
-  const sourceCollection = isMCF ? modal?.payload?.sourceCollectionID : null;
+  const sourceCollectionID = isMCF ? modal?.payload?.sourceCollectionID : null;
 
   const {
     selectedIDs: selectedCollectionIDs,
@@ -38,8 +38,8 @@ function TransferFilms() {
 
   // the goal is to filter out the source collections so users cant move or copy films to that colleciton
   const { available: collections } = useFilteredCollections({
-    allCollections: collectionsMetaQuery.data ?? [],
-    // savedCollections: [sourceCollection]
+    collections: collectionsMetaQuery.data ?? [],
+    targetCollectionIDs: sourceCollectionID ? [sourceCollectionID] : [],
     searchQuery: search,
   });
 
@@ -222,6 +222,7 @@ function TransferFilms() {
           <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
             {collections.length > 0 ? (
               <SelectCollection
+                isLoading={collectionsMetaQuery.isLoading}
                 collections={collections}
                 selectCollection={toggle}
                 selectedIDs={selectedCollectionIDs}

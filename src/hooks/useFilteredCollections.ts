@@ -2,16 +2,20 @@ import { CollectionMeta } from "@/types/collection";
 import { useMemo } from "react";
 
 type Props = {
-  allCollections: CollectionMeta[] | null;
-  savedCollections?: CollectionMeta[];
+  collections: CollectionMeta[] | null;
+  targetCollectionIDs: number[];
   searchQuery: string;
 };
 
 function useFilteredCollections(props: Props) {
-  const { allCollections, savedCollections, searchQuery } = props;
+  const { collections, targetCollectionIDs, searchQuery } = props;
+
   return useMemo(() => {
-    if (!allCollections) {
-      return { available: [], saved: [] };
+    if (!collections || collections.length === 0) {
+      return {
+        available: [],
+        filled: [],
+      };
     }
 
     const searchLower = searchQuery.toLowerCase().trim();
@@ -21,16 +25,20 @@ function useFilteredCollections(props: Props) {
       !searchQuery || collection.name.toLowerCase().includes(searchLower);
 
     // Saved collections (from server)
-    const saved = (savedCollections ?? []).filter(matchesSearch);
 
-    // Available collections (not in saved)
-    const savedIDsSet = new Set(savedCollections?.map((c) => c.id) ?? []);
-    const available = allCollections
-      .filter((c) => !savedIDsSet.has(c.id))
+    const filledIDs = new Set(targetCollectionIDs);
+    const filledCollections = collections
+      .filter((col) => filledIDs.has(col.id) ?? [])
       .filter(matchesSearch);
 
-    return { available, saved };
-  }, [allCollections, savedCollections, searchQuery]);
+    // Available collections (not in target)
+
+    const available = collections
+      .filter((c) => !filledIDs.has(c.id))
+      .filter(matchesSearch);
+
+    return { available, filled: filledCollections };
+  }, [collections, targetCollectionIDs, searchQuery]);
 }
 
 export default useFilteredCollections;

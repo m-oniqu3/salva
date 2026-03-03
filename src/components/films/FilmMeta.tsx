@@ -69,6 +69,12 @@ function FilmMeta(props: Props) {
       if (error) throw error;
 
       toast(`Saved film to your collection.`);
+
+      queryClient.invalidateQueries({
+        queryKey: ["collection", "films", film.id],
+        refetchType: "all",
+      });
+
       await queryClient.invalidateQueries({
         queryKey: ["films"],
         refetchType: "all",
