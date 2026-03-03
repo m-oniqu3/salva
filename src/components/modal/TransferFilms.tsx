@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from "@/components/Button";
 import CollectionSearchbar from "@/components/collection/CollectionSearchbar";
-import SelectCollection from "@/components/collection/SelectionCollection";
+import SelectCollection from "@/components/collection/SelectCollection";
 import { LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import useCollectionSelection from "@/hooks/useCollectionSelection";
