@@ -100,6 +100,11 @@ function FilmOverview(props: Props) {
 
         toast(`Saved film to your collection.`);
         queryClient.invalidateQueries({
+          queryKey: ["collection", "films", film.id],
+          refetchType: "all",
+        });
+
+        queryClient.invalidateQueries({
           queryKey: ["collections", user?.username ?? ""],
         });
 

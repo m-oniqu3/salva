@@ -20,8 +20,10 @@ function useFilmCollections(props?: Props) {
     queryKey: ["collection", "films", props?.filmID],
     queryFn: async () => {
       if (!props?.filmID) throw new Error("No film ID.");
-      const { data, error } = await getFilmCollections(props?.filmID);
+
+      const { data, error } = await getFilmCollections(props.filmID);
       if (error) throw error;
+
       return data;
     },
     enabled: !!props?.filmID,

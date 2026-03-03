@@ -1,10 +1,10 @@
 "use server";
 
-import { CollectionMeta } from "@/types/collection";
 import { Result } from "@/types/result";
+import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 
-type Response = Result<CollectionMeta[] | null>;
+type Response = Result<number[] | null>;
 
 // Get the collections a film is saved to
 export async function getFilmCollections(filmID: number): Response {
@@ -19,46 +19,17 @@ export async function getFilmCollections(filmID: number): Response {
     // Get the collections the film is saved in
     const { data, error } = await supabase
       .from("collection_films")
-      .select(
-        `
-         collection_id,
-            collections(
-            id,
-            name,
-            is_private,
-            cover_image,
-            cover_type,
-            collection_films(count)
-            )
-        `,
-      )
+      .select("collection_id")
       .eq("user_id", auth.user.id)
       .eq("film_id", filmID)
       .order("created_at", { ascending: false });
 
     if (error) throw error;
 
-    if (!data) {
-      return { data: null, error: null };
-    }
+    const ids = data.map((col) => col.collection_id);
 
-    const collections = data.map((collection) => {
-      return {
-        ...collection.collections,
-        films_count: collection.collections.collection_films[0]?.count ?? 0,
-      };
-    });
-
-    return { data: collections, error: null };
+    return { data: ids, error: null };
   } catch (error) {
-    console.error(`Error in ${getFilmCollections.name}:`, error);
-
-    return {
-      data: null,
-      error:
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred when trying to get collections the film is saved to..",
-    };
+    return formErrorMesage(error);
   }
 }
