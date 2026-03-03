@@ -14,9 +14,14 @@ const nextConfig: NextConfig = {
         hostname: "avatar.iran.liara.run",
         pathname: "/**",
       },
-      new URL("https://image.tmdb.org/t/p/**"),
-      new URL("http://image.tmdb.org/t/p/**"),
-      new URL("https://jtbcimmdmzqsetzqofrd.supabase.co/storage/**"),
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+      },
+      {
+        protocol: "https",
+        hostname: "jtbcimmdmzqsetzqofrd.supabase.co",
+      },
     ],
     qualities: [25, 50, 75],
   },

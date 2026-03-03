@@ -33,6 +33,7 @@ function FilmCollection() {
 
   const isFCM = modal?.type === ModalEnum.FCM;
   const film = isFCM ? modal.payload?.film : null;
+  const user = isFCM ? modal.payload?.user : null;
 
   // Get all the user's collections.
   const { collectionFilmsQuery, collectionsMetaQuery } = useFilmCollections({
@@ -98,9 +99,13 @@ function FilmCollection() {
 
       toast("Updated your collections.");
       await collectionFilmsQuery.refetch();
-      await queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["films"],
         refetchType: "all",
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["collections", user?.username ?? ""],
       });
     } catch (error) {
       console.log(error);
@@ -137,22 +142,22 @@ function FilmCollection() {
           </div>
 
           <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
-            {isLoadingFilmCollections ? (
+            {/* {isLoadingFilmCollections ? (
               <div className="h-52 grid place-items-center">
                 <LoadingIcon className="size-4 animate-spin" />
               </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {saved.length > 0 && (
-                  <SelectCollection
-                    collections={saved}
-                    selectCollection={toggle}
-                    selectedIDs={selectedIDs}
-                    sectionHeading="Saved in"
-                  />
-                )}
-              </div>
-            )}
+            ) : ( */}
+            <div className="flex flex-col gap-4">
+              {saved.length > 0 && (
+                <SelectCollection
+                  collections={saved}
+                  selectCollection={toggle}
+                  selectedIDs={selectedIDs}
+                  sectionHeading="Saved in"
+                />
+              )}
+            </div>
+            {/* )} */}
 
             {available.length > 0 && (
               <SelectCollection
@@ -166,24 +171,16 @@ function FilmCollection() {
           <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
             <Button onClick={closeModal}>Cancel</Button>
 
-            {search ? (
-              <Button className="bg-neutral-800 text-white">
-                Create Collection
+            {hasChanges ? (
+              <Button
+                type="submit"
+                disabled={isSavingFilm || !hasChanges}
+                onClick={handleSubmit}
+                className="bg-neutral-800 text-white disabled:opacity-50"
+              >
+                {isSavingFilm ? "Saving..." : "Save"}
               </Button>
-            ) : (
-              <>
-                {hasChanges ? (
-                  <Button
-                    type="submit"
-                    disabled={isSavingFilm || !hasChanges}
-                    onClick={handleSubmit}
-                    className="bg-neutral-800 text-white disabled:opacity-50"
-                  >
-                    {isSavingFilm ? "Saving..." : "Save"}
-                  </Button>
-                ) : null}
-              </>
-            )}
+            ) : null}
           </div>
         </div>
       )}

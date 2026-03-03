@@ -1,17 +1,14 @@
 "use server";
 
-import getUser from "@/server-actions/get-user";
-import { Collection } from "@/types/collection";
 import { Result } from "@/types/result";
+import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 import { slugify } from "@utils/validation/slug";
 import { revalidatePath } from "next/cache";
 
 export async function createCollection(
-  formData: FormData
-): Promise<Result<Collection | null>> {
-  const supabase = await createClient();
-
+  formData: FormData,
+): Result<{ slug: string; username: string } | null> {
   try {
     // Validate the FormData
     const values = {
@@ -21,51 +18,39 @@ export async function createCollection(
       slug: slugify(formData.get("name") as string),
     };
 
-    console.log("Form values:", values);
-
-    const slug = slugify(values.name);
-
-    console.log(slug);
+    const supabase = await createClient();
 
     // Get logged-in user
-    const { data: user, error: userError } = await getUser(supabase);
+    const { data: auth, error: authError } = await supabase.auth.getUser();
 
-    if (userError || !user) {
-      return {
-        data: null,
-        error:
-          "It looks like you're not logged in. Please log in to create a collection.",
-      };
-    }
+    if (authError) throw authError;
+
+    if (!auth) return { data: null, error: null };
 
     // Insert into DB
-    const { data: collection, error: collectionErr } = await supabase
+    const { data, error: collectionErr } = await supabase
       .from("collections")
-      .insert({ ...values, user_id: user.id })
-      .select()
+      .insert({ ...values, user_id: auth.user.id })
+      .select(
+        `
+        slug, 
+        profiles(username)
+        `,
+      )
       .single();
 
-    if (collectionErr) {
-      console.error("Supabase insert error:", collectionErr);
+    if (collectionErr) throw collectionErr;
 
-      return {
-        data: null,
-        error: "We're sorry, but we couldn't create this collection.",
-      };
-    }
-
-    console.log("Collection created:", collection);
+    const username = data.profiles.username;
 
     // Revalidate profile page cache
-    revalidatePath("/[profile]", "page");
-
-    return { data: collection, error: null };
-  } catch (err) {
-    console.error("Unexpected error in createCollection:", err);
+    revalidatePath(`/${username}`, "page");
 
     return {
-      data: null,
-      error: "Something went wrong while creating your collection.",
+      data: { slug: data.slug, username },
+      error: null,
     };
+  } catch (error) {
+    return formErrorMesage(error);
   }
 }

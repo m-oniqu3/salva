@@ -15,12 +15,11 @@ async function page({ params }: Props) {
   const { profile: username, collection: collection_slug } = await params;
 
   const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
 
   const [collection, currentUserProfile] = await Promise.all([
     findCollection(username, collection_slug),
-    supabase.auth
-      .getUser()
-      .then((auth) => getProfile({ id: auth.data.user?.id })),
+    auth.user && getProfile({ key: "user_id", value: auth.user.id }),
   ]);
 
   if (collection.error) {
@@ -53,7 +52,7 @@ async function page({ params }: Props) {
   const canAccess = canAccessCollection({
     collectionOwnerID: collectionOwnerID,
     isPrivate: is_private,
-    currentUserID: currentUserProfile.data?.user_id,
+    currentUserID: currentUserProfile?.data?.user_id,
   });
 
   if (!canAccess) {
@@ -69,7 +68,7 @@ async function page({ params }: Props) {
     );
   }
 
-  const user = currentUserProfile.data;
+  const user = currentUserProfile?.data;
 
   const currentUser: UserMeta = user
     ? { userID: user.user_id, username: user?.username }

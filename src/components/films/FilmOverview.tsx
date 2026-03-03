@@ -7,6 +7,7 @@ import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { Credits, MediaType, Movie, TMDBFilm, TVShow } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
+import { useQueryClient } from "@tanstack/react-query";
 import { addFilmToCollection } from "@utils/api/collections/add-film-to-collection";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -75,34 +76,40 @@ function FilmOverview(props: Props) {
   } = useRecentlySavedFilmContext();
 
   const isFilmRecentlySaved = !!savedFilms[film.id];
-
+  const queryClient = useQueryClient();
   async function handleSaveFilm() {
     if (!film) return;
 
-    if (collectionLastSavedTo) {
-      setIsLoading(true);
+    try {
+      if (collectionLastSavedTo) {
+        setIsLoading(true);
 
-      setRecentlySavedFilm({
-        filmID: film.id,
-        collection: collectionLastSavedTo.name,
-        savedToCollectionCount: 1,
-      });
+        setRecentlySavedFilm({
+          filmID: film.id,
+          collection: collectionLastSavedTo.name,
+          savedToCollectionCount: 1,
+        });
 
-      const { data, error } = await addFilmToCollection({
-        film: filmMeta,
-        newIDs: [collectionLastSavedTo.id],
-        deletedIDs: [],
-      });
+        const { error } = await addFilmToCollection({
+          film: filmMeta,
+          newIDs: [collectionLastSavedTo.id],
+          deletedIDs: [],
+        });
 
-      if (data) {
+        if (error) throw error;
+
         toast(`Saved film to your collection.`);
-      }
+        queryClient.invalidateQueries({
+          queryKey: ["collections", user?.username ?? ""],
+        });
 
-      if (error) {
-        removeRecentlySavedFilm(film.id);
-        toast("Failed to save film to your collection");
+        setIsLoading(false);
       }
-
+    } catch (error) {
+      console.log(error);
+      removeRecentlySavedFilm(film.id);
+      toast("Failed to save film to your collection");
+    } finally {
       setIsLoading(false);
     }
   }
@@ -110,7 +117,7 @@ function FilmOverview(props: Props) {
   function handleFilmCollectionModal() {
     openModal({
       type: ModalEnum.FCM,
-      payload: { film: filmMeta, userID: user?.userID ?? null },
+      payload: { film: filmMeta, user },
     });
   }
 
@@ -135,7 +142,7 @@ function FilmOverview(props: Props) {
   }
 
   return (
-    <section className="relative bg-white h-screen w-full max-w-125 grid grid-rows-[100px_auto] border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
+    <section className="relative bg-white h-screen grid grid-rows-[100px_auto] border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
       <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
         <div className="wrapper grid grid-cols-[1fr_auto] gap-4 items-center ">
           <div className="grid grid-cols-2 items-center w-fit sm:gap-2">

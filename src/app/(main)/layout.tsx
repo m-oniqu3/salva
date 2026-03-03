@@ -18,7 +18,7 @@ export default async function MainLayout({ children }: Props) {
   let profile = null;
 
   if (user) {
-    const { data } = await getProfile({ id: user.id });
+    const { data } = await getProfile({ key: "user_id", value: user.id });
 
     if (data) profile = data;
   }

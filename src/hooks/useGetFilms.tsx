@@ -14,10 +14,8 @@ function useGetFilms(props: Props) {
   const { userID, limit = 20, collectionID } = props;
 
   const query = useInfiniteQuery({
-    queryKey: ["films", collectionID ?? "", userID],
+    queryKey: ["films", collectionID ?? ""],
     queryFn: async ({ pageParam }) => {
-      if (!userID) throw new Error("Not authenticated");
-
       const { data, error } = await getFilms({
         userID,
         range: calculateRange(pageParam, limit),

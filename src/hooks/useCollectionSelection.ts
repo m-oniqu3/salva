@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-function useCollectionSelection(originalIDs: number[]) {
+function useCollectionSelection(originalIDs?: number[]) {
   // Single source of truth: current selected IDs
   const [selectedIDs, setSelectedIDs] = useState<Set<number>>(new Set());
   const originalSet = useRef<Set<number>>(new Set());
@@ -37,15 +37,13 @@ function useCollectionSelection(originalIDs: number[]) {
     });
   }
 
-  function reset(newIDs: number[]) {
-    const ids = new Set(newIDs);
-    setSelectedIDs(ids);
-    originalSet.current = ids;
+  function clearSelection() {
+    setSelectedIDs(new Set());
   }
 
   return {
     selectedIDs,
-    reset,
+    clearSelection,
     changes,
     hasChanges,
     toggle,

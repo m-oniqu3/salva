@@ -1,4 +1,5 @@
 import { type CollectionMeta } from "@/types/collection";
+import { getCollectionCoverUrl, getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
 
 type Props = {
@@ -16,13 +17,20 @@ function SelectCollection(props: Props) {
       <p className="text-sml font-medium px-4">{sectionHeading}</p>
       <ul className="flex flex-col h-full p-2 ">
         {collections.map((collection) => {
-          const { id, cover_image, films_count, name } = collection;
+          const { id, cover_image, cover_type, films_count, name } = collection;
           const isCollectionSelected = selectedIDs.has(id);
 
-          const image = cover_image ? (
+          const url =
+            cover_image && cover_type === "uploaded"
+              ? getCollectionCoverUrl(cover_image)
+              : cover_image
+                ? getTMDBImageURL(cover_image)
+                : null;
+
+          const image = url ? (
             <figure>
               <Image
-                src={cover_image}
+                src={url}
                 alt={name}
                 width={40}
                 height={40}

@@ -1,5 +1,6 @@
 import { EditCollectionDetals } from "@/types/collection";
 import { TMDBFilm } from "@/types/tmdb";
+import { UserMeta } from "@/types/user";
 
 export enum ModalEnum {
   CCM = "CREATE_COLLECTION_MODAL",
@@ -10,6 +11,8 @@ export enum ModalEnum {
   FL = "FOLLOWING_MODAL",
   MM = "MOBILE_MENU",
   FCM = "FILM_COLLECTION_MODAL",
+  TRANSFER_FILMS = "TRANSFER_FILMS_MODAL",
+  MDF = "MASS_DELETE_FILMS_MODAL",
 }
 
 type ModalState<K extends ModalEnum, P = null> = {
@@ -45,9 +48,32 @@ type MobileMenuModal = ModalState<ModalEnum.MM>;
 
 type FilmCollectionModal = ModalState<
   ModalEnum.FCM,
+  { film: TMDBFilm; user: UserMeta }
+>;
+
+type TransferFilmsModal = ModalState<
+  ModalEnum.TRANSFER_FILMS,
+  | {
+      type: "copy";
+      selectedFilmIDs: number[];
+      sourceCollectionID: number;
+      clearSelection: () => void;
+    }
+  | {
+      type: "move";
+      selectedIDs: number[];
+      selectedFilmIDs: number[];
+      sourceCollectionID: number;
+      clearSelection: () => void;
+    }
+>;
+
+type MassDeleteFilms = ModalState<
+  ModalEnum.MDF,
   {
-    film: TMDBFilm;
-    userID: string | null;
+    selectedFilmIDs: number[];
+    collectionID: number;
+    clearSelection: () => void;
   }
 >;
 
@@ -59,4 +85,6 @@ export type Modal =
   | FollowersModal
   | FollowingModal
   | MobileMenuModal
-  | FilmCollectionModal;
+  | FilmCollectionModal
+  | TransferFilmsModal
+  | MassDeleteFilms;

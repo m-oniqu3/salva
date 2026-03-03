@@ -39,6 +39,7 @@ function Collections(props: Props) {
       if (!lastPage?.length) return undefined;
       return allPages.length;
     },
+    staleTime: Infinity,
   });
 
   if (isLoading) {
@@ -82,26 +83,19 @@ function Collections(props: Props) {
     return isCollectionOwner || !col.is_private;
   });
 
-  const rendered_previews = viewableCollections.map((col) => {
-    return (
-      <CollectionPreview
-        key={col.id}
-        username={username}
-        preview={{
-          ...col,
-          // cover_image: `https://picsum.photos/id/${col.id}/500/500`,
-        }}
-      />
-    );
-  });
-
   return (
     <InfiniteScroll
       isLoadingIntialData={isLoading}
       isLoadingMoreData={isFetchingNextPage}
       fetchMoreData={() => hasNextPage && fetchNextPage()}
     >
-      <div className="content-grid">{rendered_previews}</div>
+      <div className="content-grid">
+        {viewableCollections.map((col) => {
+          return (
+            <CollectionPreview key={col.id} username={username} preview={col} />
+          );
+        })}
+      </div>
     </InfiniteScroll>
   );
 }

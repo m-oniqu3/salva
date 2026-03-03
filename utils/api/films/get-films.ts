@@ -2,6 +2,7 @@
 
 import { Result } from "@/types/result";
 import { SavedTMDBFilm } from "@/types/tmdb";
+import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 
 type Response = Result<SavedTMDBFilm[] | null>;
@@ -17,8 +18,6 @@ export async function getFilms(props: Props): Response {
     const { userID, range, collectionID } = props;
     const [page, end] = range;
 
-    // cacheTag("films", collectionID?.toString() ?? "");
-
     const supabase = await createClient();
 
     //if no id then get all the films
@@ -33,7 +32,6 @@ export async function getFilms(props: Props): Response {
       .from("collection_films")
       .select("id,film_id")
       .eq("collection_id", collectionID as number)
-      .eq("user_id", userID)
       .order("created_at", { ascending: false })
       .range(page, end);
 
@@ -60,6 +58,7 @@ export async function getFilms(props: Props): Response {
 
     const filmsById = new Map(data.map((f) => [f.id, f]));
 
+    // use reduce instead
     const orderedFilms = filmIDs
       .map((id) => {
         const film = filmsById.get(id);
@@ -77,11 +76,6 @@ export async function getFilms(props: Props): Response {
 
     return { data: orderedFilms, error: null };
   } catch (error) {
-    console.log("Error in " + getFilms.name, error);
-
-    const err =
-      error instanceof Error ? error.message : "Could not fetch film.";
-
-    return { data: null, error: err };
+    return formErrorMesage(error);
   }
 }

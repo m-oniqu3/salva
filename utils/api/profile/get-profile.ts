@@ -2,36 +2,31 @@
 
 import { Result } from "@/types/result";
 import { Profile } from "@/types/user";
-import { User } from "@supabase/supabase-js";
+import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 
 type Props = {
-  username?: string | null;
-  id?: User["id"] | null;
+  key: "username" | "user_id";
+  value: string;
 };
 
 type Response = Result<Profile | null>;
 
 export async function getProfile(props: Props): Response {
   try {
-    const { username, id } = props;
-
-    if (!username && !id) {
-      return { data: null, error: null };
-    }
+    const { key, value } = props;
 
     const supabase = await createClient();
 
     // Build base query.
     const baseQuery = supabase.from("profiles").select("*");
 
-    const { data, error } = username
-      ? await baseQuery.eq("username", username).single()
-      : await baseQuery.eq("user_id", id!).single();
+    const { data, error } =
+      key === "username"
+        ? await baseQuery.eq("username", value).single()
+        : await baseQuery.eq("user_id", value).single();
 
-    if (error) {
-      throw new Error(`Failed to get profile : ${error.message}`);
-    }
+    if (error) throw error;
 
     if (!data) {
       return { data: null, error: null };
@@ -39,12 +34,6 @@ export async function getProfile(props: Props): Response {
 
     return { data, error: null };
   } catch (error) {
-    console.error(`Error in ${getProfile.name}`, error);
-
-    return {
-      data: null,
-      error:
-        error instanceof Error ? error.message : "An unknown error occurred.",
-    };
+    return formErrorMesage(error);
   }
 }

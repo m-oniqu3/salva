@@ -43,7 +43,7 @@ function FilmMeta(props: Props) {
   function handleFilmCollectionModal() {
     openModal({
       type: ModalEnum.FCM,
-      payload: { film, userID: user?.userID ?? null },
+      payload: { film, user },
     });
   }
 
@@ -72,6 +72,10 @@ function FilmMeta(props: Props) {
       await queryClient.invalidateQueries({
         queryKey: ["films"],
         refetchType: "all",
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["collections", user?.username ?? ""],
       });
     } catch (error) {
       console.log(error);
@@ -119,7 +123,9 @@ function FilmMeta(props: Props) {
 
           <button
             type="button"
-            disabled={isLoading || !collectionLastSavedTo}
+            disabled={
+              isLoading || !collectionLastSavedTo || isFilmRecentlySaved
+            }
             onClick={handleSaveFilm}
             className={`bg-white text-neutral-800 rounded-full size-10 sm:size-12 grid place-items-center cursor-pointer ml-auto ${isFilmRecentlySaved ? " opacity-70" : ""}`}
           >

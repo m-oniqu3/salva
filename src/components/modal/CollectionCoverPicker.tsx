@@ -13,8 +13,10 @@ import { useModal } from "@/context/useModal";
 import useGetFilms from "@/hooks/useGetFilms";
 import { CollectionCover } from "@/types/collection";
 import { ModalEnum } from "@/types/modal";
+import { useQueryClient } from "@tanstack/react-query";
 import { editCollection } from "@utils/api/collections/edit-collection";
 import { uploadCollectionImage } from "@utils/api/collections/upload-collection-image";
+import { getTMDBImageURL } from "@utils/get-cover-url";
 import { collectionImageSchema } from "@utils/validation/edit-collection";
 import Image from "next/image";
 import { useRef, useState } from "react";
@@ -93,6 +95,7 @@ function CollectionCoverPicker() {
     });
   }
 
+  const queryClient = useQueryClient();
   async function handleSubmit() {
     if (!collectionDetails || !selectedCover) return;
 
@@ -120,7 +123,7 @@ function CollectionCoverPicker() {
 
       // edit details here
 
-      const { error } = await editCollection({
+      const { data, error } = await editCollection({
         collection: {
           id: collectionDetails.id,
           cover_image,
@@ -132,8 +135,16 @@ function CollectionCoverPicker() {
       });
 
       if (error) throw error;
+      if (!data) throw new Error("Something went wrong");
 
       toast("Cover updated.");
+
+      const { username } = data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["collections", username],
+      });
+
       closeModal();
     } catch (error) {
       console.log(error);
@@ -206,7 +217,7 @@ function CollectionCoverPicker() {
           </figure>
         )}
 
-        <div>
+        <div className="relative h-full">
           {isLoading && (
             <div>
               <LoadingIcon className="size-5 animate-spin" />
@@ -227,6 +238,7 @@ function CollectionCoverPicker() {
               <ErrorState
                 heading="Nothing in the Archives"
                 message="Your saved films will appear here once you start collecting."
+                className="absolute-center h-full w-full"
               />
             ))}
 
@@ -242,6 +254,8 @@ function CollectionCoverPicker() {
                     selectedCover &&
                     "id" in selectedCover &&
                     selectedCover.id === film.id;
+
+                  const posterURL = getTMDBImageURL(film.poster_path);
                   return (
                     <figure
                       key={film.id}
@@ -255,9 +269,10 @@ function CollectionCoverPicker() {
                           <CheckIcon className={`size-5 text-neutral-800`} />
                         </div>
                       )}
+
                       <Image
                         alt={film.title}
-                        src={film.poster_path}
+                        src={posterURL}
                         width={90}
                         height={90}
                         className="object-cover w-full h-full rounded-md"

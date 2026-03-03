@@ -6,12 +6,15 @@ import { useModal } from "@/context/useModal";
 import { createCollection } from "@/server-actions/create-collection";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { QueryClient } from "@tanstack/react-query";
 import {
   NewCollection,
   NewCollectionSchema,
 } from "@utils/validation/create-collection";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 //const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -19,6 +22,8 @@ function CreateCollection() {
   const { stopPropagation, closeModal } = useModal();
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
+
+  const router = useRouter();
 
   const form = useForm<NewCollection>({
     resolver: zodResolver(NewCollectionSchema),
@@ -29,6 +34,8 @@ function CreateCollection() {
     },
   });
 
+  const queryClient = new QueryClient();
+
   function onSubmitForm(input: NewCollection) {
     startCreateCollectionTransition(async () => {
       const formData = new FormData();
@@ -36,37 +43,41 @@ function CreateCollection() {
       formData.append("description", input.description || "");
       formData.append("private", input.private as unknown as string);
 
-      console.log(input.private);
-      console.log(formData);
+      try {
+        const { data, error } = await createCollection(formData);
 
-      const { data, error } = await createCollection(formData);
+        if (error) throw error;
 
-      if (error) {
+        if (!data) throw new Error("Something went wrong");
+
+        const { username, slug } = data;
+        router.push("/" + username + "/" + slug);
+        queryClient.invalidateQueries({
+          queryKey: ["collections", username],
+        });
+
+        closeModal();
+      } catch (error) {
         console.log(error);
+        toast("Soemthing went wrong");
       }
-
-      if (data) {
-        console.log(data);
-      }
-
-      closeModal();
     });
   }
 
   return (
     <div
-      className="panel grid grid-rows-[80px_1fr] max-w-sm"
+      className="panel grid grid-rows-[80px_1fr] w-76 h-fit"
       onClick={stopPropagation}
     >
       <header className="relative">
-        <h1 className="text-lg font-semibold">Create Collection</h1>
+        <h1 className="text-base font-bold">Create Collection</h1>
         <p className="text-sml">Create a collection to organize your films.</p>
 
         <button
           onClick={closeModal}
           className="absolute top-0 right-0 cursor-pointer"
         >
-          <CloseIcon className="size-5" />
+          <CloseIcon className="size-4" />
         </button>
       </header>
 
@@ -126,7 +137,7 @@ function CreateCollection() {
         <Button
           disabled={isCreatingCollection}
           type="submit"
-          className="bg-neutral-800 text-white rounded-lg h-9 mt-auto"
+          className="bg-neutral-800 text-white rounded-lg h-9 "
         >
           {isCreatingCollection ? (
             <div className="flex items-center justify-center gap-2">

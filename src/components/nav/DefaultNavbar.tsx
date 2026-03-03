@@ -7,12 +7,18 @@ async function DefaultNavbar() {
   const supabase = await createClient();
   const { data: user } = await getUser(supabase);
 
-  const { data: profile, error } = await getProfile({
-    username: null,
-    id: user?.id,
-  });
+  let username;
 
-  console.log("default nav", profile, error);
+  if (user) {
+    const { data } = await getProfile({
+      key: "user_id",
+      value: user?.id,
+    });
+
+    if (data) {
+      username = data.username;
+    }
+  }
 
   //todo : handle error case when there is no profile
 
@@ -21,7 +27,11 @@ async function DefaultNavbar() {
       DefaultNavbar
       <u className="flex gap-4 p-4">
         <Link href="/home">Home</Link>
-        <Link href={`/${profile?.username || "bococo"}`}>Profile</Link>
+        {username ? (
+          <Link href={`/${username}`}>Profile</Link>
+        ) : (
+          <Link href="/login">Login</Link>
+        )}
       </u>
     </div>
   );

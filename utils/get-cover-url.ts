@@ -9,3 +9,10 @@ export function getCollectionCoverUrl(filePath: string) {
 
   return data.publicUrl;
 }
+
+export function getTMDBImageURL(
+  path: string,
+  size: "w200" | "w500" | "original" = "w500",
+) {
+  return `https://image.tmdb.org/t/p/${size}${path}`;
+}

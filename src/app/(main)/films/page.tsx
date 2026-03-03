@@ -28,7 +28,10 @@ async function page() {
     );
   }
 
-  const { data: profile, error } = await getProfile({ id: auth.user.id });
+  const { data: profile, error } = await getProfile({
+    key: "user_id",
+    value: auth.user.id,
+  });
 
   if (error || !profile) {
     return (

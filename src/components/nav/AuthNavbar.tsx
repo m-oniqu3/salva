@@ -16,7 +16,6 @@ import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 type Props = {
   profile: Profile | null;
@@ -29,9 +28,6 @@ function AuthNavbar({ profile }: Props) {
   const { openContextMenu } = useContextMenu();
   const { ref: profileUserMenuRef, rect } = useClientRect<HTMLButtonElement>();
 
-  const pathname = usePathname();
-
-  console.log(pathname);
   function handleProfileContextMenu() {
     if (!rect) return;
     console.log(rect);
@@ -56,18 +52,18 @@ function AuthNavbar({ profile }: Props) {
 
   return (
     <header className="flex items-center sticky top-0 left-0 h-28 z-10 bg-white w-full">
-      <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 md:gap-6">
+      <nav className="wrapper grid grid-cols-[auto_1fr_auto] md:grid-cols-3 items-center justify-between gap-8 md:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="">
             <FilmIcon className="size-6 text-neutral-800" />
           </Link>
 
-          <ul className="hidden lg:flex gap-4 items-center">
+          <ul className="hidden md:flex gap-4 items-center">
             {rendered_links}
           </ul>
         </div>
 
-        <div className="max-w-sm mx-auto">
+        <div className="max-w-md mx-auto">
           <Searchbar />
         </div>
 
@@ -75,20 +71,20 @@ function AuthNavbar({ profile }: Props) {
           <button
             type="button"
             onClick={() => openModal({ type: ModalEnum.MM })}
-            className="flex-center lg:hidden"
+            className="flex-center md:hidden"
           >
             <MenuIcon className="size-5" />
           </button>
 
           {!profile && (
-            <div className="hidden lg:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4">
               <Button>Log In</Button>
               <Button className="bg-neutral-800 text-white">Sign Up</Button>
             </div>
           )}
 
           {profile && (
-            <div className="hidden lg:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4">
               <Button
                 onClick={() => openModal({ type: ModalEnum.CCM })}
                 className="bg-neutral-800 text-white"

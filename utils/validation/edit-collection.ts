@@ -6,7 +6,7 @@ export const EditedCollectionSchema = z.object({
     .min(3, "Name should be at least 3 characters"),
   description: z
     .string()
-    .min(10, "Description should be at least 10 characters long")
+    .min(3, "Description should be at least 3 characters")
     .nullish()
     .or(z.literal("")),
 });

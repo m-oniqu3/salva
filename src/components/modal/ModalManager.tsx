@@ -1,16 +1,18 @@
 "use client";
 
 import Prompt from "@/components/auth/Prompt";
-import CollectionCoverPicker from "@/components/collection/CollectionCoverPicker";
-import EditCollection from "@/components/collection/EditCollection";
-import FilmCollection from "@/components/collection/FilmCollection";
+import CollectionCoverPicker from "@/components/modal/CollectionCoverPicker";
+import CreateCollection from "@/components/modal/CreateCollection";
+import EditCollection from "@/components/modal/EditCollection";
+import FilmCollection from "@/components/modal/FilmCollection";
+import MassDeleteFilms from "@/components/modal/MassDeleteFilms";
+import Modal from "@/components/modal/Modal";
+import TransferFilms from "@/components/modal/TransferFilms";
 import MobileMenu from "@/components/nav/MobileMenu";
 import Followers from "@/components/profile/Followers";
 import Following from "@/components/profile/Following";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
-import CreateCollection from "@components/collection/CreateCollection";
-import Modal from "@components/Modal";
 
 function ModalManager() {
   const {
@@ -48,6 +50,12 @@ function ModalManager() {
 
       case ModalEnum.FCM:
         return <FilmCollection />;
+
+      case ModalEnum.TRANSFER_FILMS:
+        return <TransferFilms />;
+
+      case ModalEnum.MDF:
+        return <MassDeleteFilms />;
 
       default:
         throw new Error(

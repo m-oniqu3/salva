@@ -54,20 +54,35 @@ async function page({ params }: Props) {
 
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
-  const { data: profile } = await getProfile({
-    id: auth.user?.id,
-  });
+
+  let profile = null;
+
+  if (auth.user) {
+    const profilePromise = getProfile({
+      key: "user_id",
+      value: auth.user.id,
+    });
+
+    const metaPromise = queryClient.prefetchQuery({
+      queryKey: ["collection", "meta"],
+      queryFn: async () => {
+        const { data, error } = await getCollectionsMeta();
+        if (error) throw error;
+        return data;
+      },
+    });
+
+    const [{ data: profileData }] = await Promise.all([
+      profilePromise,
+      metaPromise,
+    ]);
+
+    if (data) profile = profileData;
+  }
 
   const user: UserMeta = profile
     ? { userID: profile.user_id, username: profile.username }
     : null;
-
-  if (auth.user?.id) {
-    queryClient.prefetchQuery({
-      queryKey: ["collection", "meta", auth.user?.id ?? ""],
-      queryFn: () => getCollectionsMeta(),
-    });
-  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
