@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from "@/components/Button";
 import SelectCollection from "@/components/collection/CollectionMeta";
 import CollectionSearchbar from "@/components/collection/CollectionSearchbar";
@@ -8,11 +9,11 @@ import useFilmCollections from "@/hooks/useFilmCollections";
 import useFilteredCollections from "@/hooks/useFilteredCollections";
 import { ModalEnum } from "@/types/modal";
 import { useQueryClient } from "@tanstack/react-query";
-import { massCopyFilms } from "@utils/api/films/mass-copy-films";
+import { transferFilms } from "@utils/api/films/transfer-films";
 import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
 
-function MassCopyFilms() {
+function TransferFilms() {
   const { collectionsMetaQuery } = useFilmCollections();
   const {
     stopPropagation,
@@ -24,6 +25,10 @@ function MassCopyFilms() {
   const [search, setSearch] = useState("");
   const [isSavingSelections, setIsSavingSelections] = useState(false);
 
+  const isMCF = modal?.type === ModalEnum.TRANSFER_FILMS;
+  const isCopyAction = isMCF && modal?.payload?.type === "copy" ? true : false;
+  const sourceCollection = isMCF ? modal?.payload?.sourceCollectionID : null;
+
   const {
     selectedIDs: selectedCollectionIDs,
     clearSelection: clearCollectionSelection,
@@ -31,8 +36,10 @@ function MassCopyFilms() {
     toggle,
   } = useCollectionSelection();
 
+  // the goal is to filter out the source collections so users cant move or copy films to that colleciton
   const { available: collections } = useFilteredCollections({
     allCollections: collectionsMetaQuery.data ?? [],
+    // savedCollections: [sourceCollection]
     searchQuery: search,
   });
 
@@ -44,21 +51,100 @@ function MassCopyFilms() {
     setSearch("");
   }
 
-  async function handleSubmit() {
+  type MoveFilmsProps = {
+    selectedCollectionIDs: number[];
+    selectedFilmIDs: number[];
+    selectedIDs: number[];
+    sourceCollectionID: number;
+    clearFilmSelection: () => void;
+  };
+
+  // Move films
+  async function moveFilms(props: MoveFilmsProps) {
+    const {
+      clearFilmSelection,
+      selectedCollectionIDs,
+      selectedFilmIDs,
+      selectedIDs,
+      sourceCollectionID,
+    } = props;
+
     setIsSavingSelections(true);
 
-    const isMCF = modal?.type === ModalEnum.MCF;
-    const payload = isMCF ? modal?.payload : null;
+    toast.promise(
+      async function () {
+        queryClient.setQueryData(
+          ["films", sourceCollectionID],
+          (oldData: any) => {
+            if (!oldData) return oldData;
 
-    if (!payload || !selectedCollectionIDs) return;
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page: any[]) =>
+                page.filter((film) => !selectedIDs.includes(film.id)),
+              ),
+            };
+          },
+        );
+        clearFilmSelection();
+        clearCollectionSelection();
+        closeModal();
 
-    const { selectedFilmIDs, clearSelection: clearFilmSelection } = payload;
+        const { error } = await transferFilms({
+          action: "move",
+          cf_ids: selectedIDs,
+          sourceCollectionID,
+          targetCollectionIDs: Array.from(selectedCollectionIDs),
+          filmIDs: selectedFilmIDs,
+        });
+
+        if (error) throw error;
+      },
+      {
+        loading: "Hang tight while we move your films",
+        success: async () => {
+          setIsSavingSelections(false);
+
+          // Currently viewed collection
+          queryClient.invalidateQueries({
+            queryKey: ["films", sourceCollectionID],
+          });
+          // Collection(s) the films got moved to
+          selectedCollectionIDs.map((colID) => {
+            queryClient.invalidateQueries({
+              queryKey: ["films", colID],
+            });
+          });
+
+          return "Moved your films.";
+        },
+        error: "Something went wrong. Could not move your films.",
+      },
+    );
+  }
+
+  type CopyFilmsProps = {
+    selectedCollectionIDs: number[];
+    selectedFilmIDs: number[];
+    clearFilmSelection: () => void;
+  };
+
+  async function copyFilms(props: CopyFilmsProps) {
+    const { selectedCollectionIDs, selectedFilmIDs, clearFilmSelection } =
+      props;
+
+    setIsSavingSelections(true);
 
     try {
       toast.promise(
         async () => {
-          const { error } = await massCopyFilms({
-            collectionIDs: Array.from(selectedCollectionIDs),
+          clearFilmSelection();
+          clearCollectionSelection();
+          closeModal();
+
+          const { error } = await transferFilms({
+            action: "copy",
+            targetCollectionIDs: Array.from(selectedCollectionIDs),
             filmIDs: selectedFilmIDs,
           });
 
@@ -67,27 +153,45 @@ function MassCopyFilms() {
 
         {
           loading: "Hang tight while we copy your films",
-          success: () => {
-            clearFilmSelection();
-            clearCollectionSelection();
-
-            selectedCollectionIDs.forEach(async (colID) => {
-              await queryClient.invalidateQueries({
+          success: async () => {
+            selectedCollectionIDs.map((colID) =>
+              queryClient.invalidateQueries({
                 queryKey: ["films", colID],
-              });
-            });
+              }),
+            );
 
             return "Copied your films.";
           },
           error: "Something went wrong. Could not copy your films.",
         },
       );
-
-      closeModal();
     } catch (error) {
       console.log(error);
     } finally {
       setIsSavingSelections(false);
+    }
+  }
+
+  function handleSubmit() {
+    const isMCF = modal?.type === ModalEnum.TRANSFER_FILMS;
+    const payload = isMCF ? modal?.payload : null;
+
+    if (!payload || !selectedCollectionIDs) return;
+
+    const { type } = payload;
+
+    if (type === "copy") {
+      copyFilms({
+        selectedCollectionIDs: Array.from(selectedCollectionIDs),
+        ...payload,
+        clearFilmSelection: payload.clearSelection,
+      });
+    } else {
+      moveFilms({
+        selectedCollectionIDs: Array.from(selectedCollectionIDs),
+        ...payload,
+        clearFilmSelection: payload.clearSelection,
+      });
     }
   }
 
@@ -106,7 +210,7 @@ function MassCopyFilms() {
         <div className="grid grid-rows-[110px_1fr_64px] h-full">
           <div className="flex flex-col gap-4 p-4 border-b border-gray-50 ">
             <p className="text-xs font-medium text-center">
-              Copy Films to Collection
+              {isCopyAction ? " Copy" : "Move"} Films
             </p>
             <CollectionSearchbar
               search={search}
@@ -147,4 +251,4 @@ function MassCopyFilms() {
   );
 }
 
-export default MassCopyFilms;
+export default TransferFilms;

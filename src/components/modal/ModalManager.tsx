@@ -5,9 +5,9 @@ import CollectionCoverPicker from "@/components/modal/CollectionCoverPicker";
 import CreateCollection from "@/components/modal/CreateCollection";
 import EditCollection from "@/components/modal/EditCollection";
 import FilmCollection from "@/components/modal/FilmCollection";
-import MassCopyFilms from "@/components/modal/MassCopyFilms";
 import MassDeleteFilms from "@/components/modal/MassDeleteFilms";
 import Modal from "@/components/modal/Modal";
+import TransferFilms from "@/components/modal/TransferFilms";
 import MobileMenu from "@/components/nav/MobileMenu";
 import Followers from "@/components/profile/Followers";
 import Following from "@/components/profile/Following";
@@ -51,8 +51,8 @@ function ModalManager() {
       case ModalEnum.FCM:
         return <FilmCollection />;
 
-      case ModalEnum.MCF:
-        return <MassCopyFilms />;
+      case ModalEnum.TRANSFER_FILMS:
+        return <TransferFilms />;
 
       case ModalEnum.MDF:
         return <MassDeleteFilms />;

@@ -39,6 +39,7 @@ function Collections(props: Props) {
       if (!lastPage?.length) return undefined;
       return allPages.length;
     },
+    staleTime: Infinity,
   });
 
   if (isLoading) {

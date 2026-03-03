@@ -142,22 +142,22 @@ function FilmCollection() {
           </div>
 
           <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
-            {isLoadingFilmCollections ? (
+            {/* {isLoadingFilmCollections ? (
               <div className="h-52 grid place-items-center">
                 <LoadingIcon className="size-4 animate-spin" />
               </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {saved.length > 0 && (
-                  <SelectCollection
-                    collections={saved}
-                    selectCollection={toggle}
-                    selectedIDs={selectedIDs}
-                    sectionHeading="Saved in"
-                  />
-                )}
-              </div>
-            )}
+            ) : ( */}
+            <div className="flex flex-col gap-4">
+              {saved.length > 0 && (
+                <SelectCollection
+                  collections={saved}
+                  selectCollection={toggle}
+                  selectedIDs={selectedIDs}
+                  sectionHeading="Saved in"
+                />
+              )}
+            </div>
+            {/* )} */}
 
             {available.length > 0 && (
               <SelectCollection

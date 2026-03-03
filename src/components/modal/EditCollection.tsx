@@ -122,7 +122,7 @@ function EditCollection() {
 
   return (
     <form
-      className="panel flex flex-col gap-4 w-72 h-fit mx-auto"
+      className="panel flex flex-col gap-4 w-80 h-fit mx-auto"
       onClick={stopPropagation}
       onSubmit={form.handleSubmit(onSubmitForm)}
     >
@@ -144,9 +144,9 @@ function EditCollection() {
         )}
       </header>
 
-      <div className="relative flex flex-col gap-3  h-full">
+      <div className="relative flex flex-col gap-4  h-full">
         {/* cover */}
-        <div className="flex flex-col gap-1 pb-2">
+        <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-sml text-neutral-800">
             Cover
           </label>
@@ -191,7 +191,7 @@ function EditCollection() {
             className="input h-9 gray"
           />
 
-          {errors.name && <p className="input-error">{errors.name.message}</p>}
+          <p className="input-error">{errors.name?.message}</p>
         </div>
 
         {/* description */}
@@ -206,9 +206,7 @@ function EditCollection() {
             placeholder="movies i throw on when my brain is tired"
           ></textarea>
 
-          {errors.description && (
-            <p className="input-error">{errors.description.message}</p>
-          )}
+          <p className="input-error">{errors.description?.message}</p>
         </div>
 
         <Button

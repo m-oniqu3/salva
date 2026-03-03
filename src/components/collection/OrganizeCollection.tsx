@@ -113,7 +113,28 @@ function OrganizeCollection(props: Props) {
     });
   }
 
-  function moveFilms() {}
+  function moveFilms() {
+    if (!selectedIDs || !data) return;
+
+    const filmIDs = data.reduce((acc, cur) => {
+      if (selectedIDs.has(cur.id)) {
+        acc.push(cur.filmID);
+      }
+
+      return acc;
+    }, [] as number[]);
+
+    openModal({
+      type: ModalEnum.TRANSFER_FILMS,
+      payload: {
+        type: "move",
+        selectedIDs: Array.from(selectedIDs),
+        selectedFilmIDs: filmIDs,
+        sourceCollectionID: collection.collection.id,
+        clearSelection,
+      },
+    });
+  }
 
   function copyFilms() {
     if (!selectedIDs || !data) return;
@@ -127,8 +148,13 @@ function OrganizeCollection(props: Props) {
     }, [] as number[]);
 
     openModal({
-      type: ModalEnum.MCF,
-      payload: { selectedFilmIDs: filmIDs, clearSelection },
+      type: ModalEnum.TRANSFER_FILMS,
+      payload: {
+        type: "copy",
+        selectedFilmIDs: filmIDs,
+        sourceCollectionID: collection.collection.id,
+        clearSelection,
+      },
     });
   }
 

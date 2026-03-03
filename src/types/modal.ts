@@ -11,7 +11,7 @@ export enum ModalEnum {
   FL = "FOLLOWING_MODAL",
   MM = "MOBILE_MENU",
   FCM = "FILM_COLLECTION_MODAL",
-  MCF = "MASS_COPY_FILMS_MODAL",
+  TRANSFER_FILMS = "TRANSFER_FILMS_MODAL",
   MDF = "MASS_DELETE_FILMS_MODAL",
 }
 
@@ -51,9 +51,21 @@ type FilmCollectionModal = ModalState<
   { film: TMDBFilm; user: UserMeta }
 >;
 
-type MassCopyFilmsModal = ModalState<
-  ModalEnum.MCF,
-  { selectedFilmIDs: number[]; clearSelection: () => void }
+type TransferFilmsModal = ModalState<
+  ModalEnum.TRANSFER_FILMS,
+  | {
+      type: "copy";
+      selectedFilmIDs: number[];
+      sourceCollectionID: number;
+      clearSelection: () => void;
+    }
+  | {
+      type: "move";
+      selectedIDs: number[];
+      selectedFilmIDs: number[];
+      sourceCollectionID: number;
+      clearSelection: () => void;
+    }
 >;
 
 type MassDeleteFilms = ModalState<
@@ -74,5 +86,5 @@ export type Modal =
   | FollowingModal
   | MobileMenuModal
   | FilmCollectionModal
-  | MassCopyFilmsModal
+  | TransferFilmsModal
   | MassDeleteFilms;

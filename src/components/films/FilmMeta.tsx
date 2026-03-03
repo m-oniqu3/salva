@@ -123,7 +123,9 @@ function FilmMeta(props: Props) {
 
           <button
             type="button"
-            disabled={isLoading || !collectionLastSavedTo}
+            disabled={
+              isLoading || !collectionLastSavedTo || isFilmRecentlySaved
+            }
             onClick={handleSaveFilm}
             className={`bg-white text-neutral-800 rounded-full size-10 sm:size-12 grid place-items-center cursor-pointer ml-auto ${isFilmRecentlySaved ? " opacity-70" : ""}`}
           >

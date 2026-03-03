@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from "@/components/Button";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
@@ -33,6 +34,20 @@ function MassDeleteFilms() {
 
       toast.promise(
         async () => {
+          queryClient.setQueryData(["films", collectionID], (oldData: any) => {
+            if (!oldData) return oldData;
+
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page: any[]) =>
+                page.filter((film) => !selectedFilmIDs.includes(film.id)),
+              ),
+            };
+          });
+
+          closeModal();
+          clearFilmSelection();
+
           const { error } = await massDeleteFilms({
             savedIDs: selectedFilmIDs,
             collectionID,
@@ -44,8 +59,6 @@ function MassDeleteFilms() {
         {
           loading: "Hang tight while we handle this",
           success: async () => {
-            clearFilmSelection();
-
             await queryClient.invalidateQueries({
               queryKey: ["films", collectionID],
             });
@@ -55,8 +68,6 @@ function MassDeleteFilms() {
           error: "Something went wrong.",
         },
       );
-
-      closeModal();
     } finally {
       setIsDeletingFilms(false);
     }
