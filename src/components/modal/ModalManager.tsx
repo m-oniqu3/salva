@@ -27,7 +27,7 @@ function ModalManager() {
     if (!modal) return null;
 
     switch (modal.type) {
-      case ModalEnum.CCM:
+      case ModalEnum.CREATE_COLLECTION:
         return <CreateCollection />;
 
       case ModalEnum.A:
@@ -45,7 +45,7 @@ function ModalManager() {
       case ModalEnum.IPM:
         return <CollectionCoverPicker />;
 
-      case ModalEnum.MM:
+      case ModalEnum.MOBILE_MENU:
         return <MobileMenu />;
 
       case ModalEnum.FCM:

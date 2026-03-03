@@ -9,6 +9,7 @@ import {
   OrganizeIcon,
   SortIcon,
 } from "@/components/icons";
+import Tool from "@/components/Tool";
 import { useModal } from "@/context/useModal";
 import { CollectionSummary } from "@/types/collection";
 import { ModalEnum } from "@/types/modal";
@@ -72,15 +73,15 @@ function CollectionToolbar(props: Props) {
   }
 
   const toolbar = [
-    { name: "Edit", icon: EditIcon, fn: handleEditModal },
+    { name: "Edit", icon: EditIcon, handler: handleEditModal },
     {
       name: "Privacy",
       icon: isCollectionPrivate ? LockOpenIcon : LockClosedIcon,
-      fn: togglePrivacyStatus,
+      handler: togglePrivacyStatus,
     },
-    { name: "Organize", icon: OrganizeIcon, fn: organizeCollection },
-    { name: "Sort", icon: SortIcon, fn: () => {} },
-    { name: "More", icon: MoreHorizontalIcon, fn: () => {} },
+    { name: "Organize", icon: OrganizeIcon, handler: organizeCollection },
+    { name: "Sort", icon: SortIcon, handler: () => {} },
+    { name: "More", icon: MoreHorizontalIcon, handler: () => {} },
   ];
 
   return (
@@ -104,18 +105,9 @@ function CollectionToolbar(props: Props) {
 
       {isCollectionOwner && (
         <>
-          {toolbar.map((tool) => {
-            const Icon = tool.icon;
-            return (
-              <button
-                key={tool.name}
-                className="rounded-full size-9.5 flex justify-center items-center gray cursor-pointer transition-colors duration-200 ease-in-out hover:bg-gray-200"
-                onClick={tool.fn}
-              >
-                <Icon className="size-4 text-neutral-800/60" />
-              </button>
-            );
-          })}
+          {toolbar.map((tool) => (
+            <Tool key={tool.name} tool={tool} />
+          ))}
         </>
       )}
     </div>

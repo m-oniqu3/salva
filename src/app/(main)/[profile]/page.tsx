@@ -38,12 +38,11 @@ async function page({ params }: Props) {
 
   if (!profile) {
     return (
-      <div className="h-[50dvh] w-full">
-        <ErrorState
-          heading="Scene not found."
-          message="The profile you’re looking for didn’t make the final cut."
-        />
-      </div>
+      <ErrorState
+        heading="Not in the credits."
+        message="The profile you’re looking for didn’t make the final cut."
+        className="error-state-wrapper"
+      />
     );
   }
 
