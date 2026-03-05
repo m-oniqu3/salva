@@ -75,7 +75,9 @@ function CollectionSummary({ summary, userID }: Props) {
           </h1>
 
           {description && (
-            <p className="text-zinc-500 text-[13px] leading-5">{description}</p>
+            <p className="text-neutral-600 text-[13px] leading-5">
+              {description}
+            </p>
           )}
 
           <div className="flex gap-2 font-semibold text-xs mt-1 text-neutral-800">

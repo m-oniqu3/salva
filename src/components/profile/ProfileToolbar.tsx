@@ -2,11 +2,22 @@ import { AddIcon, EditIcon, SortIcon } from "@/components/icons";
 import Tool from "@/components/Tool";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
+import { ProfileSummary } from "@/types/user";
 
-function ProfileToolbar() {
+type Props = {
+  profileSummary: ProfileSummary;
+};
+function ProfileToolbar(props: Props) {
+  const { profileSummary } = props;
+
   const { openModal } = useModal();
 
-  function handleEditModal() {}
+  function handleEditModal() {
+    openModal({
+      type: ModalEnum.EDIT_PROFILE,
+      payload: { profileSummary },
+    });
+  }
 
   function handleCreateCollection() {
     openModal({

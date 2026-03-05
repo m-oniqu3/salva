@@ -1,3 +1,4 @@
+import { SolidLockClosedIcon } from "@/components/icons";
 import { type CollectionMeta } from "@/types/collection";
 import { getCollectionCoverUrl, getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
@@ -40,8 +41,14 @@ function SelectCollection(props: Props) {
 
               <ul className="flex flex-col h-full p-2 ">
                 {collections.map((collection) => {
-                  const { id, cover_image, cover_type, films_count, name } =
-                    collection;
+                  const {
+                    id,
+                    cover_image,
+                    cover_type,
+                    films_count,
+                    name,
+                    is_private,
+                  } = collection;
                   const isCollectionSelected = selectedIDs.has(id);
 
                   const url =
@@ -77,9 +84,20 @@ function SelectCollection(props: Props) {
                         <p className="text-sml line-clamp-1 text-neutral-800 font-medium">
                           {name}
                         </p>
-                        <p className="text-sml text-zinc-500">
-                          {films_count} films
-                        </p>
+
+                        <div className="flex gap-1 items-center">
+                          <p className="text-sml text-zinc-500">
+                            {films_count} films
+                          </p>
+
+                          {is_private && (
+                            <div className="flex items-center gap-1">
+                              &bull;
+                              {/* <p className="text-sml text-zinc-500">Private</p> */}
+                              <SolidLockClosedIcon className="size-3.5 text-zinc-500" />
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div

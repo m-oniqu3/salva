@@ -9,10 +9,11 @@ import { getCollections } from "@utils/api/collections/get-collections";
 
 type Props = {
   targetUserID: string;
+  authUserID: string | null;
 };
 
 function Collections(props: Props) {
-  const { targetUserID } = props;
+  const { targetUserID, authUserID } = props;
 
   const {
     data,
@@ -73,7 +74,7 @@ function Collections(props: Props) {
 
   //filter out collections
   const viewableCollections = collections.filter((col) => {
-    const isCollectionOwner = targetUserID === col.user.user_id;
+    const isCollectionOwner = authUserID === col.user.user_id;
     return isCollectionOwner || !col.collection.is_private;
   });
 

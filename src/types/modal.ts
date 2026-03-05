@@ -1,6 +1,6 @@
 import { EditCollectionDetals } from "@/types/collection";
 import { TMDBFilm } from "@/types/tmdb";
-import { Profile, UserMeta } from "@/types/user";
+import { Profile, ProfileSummary, UserMeta } from "@/types/user";
 
 export enum ModalEnum {
   CREATE_COLLECTION = "CREATE_COLLECTION_MODAL",
@@ -13,6 +13,7 @@ export enum ModalEnum {
   TRANSFER_FILMS = "TRANSFER_FILMS_MODAL",
   MDF = "MASS_DELETE_FILMS_MODAL",
   MOBILE_MENU = "MOBILE_MENU_MODAL",
+  EDIT_PROFILE = "EDIT_PROFILE-MODAL",
 }
 
 type ModalState<K extends ModalEnum, P = null> = {
@@ -24,6 +25,11 @@ type CreateCollectionModal = ModalState<ModalEnum.CREATE_COLLECTION>;
 
 type MobileMenuModal = ModalState<ModalEnum.MOBILE_MENU, { profile: Profile }>;
 type AuthModal = ModalState<ModalEnum.A>;
+
+type EditProfileModal = ModalState<
+  ModalEnum.EDIT_PROFILE,
+  { profileSummary: ProfileSummary }
+>;
 
 type EditCollectionModal = ModalState<
   ModalEnum.ECM,
@@ -87,4 +93,5 @@ export type Modal =
   | MobileMenuModal
   | FilmCollectionModal
   | TransferFilmsModal
-  | MassDeleteFilms;
+  | MassDeleteFilms
+  | EditProfileModal;

@@ -63,7 +63,7 @@ function AuthNavbar({ profile }: Props) {
     <header className="flex items-center sticky top-0 left-0 h-28 z-10 bg-white w-full">
       <nav className="wrapper grid grid-cols-[auto_1fr_auto] md:grid-cols-3 items-center justify-between gap-8 md:gap-6">
         <div className="flex items-center gap-4">
-          <Link href="/" className="">
+          <Link href="/home" className="">
             <FilmIcon className="size-6 text-neutral-800" />
           </Link>
 
@@ -108,6 +108,7 @@ function AuthNavbar({ profile }: Props) {
             <Avatar
               avatar={profile.avatar}
               username={profile.username}
+              name={profile.firstname || profile.username}
               className={"size-7 rounded-full text-[12px]"}
             />
 

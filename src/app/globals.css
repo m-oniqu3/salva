@@ -80,6 +80,10 @@ body {
     /* @apply bg-gray-100 */
   }
 
+  .form-label {
+    @apply text-[0.8rem] font-medium text-neutral-800 capitalize
+  }
+
   .input {
     @apply w-full bg-[#F5F4F2] px-3 py-3 font-medium rounded-md focus:outline-none text-neutral-800;
     font-size: var(--text-small);

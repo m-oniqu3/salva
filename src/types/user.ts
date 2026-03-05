@@ -14,7 +14,7 @@ export type ProfileSummary = {
   username: string;
   firstname: string;
   lastname: string;
-  avatar: string;
+  avatar: string | null;
   bio: string;
 
   collections_created: number;

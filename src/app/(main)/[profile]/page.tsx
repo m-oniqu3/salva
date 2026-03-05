@@ -54,7 +54,10 @@ async function page({ params }: Props) {
         />
 
         <Suspense fallback={<p>Loading collections...</p>}>
-          <Collections targetUserID={profile_summary.user_id} />
+          <Collections
+            targetUserID={profile_summary.user_id}
+            authUserID={authUserID}
+          />
         </Suspense>
       </div>
     </HydrationBoundary>

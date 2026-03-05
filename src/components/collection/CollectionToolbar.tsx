@@ -90,6 +90,7 @@ function CollectionToolbar(props: Props) {
         <Avatar
           avatar={summary.user.avatar}
           username={summary.user.username}
+          name={summary.user.firstname || summary.user.username}
           className={"size-9.5 rounded-full"}
         />
 
