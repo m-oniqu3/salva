@@ -2,17 +2,14 @@
 
 import Avatar from "@/components/Avatar";
 import ProfileToolbar from "@/components/profile/ProfileToolbar";
-import { useModal } from "@/context/useModal";
-import { Profile } from "@/types/user";
+import { Profile, ProfileSummary as PSummary } from "@/types/user";
 
 type Props = {
-  profile: Profile;
-  userID: Profile["user_id"] | null;
+  profileSummary: PSummary;
+  authUserID: Profile["user_id"] | null;
 };
 
-function ProfileSummary({ profile, userID }: Props) {
-  const { openModal } = useModal();
-
+function ProfileSummary({ profileSummary, authUserID }: Props) {
   const {
     user_id: profileID,
     firstname,
@@ -20,11 +17,12 @@ function ProfileSummary({ profile, userID }: Props) {
     username,
     avatar,
     bio,
-  } = profile;
+    collections_created,
+  } = profileSummary;
 
   // Is the current user viewing their own profile?
-  const isUserViewingSelf = profileID === userID;
-  const isLoggedIn = Boolean(userID);
+  const isUserViewingSelf = profileID === authUserID;
+  const isLoggedIn = Boolean(authUserID);
 
   return (
     <section className="py-4 max-w-[450px]">
@@ -48,7 +46,8 @@ function ProfileSummary({ profile, userID }: Props) {
             <span>&bull;</span>
 
             <p className="text-[13px] font-semibold text-neutral-600">
-              {username.length} collections
+              {collections_created}{" "}
+              {collections_created === 1 ? "collection" : "collections"}
             </p>
           </div>
           <p className="text-zinc-500 leading-5 text-[13px]">{bio}</p>

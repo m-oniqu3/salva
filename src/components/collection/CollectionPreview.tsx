@@ -5,15 +5,16 @@ import Link from "next/link";
 
 type Props = {
   preview: CollectionPreview;
-  username: string;
 };
 
 //https://picsum.photos/id/237/200/300
 function CollectionPreview(props: Props) {
-  const { preview, username } = props;
+  const { preview } = props;
 
-  const { is_private, name, cover_image, cover_type, slug, film_count } =
-    preview;
+  const {
+    collection: { is_private, name, cover_image, cover_type, slug, film_count },
+    user: { username },
+  } = preview;
 
   const url =
     cover_image && cover_type === "uploaded"

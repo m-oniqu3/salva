@@ -8,12 +8,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getCollections } from "@utils/api/collections/get-collections";
 
 type Props = {
-  username: string;
-  isCollectionOwner: boolean;
+  targetUserID: string;
 };
 
 function Collections(props: Props) {
-  const { username, isCollectionOwner } = props;
+  const { targetUserID } = props;
 
   const {
     data,
@@ -23,10 +22,10 @@ function Collections(props: Props) {
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: ["collections", username],
+    queryKey: ["collections", targetUserID],
     queryFn: async ({ pageParam }) => {
       const { data, error } = await getCollections({
-        username,
+        targetUserID,
         page: pageParam,
       });
 
@@ -52,27 +51,21 @@ function Collections(props: Props) {
 
   if (error) {
     return (
-      <div className="error-state-wrapper">
-        <ErrorState
-          heading="Playback error."
-          message="We hit a snag fetching your collections."
-        />
-      </div>
+      <ErrorState
+        heading="Playback error."
+        message="We hit a snag fetching your collections."
+        className="error-state-wrapper"
+      />
     );
   }
 
   if (!data || data.pages.length === 0) {
     return (
-      <div className="error-state-wrapper">
-        <ErrorState
-          heading="Nothing on screen"
-          message={
-            isCollectionOwner
-              ? `You haven’t created any collections yet.`
-              : `This user hasn’t shared any collections yet`
-          }
-        />
-      </div>
+      <ErrorState
+        heading="Nothing on screen"
+        message={" No collections have been created here yet"}
+        className="error-state-wrapper"
+      />
     );
   }
 
@@ -80,7 +73,8 @@ function Collections(props: Props) {
 
   //filter out collections
   const viewableCollections = collections.filter((col) => {
-    return isCollectionOwner || !col.is_private;
+    const isCollectionOwner = targetUserID === col.user.user_id;
+    return isCollectionOwner || !col.collection.is_private;
   });
 
   return (
@@ -90,11 +84,9 @@ function Collections(props: Props) {
       fetchMoreData={() => hasNextPage && fetchNextPage()}
     >
       <div className="content-grid">
-        {viewableCollections.map((col) => {
-          return (
-            <CollectionPreview key={col.id} username={username} preview={col} />
-          );
-        })}
+        {viewableCollections.map((col) => (
+          <CollectionPreview key={col.collection.id} preview={col} />
+        ))}
       </div>
     </InfiniteScroll>
   );

@@ -6,10 +6,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { getProfile } from "@utils/api/profile/get-profile";
-import { getFollowers } from "@utils/api/user/get-followers";
-import { getFollowing } from "@utils/api/user/get-following";
-import { getFollowingCount } from "@utils/api/user/get-following-count";
+import { getProfileSummary } from "@utils/api/profile/get-profile-summary";
 import { createClient } from "@utils/supabase/server";
 
 import { Suspense } from "react";
@@ -26,17 +23,17 @@ async function page({ params }: Props) {
   const supabase = await createClient();
   const queryClient = new QueryClient();
 
-  const [profileDetails, userDetails] = await Promise.all([
-    getProfile({ key: "username", value: username }),
+  const [profileSummary, userDetails] = await Promise.all([
+    getProfileSummary({ username }),
     supabase.auth.getUser(),
   ]);
 
   const { user } = userDetails.data;
-  const { data: profile } = profileDetails;
+  const { data: profile_summary } = profileSummary;
 
-  const userID = user?.id ?? null;
+  const authUserID = user?.id ?? null;
 
-  if (!profile) {
+  if (!profile_summary) {
     return (
       <ErrorState
         heading="Not in the credits."
@@ -46,42 +43,18 @@ async function page({ params }: Props) {
     );
   }
 
-  const isCollectionOwner = profile.user_id === user?.id;
-  const targetUserID = profile.user_id;
-
-  Promise.all([
-    queryClient.prefetchInfiniteQuery({
-      queryKey: ["follow", "followers", targetUserID],
-      queryFn: ({ pageParam }) =>
-        getFollowers({ targetUserID, page: pageParam }),
-
-      initialPageParam: 0,
-    }),
-
-    queryClient.prefetchInfiniteQuery({
-      queryKey: ["follow", "followings", targetUserID],
-      queryFn: ({ pageParam }) =>
-        getFollowing({ targetUserID, page: pageParam }),
-
-      initialPageParam: 0,
-    }),
-
-    queryClient.prefetchQuery({
-      queryKey: ["follow", "states", targetUserID],
-      queryFn: () => getFollowingCount(userID, targetUserID),
-    }),
-  ]);
+  // todo prefetch the collection previews
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="pages">
-        <ProfileSummary profile={profile} userID={userID} />
+        <ProfileSummary
+          profileSummary={profile_summary}
+          authUserID={authUserID}
+        />
 
         <Suspense fallback={<p>Loading collections...</p>}>
-          <Collections
-            username={username}
-            isCollectionOwner={isCollectionOwner}
-          />
+          <Collections targetUserID={profile_summary.user_id} />
         </Suspense>
       </div>
     </HydrationBoundary>
