@@ -47,15 +47,17 @@ function CollectionPreview(props: Props) {
           {name}
         </h3>
 
-        <div className="flex items-center font-semibold gap-1">
-          <p className="text-xs font-medium text-zinc-500">
+        <div className="flex items-center gap-1">
+          <p className="text-xs font-medium text-neutral-600">
             {film_count} {film_count === 1 ? "film" : "films"}
           </p>
 
           {is_private && (
             <p className="flex items-center gap-1">
-              <span className="text-zinc-500">&#xb7;</span>
-              <span className="text-zinc-500 text-xs">Private</span>
+              <span className="text-neutral-600">&#xb7;</span>
+              <span className="text-neutral-600 text-xs font-medium">
+                Private
+              </span>
             </p>
           )}
         </div>

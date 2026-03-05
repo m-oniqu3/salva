@@ -14,6 +14,7 @@ import { useModal } from "@/context/useModal";
 import { CollectionSummary } from "@/types/collection";
 import { ModalEnum } from "@/types/modal";
 import toggleCollectionPrivacy from "@utils/api/collections/toggle-collection-privacy";
+import { getAvatarURL } from "@utils/get-cover-url";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -88,7 +89,7 @@ function CollectionToolbar(props: Props) {
     <div className="flex flex-wrap gap-3 mt-4">
       <div className="flex gap-3 items-center">
         <Avatar
-          avatar={summary.user.avatar}
+          avatar={summary.user.avatar ? getAvatarURL(summary.user.avatar) : ""}
           username={summary.user.username}
           name={summary.user.firstname || summary.user.username}
           className={"size-9.5 rounded-full"}

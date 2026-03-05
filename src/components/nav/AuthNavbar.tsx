@@ -15,6 +15,7 @@ import useClientRect from "@/hooks/useClientRect";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import { Profile } from "@/types/user";
+import { getAvatarURL } from "@utils/get-cover-url";
 import Link from "next/link";
 
 type Props = {
@@ -106,7 +107,7 @@ function AuthNavbar({ profile }: Props) {
 
             {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
             <Avatar
-              avatar={profile.avatar}
+              avatar={profile.avatar ? getAvatarURL(profile.avatar) : ""}
               username={profile.username}
               name={profile.firstname || profile.username}
               className={"size-7 rounded-full text-[12px]"}

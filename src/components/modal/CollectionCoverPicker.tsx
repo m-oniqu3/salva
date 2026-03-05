@@ -3,9 +3,9 @@
 import Button from "@/components/Button";
 import ErrorState from "@/components/ErrorState";
 import {
-  CameraIcon,
   CheckIcon,
   ChevronLeftIcon,
+  EditIcon,
   LoadingIcon,
 } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
@@ -201,10 +201,10 @@ function CollectionCoverPicker() {
         {selectedCover instanceof File && imagePreview && (
           <figure className="mx-auto relative">
             <div
-              className="absolute absolute-center bg-white text-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer z-10"
+              className="absolute absolute-center bg-white text-neutral-800 rounded-full size-8 grid place-items-center cursor-pointer z-10"
               onClick={triggerFileInput}
             >
-              <CameraIcon className="size-5" />
+              <EditIcon className="size-4" />
             </div>
 
             <Image
