@@ -40,9 +40,17 @@ function ProfileSummary({ profile, userID }: Props) {
             <span>{firstname ? `${firstname} ${lastname}` : username}</span>
           </h2>
 
-          <p className="text-[13px] font-semibold text-neutral-600">
-            @{username}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-[13px] font-semibold text-neutral-600">
+              @{username}
+            </p>
+
+            <span>&bull;</span>
+
+            <p className="text-[13px] font-semibold text-neutral-600">
+              {username.length} collections
+            </p>
+          </div>
           <p className="text-zinc-500 leading-5 text-[13px]">{bio}</p>
         </div>
 
