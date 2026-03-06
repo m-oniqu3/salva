@@ -5,18 +5,18 @@ curate and discuss films.
 ## what you can do so far
 - log in
 - edit profile
-
+*
 - search films/collections/users
 - view film details
 - view similar films 
-
+- view all saved films
+*
 - create, edit collections
 - save films to collections
 - toggle collection privacy
-- view all saved films
 - view films saved to a collection 
-
 - mass delete and move films from a collection
+
 
 
 
