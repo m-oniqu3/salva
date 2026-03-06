@@ -4,7 +4,6 @@ import { Result } from "@/types/result";
 import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 import { slugify } from "@utils/validation/slug";
-import { revalidatePath } from "next/cache";
 
 export async function createCollection(
   formData: FormData,
@@ -22,10 +21,19 @@ export async function createCollection(
 
     // Get logged-in user
     const { data: auth, error: authError } = await supabase.auth.getUser();
-
     if (authError) throw authError;
-
     if (!auth) return { data: null, error: null };
+
+    // Does the collection already exist
+    const { data: duplicate, error: duplicateError } = await supabase
+      .from("collections")
+      .select("name,slug")
+      .eq("name", values.name)
+      .maybeSingle();
+
+    if (duplicateError) throw duplicateError;
+
+    if (duplicate) throw new Error("Collection already exists");
 
     // Insert into DB
     const { data, error: collectionErr } = await supabase
@@ -44,7 +52,7 @@ export async function createCollection(
     const username = data.profiles.username;
 
     // Revalidate profile page cache
-    revalidatePath(`/${username}`, "page");
+    //revalidatePath(`/${username}`, "page");
 
     return {
       data: { slug: data.slug, username },

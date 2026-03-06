@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/Button";
-import CollectionMeta from "@/components/collection/SelectionCollection";
+import CollectionMeta from "@/components/collection/SelectCollection";
 import { CloseIcon, SearchIcon } from "@/components/icons";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types/context-menu";

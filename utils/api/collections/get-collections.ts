@@ -1,68 +1,57 @@
 "use server";
 
-import { CollectionPreview } from "@/types/collection";
+import { CollectionCover, CollectionPreview } from "@/types/collection";
 import { Result } from "@/types/result";
+import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 import { calculateRange } from "@utils/validation/paginate";
 
 type GetCollectionsResponse = Result<Array<CollectionPreview> | null>;
 
 type Props = {
-  username: string;
+  targetUserID: string;
   page: number;
 };
 
 // Gets the collections for the given user
 export async function getCollections(props: Props): GetCollectionsResponse {
   try {
-    const { username, page } = props;
+    const { targetUserID, page } = props;
     const [start, end] = calculateRange(page, 10);
 
     const supabase = await createClient();
 
-    // Get the user from the username
-    const { data: profile, error: profileErr } = await supabase
-      .from("profiles")
-      .select("user_id")
-      .eq("username", username)
-      .single();
-
-    if (profileErr) throw profileErr;
-
-    if (!profile) {
-      return { data: null, error: null };
-    }
-
     const { data, error } = await supabase
       .from("collections")
       .select(
-        `id, name, is_private, cover_image, slug,cover_type,
-         films:collection_films(id)
+        `id, name, is_private, cover_image, slug, cover_type,
+         films:collection_films(id),
+         user:profiles(user_id,username)
         `,
       )
-      .eq("user_id", profile.user_id)
+      .eq("user_id", targetUserID)
       .order("created_at", { ascending: false })
       .range(start, end);
 
     if (error) throw error;
 
-    const collections: Array<CollectionPreview> = data.map((col) => {
-      return {
-        ...col,
-        film_count: col.films.length,
-      };
-    });
+    const collections: Array<CollectionPreview> = data.map(
+      ({ films, user, ...col }) => {
+        return {
+          collection: {
+            ...col,
+            cover_type: col.cover_type
+              ? (col.cover_type as CollectionCover)
+              : null,
+            film_count: films.length,
+          },
+          user,
+        };
+      },
+    );
 
     return { data: collections, error: null };
   } catch (error) {
-    console.error("Unexpected error in getCollections:", error);
-
-    return {
-      data: null,
-      error:
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occurred while fetching the collection.",
-    };
+    return formErrorMesage(error);
   }
 }

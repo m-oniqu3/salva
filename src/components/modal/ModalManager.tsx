@@ -4,6 +4,7 @@ import Prompt from "@/components/auth/Prompt";
 import CollectionCoverPicker from "@/components/modal/CollectionCoverPicker";
 import CreateCollection from "@/components/modal/CreateCollection";
 import EditCollection from "@/components/modal/EditCollection";
+import EditProfile from "@/components/modal/EditProfile";
 import FilmCollection from "@/components/modal/FilmCollection";
 import MassDeleteFilms from "@/components/modal/MassDeleteFilms";
 import Modal from "@/components/modal/Modal";
@@ -27,7 +28,7 @@ function ModalManager() {
     if (!modal) return null;
 
     switch (modal.type) {
-      case ModalEnum.CCM:
+      case ModalEnum.CREATE_COLLECTION:
         return <CreateCollection />;
 
       case ModalEnum.A:
@@ -45,7 +46,7 @@ function ModalManager() {
       case ModalEnum.IPM:
         return <CollectionCoverPicker />;
 
-      case ModalEnum.MM:
+      case ModalEnum.MOBILE_MENU:
         return <MobileMenu />;
 
       case ModalEnum.FCM:
@@ -56,6 +57,9 @@ function ModalManager() {
 
       case ModalEnum.MDF:
         return <MassDeleteFilms />;
+
+      case ModalEnum.EDIT_PROFILE:
+        return <EditProfile />;
 
       default:
         throw new Error(

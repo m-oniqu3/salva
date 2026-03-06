@@ -3,9 +3,9 @@
 import Button from "@/components/Button";
 import ErrorState from "@/components/ErrorState";
 import {
-  CameraIcon,
   CheckIcon,
   ChevronLeftIcon,
+  EditIcon,
   LoadingIcon,
 } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
@@ -156,23 +156,16 @@ function CollectionCoverPicker() {
 
   return (
     <div
-      className="panel w-76 h-110 p-0 max-w-sm relative grid grid-rows-[70px_1fr_64px]  "
+      className="panel w-76 h-110 flex flex-col gap-4 relative overflow-hidden"
       onClick={stopPropagation}
     >
-      <header className="grid grid-cols-[30px_auto_30px] items-start p-4 gap-1 border-t border-gray-50 shadow-xs">
-        <button
-          onClick={handleBack}
-          className="relative top-0.5 cursor-pointer"
-        >
-          <ChevronLeftIcon className="size-6" />
-        </button>
+      <header>
+        <div className="flex  items-center text-center w-full">
+          <button onClick={handleBack} className=" cursor-pointer">
+            <ChevronLeftIcon className="size-5" />
+          </button>
 
-        <div className="flex flex-col  justify-center items-center text-center w-full">
-          <h1 className="text-base text-center font-semibold text-neutral-800">
-            Update Collection Cover
-          </h1>
-
-          <div className="flex text-sml text-center justify-center ">
+          <div className="flex text-sml text-center justify-center w-full">
             <p>Select an image or</p>
             <span>&nbsp;</span>
 
@@ -192,110 +185,116 @@ function CollectionCoverPicker() {
               onChange={handleFileChange}
             />
           </div>
-
-          {imageError && <p className="input-error">{imageError}</p>}
         </div>
+
+        {imageError && <p className="input-error">{imageError}</p>}
       </header>
 
-      <div className="flex flex-col gap-4 p-4 overflow-scroll no-scrollbar">
-        {selectedCover instanceof File && imagePreview && (
-          <figure className="mx-auto relative">
-            <div
-              className="absolute absolute-center bg-white text-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer z-10"
-              onClick={triggerFileInput}
-            >
-              <CameraIcon className="size-5" />
-            </div>
-
-            <Image
-              alt={selectedCover.name}
-              src={imagePreview}
-              width={90}
-              height={90}
-              className="object-cover h-32 rounded-md opacity-70"
-            />
-          </figure>
-        )}
-
-        <div className="relative h-full">
-          {isLoading && (
-            <div>
-              <LoadingIcon className="size-5 animate-spin" />
-            </div>
-          )}
-
-          {error && (
-            <ErrorState
-              heading="Reel Jammed"
-              message="We couldn’t load your saved films. Try again in a moment."
-              buttonLabel="Try Again"
-              onClick={refetch}
-            />
-          )}
-
-          {!data ||
-            (data.length === 0 && (
-              <ErrorState
-                heading="Nothing in the Archives"
-                message="Your saved films will appear here once you start collecting."
-                className="absolute-center h-full w-full"
-              />
-            ))}
-
-          {data && (
-            <InfiniteScroll
-              isLoadingIntialData={isLoading}
-              isLoadingMoreData={isFetchingNextPage}
-              fetchMoreData={() => hasNextPage && fetchNextPage()}
-            >
-              <div className="grid grid-cols-3 gap-1 ">
-                {data?.map((film) => {
-                  const isSelectedCover =
-                    selectedCover &&
-                    "id" in selectedCover &&
-                    selectedCover.id === film.id;
-
-                  const posterURL = getTMDBImageURL(film.poster_path);
-                  return (
-                    <figure
-                      key={film.id}
-                      className={`"w-full cursor-pointer relative transition-opacity duration-200 ease-in ${isSelectedCover ? "opacity-70" : ""}`}
-                      onClick={() =>
-                        handleSelectedFilmCover(film.id, film.poster_path)
-                      }
-                    >
-                      {isSelectedCover && (
-                        <div className="absolute absolute-center bg-white text-neutral-800 rounded-full size-10 grid place-items-center">
-                          <CheckIcon className={`size-5 text-neutral-800`} />
-                        </div>
-                      )}
-
-                      <Image
-                        alt={film.title}
-                        src={posterURL}
-                        width={90}
-                        height={90}
-                        className="object-cover w-full h-full rounded-md"
-                      />
-                    </figure>
-                  );
-                })}
+      <div className=" grid grid-rows-[1fr_64px] overflow-scroll no-scrollbar h-full">
+        <div className="flex flex-col gap-4 ">
+          {selectedCover instanceof File && imagePreview && (
+            <figure className="relative w-fit">
+              <figcaption className="form-label pb-1">
+                Selected Cover
+              </figcaption>
+              <div
+                className="absolute absolute-center bg-white text-neutral-800 rounded-full size-8 grid place-items-center cursor-pointer z-10"
+                onClick={triggerFileInput}
+              >
+                <EditIcon className="size-4" />
               </div>
-            </InfiniteScroll>
-          )}
-        </div>
-      </div>
 
-      <footer className="flex items-center justify-end gap-4 p-4 border-t border-gray-50 shadow-xs">
-        <Button onClick={closeModal}>Cancel</Button>
-        <Button
-          disabled={!selectedCover || isSubmitting}
-          onClick={handleSubmit}
-          className="bg-neutral-800 text-white disabled:opacity-50"
-        >
-          {isSubmitting ? "Saving" : "Save"}
-        </Button>
-      </footer>
+              <Image
+                alt={selectedCover.name}
+                src={imagePreview}
+                width={90}
+                height={90}
+                className="object-cover h-32 rounded-md"
+              />
+            </figure>
+          )}
+
+          <div className="relative h-full">
+            {isLoading && (
+              <div>
+                <LoadingIcon className="size-5 animate-spin" />
+              </div>
+            )}
+
+            {error && (
+              <ErrorState
+                heading="Reel Jammed"
+                message="We couldn’t load your saved films. Try again in a moment."
+                buttonLabel="Try Again"
+                onClick={refetch}
+              />
+            )}
+
+            {!data ||
+              (data.length === 0 && (
+                <ErrorState
+                  heading="Nothing in the Archives"
+                  message="Your saved films will appear here once you start collecting."
+                  className="absolute-center h-full w-full"
+                />
+              ))}
+
+            {data && (
+              <InfiniteScroll
+                isLoadingIntialData={isLoading}
+                isLoadingMoreData={isFetchingNextPage}
+                fetchMoreData={() => hasNextPage && fetchNextPage()}
+              >
+                <div className="grid grid-cols-3 gap-1 ">
+                  {data?.map((film) => {
+                    const isSelectedCover =
+                      selectedCover &&
+                      "id" in selectedCover &&
+                      selectedCover.id === film.id;
+
+                    const posterURL = getTMDBImageURL(film.poster_path);
+                    return (
+                      <figure
+                        key={film.id}
+                        className={`"w-full cursor-pointer relative transition-opacity duration-200 ease-in ${isSelectedCover ? "opacity-70" : ""}`}
+                        onClick={() =>
+                          handleSelectedFilmCover(film.id, film.poster_path)
+                        }
+                      >
+                        {isSelectedCover && (
+                          <div className="absolute absolute-center bg-white text-neutral-800 rounded-full size-10 grid place-items-center">
+                            <CheckIcon className={`size-5 text-neutral-800`} />
+                          </div>
+                        )}
+
+                        <Image
+                          alt={film.title}
+                          src={posterURL}
+                          width={90}
+                          height={90}
+                          className="object-cover w-full h-full rounded-md"
+                        />
+                      </figure>
+                    );
+                  })}
+                </div>
+              </InfiniteScroll>
+            )}
+          </div>
+        </div>
+
+        <footer className="flex items-center justify-end gap-4 p-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 w-full bg-white">
+          <Button onClick={closeModal}>Cancel</Button>
+
+          <Button
+            disabled={!selectedCover || isSubmitting}
+            onClick={handleSubmit}
+            className="bg-neutral-800 text-white disabled:opacity-50"
+          >
+            {isSubmitting ? "Saving" : "Save"}
+          </Button>
+        </footer>
+      </div>
     </div>
   );
 }

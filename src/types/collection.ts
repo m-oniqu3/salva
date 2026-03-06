@@ -10,13 +10,16 @@ export type Collection = {
 };
 
 export type CollectionPreview = {
-  id: number;
-  name: string;
-  is_private: boolean;
-  cover_image: string | null;
-  cover_type: CollectionCover | null;
-  slug: string;
-  film_count: number;
+  collection: {
+    id: number;
+    name: string;
+    is_private: boolean;
+    cover_image: string | null;
+    cover_type: CollectionCover | null;
+    slug: string;
+    film_count: number;
+  };
+  user: { user_id: string; username: string };
 };
 
 export type CollectionSummary = {

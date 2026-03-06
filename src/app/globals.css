@@ -6,6 +6,12 @@
 
 }
 
+/* * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} */
+
 :root {
   /* --background: #f4f4f4; */
   --background: rgb(245, 245, 245);
@@ -37,13 +43,6 @@ body {
 }
 
 
-@layer base {
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-}
 
 @layer components {
 
@@ -64,7 +63,7 @@ body {
   }
 
   .panel {
-    @apply bg-white h-full max-h-[500px] p-4 rounded-2xl w-full overflow-scroll no-scrollbar
+    @apply bg-white h-full max-h-[500px] p-4 rounded-3xl w-full overflow-scroll no-scrollbar
   }
 
   .context-panel {
@@ -81,8 +80,12 @@ body {
     /* @apply bg-gray-100 */
   }
 
+  .form-label {
+    @apply text-xs font-medium text-neutral-800 capitalize
+  }
+
   .input {
-    @apply w-full bg-[#F5F4F2] px-3 py-3 font-medium rounded-md focus:outline-none text-neutral-800;
+    @apply w-full bg-[#F5F4F2] px-3 py-3 font-medium rounded-lg focus:outline-none text-neutral-800;
     font-size: var(--text-small);
   }
 

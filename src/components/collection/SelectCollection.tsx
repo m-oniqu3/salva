@@ -1,0 +1,118 @@
+import { SolidLockClosedIcon } from "@/components/icons";
+import { type CollectionMeta } from "@/types/collection";
+import { getCollectionCoverUrl, getTMDBImageURL } from "@utils/get-cover-url";
+import Image from "next/image";
+
+type Props = {
+  collections: CollectionMeta[];
+  selectCollection: (id: number) => void;
+  selectedIDs: Set<number>;
+  sectionHeading: string;
+  isLoading: boolean;
+};
+
+function SelectCollection(props: Props) {
+  const {
+    collections,
+    selectCollection,
+    selectedIDs,
+    sectionHeading,
+    isLoading,
+  } = props;
+
+  return (
+    <>
+      {isLoading ? (
+        <>
+          <div className="h-full w-full grid place-items-center grid-cols-[40px_auto] gap-4 p-4">
+            <div className="size-10 bg-neutral-200 rounded-xl" />
+
+            <div className="flex flex-col w-full gap-1.5">
+              <div className="h-3.5 rounded-sm gray w-9/12"></div>
+              <div className="h-3.5 rounded-sm gray w-3/12"></div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {collections.length > 0 && (
+            <div className="flex flex-col">
+              <p className="text-sml font-medium px-4">{sectionHeading}</p>
+
+              <ul className="flex flex-col h-full p-2 ">
+                {collections.map((collection) => {
+                  const {
+                    id,
+                    cover_image,
+                    cover_type,
+                    films_count,
+                    name,
+                    is_private,
+                  } = collection;
+                  const isCollectionSelected = selectedIDs.has(id);
+
+                  const url =
+                    cover_image && cover_type === "uploaded"
+                      ? getCollectionCoverUrl(cover_image)
+                      : cover_image
+                        ? getTMDBImageURL(cover_image)
+                        : null;
+
+                  const image = url ? (
+                    <figure>
+                      <Image
+                        src={url}
+                        alt={name}
+                        width={40}
+                        height={40}
+                        className="size-10 object-cover bg-neutral-200 rounded-xl"
+                      />
+                    </figure>
+                  ) : (
+                    <div className="size-10 bg-neutral-200 rounded-xl" />
+                  );
+
+                  return (
+                    <li
+                      key={id}
+                      onClick={() => selectCollection(id)}
+                      className="grid place-items-center grid-cols-[40px_auto_40px] p-2 gap-4 rounded-2xl transition-all duration-300 ease-in-out cursor-pointer hover:gray"
+                    >
+                      {image}
+
+                      <div className="w-full text-start">
+                        <p className="text-sml line-clamp-1 text-neutral-800 font-medium">
+                          {name}
+                        </p>
+
+                        <div className="flex gap-1 items-center">
+                          <p className="text-sml text-zinc-500">
+                            {films_count} films
+                          </p>
+
+                          {is_private && (
+                            <div className="flex items-center gap-1">
+                              &bull;
+                              {/* <p className="text-sml text-zinc-500">Private</p> */}
+                              <SolidLockClosedIcon className="size-3.5 text-zinc-500" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div
+                        className={`size-3 border border-neutral-800 rounded-full cursor-pointer ${isCollectionSelected ? "bg-neutral-800" : ""}`}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        </>
+      )}
+    </>
+  );
+}
+
+export default SelectCollection;

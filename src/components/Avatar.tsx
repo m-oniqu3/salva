@@ -4,15 +4,13 @@ import { HTMLAttributes } from "react";
 
 type Props<T> = {
   avatar: string | null;
+  name: string;
   username: string;
   className?: HTMLAttributes<T> | string | null;
 };
 
 function Avatar<T>(props: Props<T>) {
-  const { avatar, username, className = "" } = props;
-
-  //username initials (characters)
-  const chars = username.at(0);
+  const { avatar, username, name, className = "" } = props;
 
   return (
     <Link
@@ -34,7 +32,7 @@ function Avatar<T>(props: Props<T>) {
           className="size-full rounded-full flex items-center justify-center uppercase text-[#ffffff] bg-[#ff9a6e]"
           style={{ fontSize: "inherit" }}
         >
-          {chars}
+          {name.at(0)}
         </span>
       )}
     </Link>

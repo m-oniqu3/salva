@@ -10,6 +10,16 @@ export function getCollectionCoverUrl(filePath: string) {
   return data.publicUrl;
 }
 
+export function getAvatarURL(filePath: string) {
+  const supabase = createClient();
+
+  const { data } = supabase.storage
+    .from("profile_avatars")
+    .getPublicUrl(filePath);
+
+  return data.publicUrl;
+}
+
 export function getTMDBImageURL(
   path: string,
   size: "w200" | "w500" | "original" = "w500",

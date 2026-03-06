@@ -59,8 +59,8 @@ async function page({ params }: Props) {
     return (
       <div className="error-state-wrapper">
         <ErrorState
-          heading="This page is not available."
-          message="Sorry, you can't access this."
+          heading="Private Screening"
+          message="This film collection isn’t open to the public."
           link="/"
           buttonLabel="Home"
         />

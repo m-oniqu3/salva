@@ -5,15 +5,16 @@ import Link from "next/link";
 
 type Props = {
   preview: CollectionPreview;
-  username: string;
 };
 
 //https://picsum.photos/id/237/200/300
 function CollectionPreview(props: Props) {
-  const { preview, username } = props;
+  const { preview } = props;
 
-  const { is_private, name, cover_image, cover_type, slug, film_count } =
-    preview;
+  const {
+    collection: { is_private, name, cover_image, cover_type, slug, film_count },
+    user: { username },
+  } = preview;
 
   const url =
     cover_image && cover_type === "uploaded"
@@ -46,15 +47,17 @@ function CollectionPreview(props: Props) {
           {name}
         </h3>
 
-        <div className="flex items-center font-semibold gap-1">
-          <p className="text-xs font-medium text-zinc-500">
+        <div className="flex items-center gap-1">
+          <p className="text-xs font-medium text-neutral-600">
             {film_count} {film_count === 1 ? "film" : "films"}
           </p>
 
           {is_private && (
             <p className="flex items-center gap-1">
-              <span className="text-zinc-500">&#xb7;</span>
-              <span className="text-zinc-500 text-xs">Private</span>
+              <span className="text-neutral-600">&#xb7;</span>
+              <span className="text-neutral-600 text-xs font-medium">
+                Private
+              </span>
             </p>
           )}
         </div>

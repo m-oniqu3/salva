@@ -1,7 +1,5 @@
 "use client";
 
-import Button from "@/components/Button";
-import { ChevronDownIcon } from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -36,27 +34,11 @@ function SearchLayout({ children }: Props) {
 
   return (
     <div className="pages">
-      <header>
-        <nav className="h-20 flex items-center justify-between">
-          <Button className="gray hidden md:flex">
-            All
-            <span>
-              <ChevronDownIcon className="size-4" />
-            </span>
-          </Button>
-
-          <ul className="flex items-center justify-center gap-2 w-full">
-            {rendered_links}
-          </ul>
-
-          <Button className="gray hidden md:flex">
-            Relevant
-            <span>
-              <ChevronDownIcon className="size-4" />
-            </span>
-          </Button>
-        </nav>
-      </header>
+      <nav className="flex items-center justify-between">
+        <ul className="flex items-center justify-center gap-2 w-full">
+          {rendered_links}
+        </ul>
+      </nav>
 
       {children}
     </div>

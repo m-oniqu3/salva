@@ -2,7 +2,7 @@
 
 import Button from "@/components/Button";
 import CollectionSearchbar from "@/components/collection/CollectionSearchbar";
-import SelectCollection from "@/components/collection/SelectionCollection";
+import SelectCollection from "@/components/collection/SelectCollection";
 import { useRecentlySavedFilmContext } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import useCollectionSelection from "@/hooks/useCollectionSelection";
@@ -142,19 +142,17 @@ function FilmCollection() {
         </div>
 
         <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
-          <div className="flex flex-col gap-4">
-            {filled.length > 0 && (
-              <SelectCollection
-                isLoading={collectionFilmsQuery.isLoading}
-                collections={filled}
-                selectCollection={toggle}
-                selectedIDs={selectedIDs}
-                sectionHeading="Saved in"
-              />
-            )}
-          </div>
+          {
+            <SelectCollection
+              isLoading={collectionFilmsQuery.isLoading}
+              collections={filled}
+              selectCollection={toggle}
+              selectedIDs={selectedIDs}
+              sectionHeading="Saved in"
+            />
+          }
 
-          {available.length > 0 && (
+          {
             <SelectCollection
               isLoading={collectionsMetaQuery.isLoading}
               collections={available}
@@ -162,7 +160,7 @@ function FilmCollection() {
               selectedIDs={selectedIDs}
               sectionHeading="Your collections"
             />
-          )}
+          }
         </div>
 
         <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
