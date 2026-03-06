@@ -17,6 +17,8 @@ import toggleCollectionPrivacy from "@utils/api/collections/toggle-collection-pr
 import { getAvatarURL } from "@utils/get-cover-url";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type Props = {
   isCollectionOwner: boolean;
@@ -29,20 +31,34 @@ function CollectionToolbar(props: Props) {
   const { openModal } = useModal();
   const router = useRouter();
 
-  const isCollectionPrivate = summary.collection.is_private;
+  const [isTogglingPrivacy, setIsTogglingPrivacy] = useState(false);
 
-  // disable button when loading
   async function togglePrivacyStatus() {
-    console.log("Making collection public...");
+    toast.promise(
+      async function () {
+        setIsTogglingPrivacy(true);
 
-    const { data, error } = await toggleCollectionPrivacy(
-      summary.collection.id,
+        const { error } = await toggleCollectionPrivacy({
+          collection: {
+            id: summary.collection.id,
+            isPrivate: summary.collection.is_private,
+          },
+        });
+
+        if (error) throw error;
+        setIsTogglingPrivacy(false);
+      },
+      {
+        loading: "Updating collection's privacy...",
+        success: () => {
+          router.replace(
+            `/${summary.user.username}/${summary.collection.slug}`,
+          );
+          return "Collection's privacy updated.";
+        },
+        error: "Failed to update collection\'s privacy.",
+      },
     );
-
-    if (!error) {
-      console.log(data);
-      console.log("successfully toggled privacy");
-    }
   }
 
   function handleEditModal() {
@@ -77,8 +93,9 @@ function CollectionToolbar(props: Props) {
     { name: "Edit", icon: EditIcon, handler: handleEditModal },
     {
       name: "Privacy",
-      icon: isCollectionPrivate ? LockOpenIcon : LockClosedIcon,
+      icon: summary.collection.is_private ? LockOpenIcon : LockClosedIcon,
       handler: togglePrivacyStatus,
+      disabled: isTogglingPrivacy,
     },
     { name: "Organize", icon: OrganizeIcon, handler: organizeCollection },
     { name: "Sort", icon: SortIcon, handler: () => {} },
