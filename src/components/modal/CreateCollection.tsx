@@ -61,6 +61,17 @@ function CreateCollection() {
         closeModal();
       } catch (error) {
         console.log(error);
+
+        if (
+          (error as unknown as string).includes("Collection already exists")
+        ) {
+          form.setError("root", {
+            message: "You already have a collection with this name.",
+          });
+
+          return;
+        }
+
         toast("Soemthing went wrong");
       }
     });
