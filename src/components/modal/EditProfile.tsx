@@ -127,7 +127,7 @@ function EditProfile() {
           />
 
           <div>
-            {/* name */}
+            {/* names */}
             <div className="flex gap-4">
               <div className="flex flex-col gap-1">
                 <label htmlFor="name" className="form-label">
@@ -157,6 +157,8 @@ function EditProfile() {
                 <p className="input-error">{errors.firstname?.message}</p>
               </div>
             </div>
+
+            {/* username */}
             <div className="flex flex-col gap-1">
               <label htmlFor="username" className="form-label">
                 Username

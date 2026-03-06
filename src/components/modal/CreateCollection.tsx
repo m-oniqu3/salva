@@ -1,12 +1,12 @@
 "use client";
 
 import Button from "@/components/Button";
-import { CloseIcon, LoadingIcon } from "@/components/icons";
+import { LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { createCollection } from "@/server-actions/create-collection";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { QueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   NewCollection,
   NewCollectionSchema,
@@ -24,6 +24,7 @@ function CreateCollection() {
     useTransition();
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm<NewCollection>({
     resolver: zodResolver(NewCollectionSchema),
@@ -34,7 +35,7 @@ function CreateCollection() {
     },
   });
 
-  const queryClient = new QueryClient();
+  const { errors } = form.formState;
 
   function onSubmitForm(input: NewCollection) {
     startCreateCollectionTransition(async () => {
@@ -51,7 +52,8 @@ function CreateCollection() {
         if (!data) throw new Error("Something went wrong");
 
         const { username, slug } = data;
-        router.push("/" + username + "/" + slug);
+        router.replace("/" + username + "/" + slug);
+
         queryClient.invalidateQueries({
           queryKey: ["collections", username],
         });
@@ -66,19 +68,15 @@ function CreateCollection() {
 
   return (
     <div
-      className="panel grid grid-rows-[80px_1fr] w-76 h-fit"
+      className="relative panel grid grid-rows-[auto_1fr] gap-4 w-76 h-110"
       onClick={stopPropagation}
     >
-      <header className="relative">
-        <h1 className="text-base font-bold">Create Collection</h1>
-        <p className="text-sml">Create a collection to organize your films.</p>
+      <header>
+        <p className="text-xs font-medium text-center">Create Collection</p>
 
-        <button
-          onClick={closeModal}
-          className="absolute top-0 right-0 cursor-pointer"
-        >
-          <CloseIcon className="size-4" />
-        </button>
+        {errors.root && (
+          <p className="py-1 input-error">{errors.root.message}</p>
+        )}
       </header>
 
       <form
@@ -87,7 +85,7 @@ function CreateCollection() {
       >
         {/* name */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml ">
+          <label htmlFor="name" className="form-label ">
             Collection Name
           </label>
 
@@ -102,8 +100,8 @@ function CreateCollection() {
 
         {/* description */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sml">
-            What is this collection about?
+          <label htmlFor="description" className="form-label">
+            Description (Optional)
           </label>
 
           <textarea
@@ -134,21 +132,26 @@ function CreateCollection() {
           </p>
         </div>
 
-        <Button
-          disabled={isCreatingCollection}
-          type="submit"
-          className="bg-neutral-800 text-white rounded-lg h-9 "
-        >
-          {isCreatingCollection ? (
-            <div className="flex items-center justify-center gap-2">
-              <span className="animate-spin text-white">
-                <LoadingIcon className="size-5" />
-              </span>
-            </div>
-          ) : (
-            "Create Collection"
-          )}
-        </Button>
+        <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
+          <Button onClick={closeModal}>Cancel</Button>
+
+          <Button
+            disabled={isCreatingCollection}
+            type="submit"
+            className="bg-neutral-800 text-white "
+          >
+            {isCreatingCollection ? (
+              <div className="flex items-center justify-center gap-2">
+                Creating
+                <span className="animate-spin text-white">
+                  <LoadingIcon className="size-4" />
+                </span>
+              </div>
+            ) : (
+              "Create Collection"
+            )}
+          </Button>
+        </div>
       </form>
     </div>
   );

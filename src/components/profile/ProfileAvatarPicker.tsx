@@ -41,10 +41,6 @@ function ProfileAvatarPicker(props: Props) {
       return;
     }
 
-    // Preview
-    // const url = URL.createObjectURL(file);
-    // setAvatarPreview(url);
-
     uploadAvatar(file);
   };
 
@@ -62,8 +58,7 @@ function ProfileAvatarPicker(props: Props) {
       if (uploadError) throw uploadError;
       if (!avatarURL) throw new Error("Something went wrong.");
 
-      // Edit profile
-
+      // Update Profile
       const { error } = await editProfile({ profile: { avatar: avatarURL } });
       if (error) throw error;
 
@@ -85,6 +80,7 @@ function ProfileAvatarPicker(props: Props) {
         <label htmlFor="name" className="form-label">
           Avatar
         </label>
+
         <>
           {avatarPreview ? (
             <figure

@@ -142,17 +142,15 @@ function FilmCollection() {
         </div>
 
         <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
-          <div className="flex flex-col gap-4">
-            {
-              <SelectCollection
-                isLoading={collectionFilmsQuery.isLoading}
-                collections={filled}
-                selectCollection={toggle}
-                selectedIDs={selectedIDs}
-                sectionHeading="Saved in"
-              />
-            }
-          </div>
+          {
+            <SelectCollection
+              isLoading={collectionFilmsQuery.isLoading}
+              collections={filled}
+              selectCollection={toggle}
+              selectedIDs={selectedIDs}
+              sectionHeading="Saved in"
+            />
+          }
 
           {
             <SelectCollection

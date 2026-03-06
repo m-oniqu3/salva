@@ -1,12 +1,7 @@
 "use client ";
 
 import Button from "@/components/Button";
-import {
-  AddIcon,
-  CameraIcon,
-  CloseIcon,
-  LoadingIcon,
-} from "@/components/icons";
+import { AddIcon, CameraIcon, LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { ModalEnum } from "@/types/modal";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -122,108 +117,103 @@ function EditCollection() {
 
   return (
     <form
-      className="panel flex flex-col gap-4 w-80 h-fit mx-auto"
+      className="relative panel flex flex-col gap-4 overflow-hidden h-110 w-76 mx-auto"
       onClick={stopPropagation}
       onSubmit={form.handleSubmit(onSubmitForm)}
     >
       <header className="relative">
-        <h1 className="text-base font-bold text-neutral-800">
-          Edit Collection
-        </h1>
-        <p className="text-sml">Adjust the details of your collection.</p>
-
-        <button
-          onClick={closeModal}
-          className="absolute top-0 right-0 cursor-pointer"
-        >
-          <CloseIcon className="size-4" />
-        </button>
+        <p className="text-xs font-medium text-center">Edit Collection</p>
 
         {errors.root && (
           <p className="py-1 input-error">{errors.root.message}</p>
         )}
       </header>
 
-      <div className="relative flex flex-col gap-4  h-full">
-        {/* cover */}
-        <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-neutral-800">
-            Cover
-          </label>
+      <div className="grid grid-rows-[1fr_64px] h-full overflow-scroll no-scrollbar">
+        <div className="flex flex-col gap-5">
+          {/* cover */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="name" className="text-sml text-neutral-800">
+              Cover
+            </label>
 
-          {collectionDetails?.cover_image && url ? (
-            <figure className="relative size-20">
-              <div
-                className="absolute absolute-center bg-white text-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer z-10"
+            {collectionDetails?.cover_image && url ? (
+              <figure className="relative size-20">
+                <div
+                  className="absolute absolute-center bg-white text-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer z-10"
+                  onClick={openImagePickerModal}
+                >
+                  <CameraIcon className="size-5" />
+                </div>
+
+                <Image
+                  src={url}
+                  alt={collectionDetails.name}
+                  width={90}
+                  height={90}
+                  className="object-cover size-full rounded-xl"
+                />
+              </figure>
+            ) : (
+              <button
+                type="button"
                 onClick={openImagePickerModal}
+                className="flex justify-center items-center size-20 rounded-xl gray z-0 cursor-pointer"
               >
-                <CameraIcon className="size-5" />
+                <AddIcon className="size-5 text-neutral-400" />
+              </button>
+            )}
+          </div>
+
+          {/* name */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="name" className="text-sml text-neutral-800">
+              Name
+            </label>
+
+            <input
+              {...form.register("name")}
+              placeholder="comfort rewatches"
+              className="input h-9 gray"
+            />
+
+            <p className="input-error">{errors.name?.message}</p>
+          </div>
+
+          {/* description */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="description" className="text-sml text-neutral-800">
+              Description (Optional)
+            </label>
+
+            <textarea
+              {...form.register("description")}
+              className="input h-16 resize-none gray no-scrollbar"
+              placeholder="movies i throw on when my brain is tired"
+            ></textarea>
+
+            <p className="input-error">{errors.description?.message}</p>
+          </div>
+        </div>
+
+        <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">
+          <Button onClick={closeModal}>Cancel</Button>
+          <Button
+            disabled={isEditingCollection || isError}
+            type="submit"
+            className="bg-neutral-800 text-white"
+          >
+            {isEditingCollection ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="animate-spin text-white">
+                  <LoadingIcon className="size-5" />
+                </span>
               </div>
-
-              <Image
-                src={url}
-                alt={collectionDetails.name}
-                width={90}
-                height={90}
-                className="object-cover size-full rounded-lg"
-              />
-            </figure>
-          ) : (
-            <button
-              type="button"
-              onClick={openImagePickerModal}
-              className="flex justify-center items-center size-20 rounded-lg gray z-0 cursor-pointer"
-            >
-              <AddIcon className="size-5 text-neutral-400" />
-            </button>
-          )}
+            ) : (
+              "Edit Collection"
+            )}
+          </Button>
         </div>
-
-        {/* name */}
-        <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sml text-neutral-800">
-            Name
-          </label>
-
-          <input
-            {...form.register("name")}
-            placeholder="comfort rewatches"
-            className="input h-9 gray"
-          />
-
-          <p className="input-error">{errors.name?.message}</p>
-        </div>
-
-        {/* description */}
-        <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sml text-neutral-800">
-            What is this collection about?
-          </label>
-
-          <textarea
-            {...form.register("description")}
-            className="input h-16 resize-none gray no-scrollbar"
-            placeholder="movies i throw on when my brain is tired"
-          ></textarea>
-
-          <p className="input-error">{errors.description?.message}</p>
-        </div>
-
-        <Button
-          disabled={isEditingCollection || isError}
-          type="submit"
-          className="bg-neutral-800 text-white rounded-lg h-9"
-        >
-          {isEditingCollection ? (
-            <div className="flex items-center justify-center gap-2">
-              <span className="animate-spin text-white">
-                <LoadingIcon className="size-5" />
-              </span>
-            </div>
-          ) : (
-            "Edit Collection"
-          )}
-        </Button>
       </div>
     </form>
   );
