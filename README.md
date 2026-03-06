@@ -4,6 +4,7 @@ curate and discuss films.
 
 ## what you can do so far
 - log in
+- edit profile
 
 - search films/collections/users
 - view film details
@@ -15,11 +16,14 @@ curate and discuss films.
 - view all saved films
 - view films saved to a collection 
 
+- mass delete and move films from a collection
+
 
 
 ## next up
 - delete a collection
-- mass delete and move films from a collection
+- sort collections
+- sort films 
 - delete/move a film from a collection
 - discover page
 - logout
@@ -33,6 +37,7 @@ curate and discuss films.
 - notifications
 - follow people
 - follow collections 
+- comment on films
 
 
 
