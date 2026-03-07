@@ -1,6 +1,7 @@
 "use client";
 
 import ProfileOptionsMenu from "@/components/context-menu/ProfileOptionsMenu";
+import SortCollectionPreviews from "@/components/context-menu/SortCollectionPreviews";
 import {
   AddIcon,
   BookmarkIcon,
@@ -27,12 +28,16 @@ function ProfileToolbar(props: Props) {
   const { openModal } = useModal();
   const {
     openMenu,
+    closeMenu,
     state: { menu },
   } = useContextMenu();
 
   const isProfileOptionsMenu = menu?.type === ContextMenuEnum.PROFILE_OPTIONS;
+  const isSortCollectionPreviewsMenu =
+    menu?.type === ContextMenuEnum.SORT_COLLECTION_PREVIEWS;
 
   function handleEditModal() {
+    closeMenu();
     openModal({
       type: ModalEnum.EDIT_PROFILE,
       payload: { profileSummary },
@@ -40,6 +45,7 @@ function ProfileToolbar(props: Props) {
   }
 
   function handleCreateCollection() {
+    closeMenu();
     openModal({ type: ModalEnum.CREATE_COLLECTION });
   }
 
@@ -54,12 +60,16 @@ function ProfileToolbar(props: Props) {
     router.push("/films");
   }
 
+  function handleSort() {
+    openMenu({ type: ContextMenuEnum.SORT_COLLECTION_PREVIEWS });
+  }
+
   const toolbar = [
     { name: "Films", icon: BookmarkIcon, handler: handleViewFilms },
     { name: "Create", icon: AddIcon, handler: handleCreateCollection },
     { name: "Edit", icon: EditIcon, handler: handleEditModal },
 
-    { name: "Sort", icon: SortIcon, handler: () => {} },
+    { name: "Sort", icon: SortIcon, handler: handleSort },
     { name: "More", icon: MoreHorizontalIcon, handler: handleMore },
   ];
 
@@ -68,6 +78,12 @@ function ProfileToolbar(props: Props) {
       {toolbar.map((tool) => (
         <Tool key={tool.name} tool={tool} />
       ))}
+
+      {isSortCollectionPreviewsMenu && (
+        <div className="absolute top-15 -right-10 z-5">
+          <SortCollectionPreviews />
+        </div>
+      )}
 
       <div className="absolute top-15 right-0 z-5">
         {isProfileOptionsMenu && <ProfileOptionsMenu />}

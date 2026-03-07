@@ -1,13 +1,11 @@
 import { CollectionSummary } from "@/types/collection";
-import { TMDBFilm } from "@/types/tmdb";
 import { ProfileSummary } from "@/types/user";
 
 export enum ContextMenuEnum {
-  "PM" = "PROFILE_MENU",
+  "PROFILE_MENU" = "PROFILE_MENU",
   "COLLECTION_OPTIONS" = "COLLECTION_OPTIONS_MENU",
   "PROFILE_OPTIONS" = "PROFILE_OPTIONS_MENU",
-  "AEM" = "ADD_ELEMENT_MENU",
-  "CPM" = "COLLECTION_PICKER_MENU",
+  "SORT_COLLECTION_PREVIEWS" = "SORT_COLLECTION_PREVIEWS_MENU",
 }
 
 type ContextMenuState<K = ContextMenuEnum, P = undefined> = {
@@ -16,22 +14,15 @@ type ContextMenuState<K = ContextMenuEnum, P = undefined> = {
 };
 
 // might need user ID here in the payload
-type ProfileMenu = ContextMenuState<ContextMenuEnum.PM, null>;
+type ProfileMenu = ContextMenuState<ContextMenuEnum.PROFILE_MENU, null>;
 
 type CollectionActionsMenu = ContextMenuState<
   ContextMenuEnum.COLLECTION_OPTIONS,
   { summary: CollectionSummary }
 >;
 
-type AddElementMenu = ContextMenuState<ContextMenuEnum.AEM, null>;
-
-type CollectionPickerMenu = ContextMenuState<
-  ContextMenuEnum.CPM,
-  {
-    userID?: string | null;
-    film: TMDBFilm;
-  }
->;
+type SortCollectionPreviewsMenu =
+  ContextMenuState<ContextMenuEnum.SORT_COLLECTION_PREVIEWS>;
 
 type ProfileOptionsMenu = ContextMenuState<
   ContextMenuEnum.PROFILE_OPTIONS,
@@ -42,5 +33,4 @@ export type ContextMenu =
   | ProfileMenu
   | CollectionActionsMenu
   | ProfileOptionsMenu
-  | AddElementMenu
-  | CollectionPickerMenu;
+  | SortCollectionPreviewsMenu;
