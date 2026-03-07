@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
+import CollectionOptionsMenu from "@/components/context-menu/CollectionOptionsMenu";
 import {
   EditIcon,
   LockClosedIcon,
@@ -10,8 +11,10 @@ import {
   SortIcon,
 } from "@/components/icons";
 import Tool from "@/components/Tool";
+import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { CollectionSummary } from "@/types/collection";
+import { ContextMenuEnum } from "@/types/context-menu";
 import { ModalEnum } from "@/types/modal";
 import toggleCollectionPrivacy from "@utils/api/collections/toggle-collection-privacy";
 import { getAvatarURL } from "@utils/get-cover-url";
@@ -29,8 +32,15 @@ function CollectionToolbar(props: Props) {
   const { isCollectionOwner, summary } = props;
 
   const { openModal } = useModal();
+  const {
+    openMenu,
+    closeMenu,
+    state: { menu },
+  } = useContextMenu();
   const router = useRouter();
 
+  const isCollectionOptionsMenu =
+    menu?.type === ContextMenuEnum.COLLECTION_OPTIONS;
   const [isTogglingPrivacy, setIsTogglingPrivacy] = useState(false);
 
   async function togglePrivacyStatus() {
@@ -89,6 +99,13 @@ function CollectionToolbar(props: Props) {
     );
   }
 
+  function handleMore() {
+    openMenu({
+      type: ContextMenuEnum.COLLECTION_OPTIONS,
+      payload: { summary },
+    });
+  }
+
   const toolbar = [
     { name: "Edit", icon: EditIcon, handler: handleEditModal },
     {
@@ -99,12 +116,12 @@ function CollectionToolbar(props: Props) {
     },
     { name: "Organize", icon: OrganizeIcon, handler: organizeCollection },
     { name: "Sort", icon: SortIcon, handler: () => {} },
-    { name: "More", icon: MoreHorizontalIcon, handler: () => {} },
+    { name: "More", icon: MoreHorizontalIcon, handler: handleMore },
   ];
 
   return (
-    <div className="flex flex-wrap gap-3 mt-4">
-      <div className="flex gap-3 items-center">
+    <div className=" flex flex-wrap gap-3 mt-4">
+      <div className="relative flex flex-wrap gap-3 items-center">
         <Avatar
           avatar={summary.user.avatar ? getAvatarURL(summary.user.avatar) : ""}
           username={summary.user.username}
@@ -120,15 +137,21 @@ function CollectionToolbar(props: Props) {
             </Link>
           </figcaption>
         )}
-      </div>
 
-      {isCollectionOwner && (
-        <>
-          {toolbar.map((tool) => (
-            <Tool key={tool.name} tool={tool} />
-          ))}
-        </>
-      )}
+        {isCollectionOwner && (
+          <>
+            {toolbar.map((tool) => (
+              <Tool key={tool.name} tool={tool} />
+            ))}
+
+            {isCollectionOptionsMenu && (
+              <div className="absolute top-15 right-0 z-5">
+                {isCollectionOptionsMenu && <CollectionOptionsMenu />}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

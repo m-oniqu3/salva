@@ -67,7 +67,7 @@ body {
   }
 
   .context-panel {
-    @apply gray p-3 rounded-2xl
+    @apply gray p-3 rounded-2xl z-5 border border-zinc-200
   }
 
   .dark {

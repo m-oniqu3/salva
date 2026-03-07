@@ -1,123 +1,41 @@
 "use client";
 
+import Menu from "@/components/context-menu/Menu";
 import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { ContextMenuEnum } from "@/types/context-menu";
-import { ModalEnum } from "@/types/modal";
-import toggleCollectionPrivacy from "@utils/api/collections/toggle-collection-privacy";
 
 function CollectionOptionsMenu() {
-  const { closeContextMenu } = useContextMenu();
   const { openModal } = useModal();
   const {
+    closeMenu,
+    stopPropagation,
     state: { menu },
   } = useContextMenu();
 
   if (!menu) return null;
-  if (menu.type !== ContextMenuEnum.COM) return null;
-  if (!menu.payload?.collectionSummary)
+  if (menu.type !== ContextMenuEnum.COLLECTION_OPTIONS) return null;
+  if (!menu.payload?.summary)
     throw new Error(
       "Collection Summary must be provided to" + CollectionOptionsMenu.name,
     );
 
-  const { top, left } = menu.position;
-
-  const collectionSummary = menu.payload.collectionSummary;
-
-  const CollectionOptions = {
-    EDIT: "Edit Details",
-    ORG: "Organize",
-    MP: collectionSummary?.collection.is_private
-      ? "Make Public"
-      : "Make Private",
-    IC: "Invite Collaborators",
-    S: "Share",
-    DEL: "Delete",
-  } as const;
-
-  const keys = Object.keys(CollectionOptions) as Array<
-    keyof typeof CollectionOptions
-  >;
-
-  // Action functions
-  function editCollectionDetails() {
-    console.log("editing collection");
-    closeContextMenu();
-    openModal({ type: ModalEnum.ECM, payload: { collectionSummary } });
-  }
-
-  function organizeCollection() {
-    console.log("Organizing collection...");
-  }
-
-  async function togglePrivacyStatus() {
-    console.log("Making collection public...");
-
-    closeContextMenu();
-
-    const { data, error } = await toggleCollectionPrivacy(
-      collectionSummary.collection.id,
-    );
-
-    if (!error) {
-      console.log(data);
-      console.log("successfully toggled privacy");
-    }
-  }
-
-  function inviteCollaborators() {
-    console.log("Inviting collaborators...");
-  }
+  const collectionSummary = menu.payload.summary;
 
   function deleteCollection() {
     console.log("Deleting collection...");
   }
 
-  function handleOptionsClick(key: keyof typeof CollectionOptions) {
-    switch (key) {
-      case "EDIT":
-        return editCollectionDetails();
+  const options = [
+    { label: "Share", onClick: () => {} },
+    {
+      label: "Delete",
+      className: "text-red-600 hover:bg-red-700/50 hover:text-white",
+      onClick: deleteCollection,
+    },
+  ];
 
-      case "ORG":
-        return organizeCollection();
-
-      case "MP":
-        return togglePrivacyStatus();
-
-      case "IC":
-        return inviteCollaborators();
-
-      case "DEL":
-        return deleteCollection();
-
-      default:
-        throw new Error(`No action exists for key: ${key}`);
-    }
-  }
-
-  const rendered_collection_options = keys.map((key) => {
-    return (
-      <li
-        key={key}
-        onClick={() => handleOptionsClick(key)}
-        className={`p-3 font-semibold text-xs cursor-pointer text-zinc-500 hover:text-zinc-700 hover:rounded-lg hover:bg-[#ebebe9] transition-all ease-in-out duration-100 ${
-          key === `DEL` ? `text-red-600` : ""
-        }`}
-      >
-        {CollectionOptions[key]}
-      </li>
-    );
-  });
-
-  return (
-    <div
-      className="context-panel absolute z-5 w-full min-[400px]:w-48"
-      style={{ top, left }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <ul className="">{rendered_collection_options}</ul>
-    </div>
-  );
+  return <Menu items={options} />;
 }
 
 export default CollectionOptionsMenu;

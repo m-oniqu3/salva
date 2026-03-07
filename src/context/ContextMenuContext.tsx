@@ -21,9 +21,9 @@ import {
 type ContextMenuContext = {
   state: ContextState;
   dispatch: Dispatch<ContextMenuAction>;
-  openContextMenu(menu: ContextMenu): void;
-  closeContextMenu: () => void;
-  updateContextMenuPosition(position: { top: number; left: number }): void;
+  openMenu(menu: ContextMenu): void;
+  closeMenu: () => void;
+  stopPropagation: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 };
 
 export const ContextMenuContext = createContext<ContextMenuContext | null>(
@@ -39,36 +39,24 @@ export function ContextMenuProvider({ children }: ContextProviderProps) {
   // useReducer hook to manage state with our reducer function and initial state
   const [state, dispatch] = useReducer(contextMenuReducer, initialState);
 
-  const openContextMenu = useCallback((menu: ContextMenu) => {
+  const openMenu = useCallback((menu: ContextMenu) => {
     dispatch({
       type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
       payload: menu,
     });
   }, []);
 
-  const closeContextMenu = useCallback(() => {
+  const closeMenu = useCallback(() => {
     dispatch({ type: ContextMenuActionEnum.CLOSE_CONTEXT_MENU });
   }, []);
 
-  const updateContextMenuPosition = useCallback(
-    (position: { top: number; left: number }) => {
-      dispatch({
-        type: ContextMenuActionEnum.UPDATE_POSITION,
-        payload: position,
-      });
-    },
-    [],
-  );
+  function stopPropagation(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+    e.stopPropagation();
+  }
 
   return (
     <ContextMenuContext.Provider
-      value={{
-        dispatch,
-        state,
-        openContextMenu,
-        closeContextMenu,
-        updateContextMenuPosition,
-      }}
+      value={{ dispatch, state, openMenu, closeMenu, stopPropagation }}
     >
       {children}
     </ContextMenuContext.Provider>

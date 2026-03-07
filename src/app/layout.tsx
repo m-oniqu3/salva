@@ -1,4 +1,3 @@
-import ContextMenuManager from "@/components/context-menu/ContextMenuManager";
 import ModalManager from "@/components/modal/ModalManager";
 import { ContextMenuProvider } from "@/context/ContextMenuContext";
 import { ModalContextProvider } from "@/context/ModalContext";
@@ -52,9 +51,7 @@ export default async function RootLayout({ children }: LayoutProps) {
 
                 {children}
                 <div id="modal" />
-                <div id="context-menu">
-                  <ContextMenuManager />
-                </div>
+                <div id="context-menu">{/* <ContextMenuManager /> */}</div>
               </ContextMenuProvider>
             </ModalContextProvider>
           </RecentlySavedFilmProvider>

@@ -21,7 +21,10 @@ type ModalState<K extends ModalEnum, P = null> = {
   payload?: P;
 };
 
-type CreateCollectionModal = ModalState<ModalEnum.CREATE_COLLECTION>;
+type CreateCollectionModal = ModalState<
+  ModalEnum.CREATE_COLLECTION,
+  { collectionName: string }
+>;
 
 type MobileMenuModal = ModalState<ModalEnum.MOBILE_MENU, { profile: Profile }>;
 type AuthModal = ModalState<ModalEnum.A>;

@@ -131,7 +131,7 @@ function FilmCollection() {
       className="relative p-0 rounded-3xl overflow-hidden h-110 w-76 bg-white "
       onClick={stopPropagation}
     >
-      <div className="grid grid-rows-[110px_1fr_64px] h-full">
+      <div className="grid grid-rows-[auto_auto_1fr_64px] h-full">
         <div className="flex flex-col gap-4 p-4 border-b border-gray-50 ">
           <p className="text-xs font-medium text-center">Add to Collection</p>
           <CollectionSearchbar
@@ -139,6 +139,9 @@ function FilmCollection() {
             onSearchChange={handleSearch}
             onClearSearch={clearSearch}
           />
+        </div>
+        <div>
+          <button>Create Collection</button>
         </div>
 
         <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">

@@ -1,16 +1,17 @@
 import { CollectionSummary } from "@/types/collection";
 import { TMDBFilm } from "@/types/tmdb";
+import { ProfileSummary } from "@/types/user";
 
 export enum ContextMenuEnum {
   "PM" = "PROFILE_MENU",
-  "COM" = "COLLECTION_OPTIONS_MENU",
+  "COLLECTION_OPTIONS" = "COLLECTION_OPTIONS_MENU",
+  "PROFILE_OPTIONS" = "PROFILE_OPTIONS_MENU",
   "AEM" = "ADD_ELEMENT_MENU",
   "CPM" = "COLLECTION_PICKER_MENU",
 }
 
 type ContextMenuState<K = ContextMenuEnum, P = undefined> = {
   type: K;
-  position: { top?: number; left?: number; right?: number; bottom?: number };
   payload?: P | null;
 };
 
@@ -18,10 +19,8 @@ type ContextMenuState<K = ContextMenuEnum, P = undefined> = {
 type ProfileMenu = ContextMenuState<ContextMenuEnum.PM, null>;
 
 type CollectionActionsMenu = ContextMenuState<
-  ContextMenuEnum.COM,
-  {
-    collectionSummary: CollectionSummary;
-  }
+  ContextMenuEnum.COLLECTION_OPTIONS,
+  { summary: CollectionSummary }
 >;
 
 type AddElementMenu = ContextMenuState<ContextMenuEnum.AEM, null>;
@@ -34,8 +33,14 @@ type CollectionPickerMenu = ContextMenuState<
   }
 >;
 
+type ProfileOptionsMenu = ContextMenuState<
+  ContextMenuEnum.PROFILE_OPTIONS,
+  { summary: ProfileSummary }
+>;
+
 export type ContextMenu =
   | ProfileMenu
   | CollectionActionsMenu
+  | ProfileOptionsMenu
   | AddElementMenu
   | CollectionPickerMenu;

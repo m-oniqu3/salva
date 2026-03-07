@@ -18,8 +18,8 @@ export function contextMenuReducer(
 ) {
   switch (action.type) {
     case ContextMenuActionEnum.OPEN_CONTEXT_MENU:
-      // if (state.menu?.type === action.payload.type)
-      //   return { ...state, menu: null };
+      if (state.menu?.type === action.payload.type)
+        return { ...state, menu: null };
 
       return {
         ...state,

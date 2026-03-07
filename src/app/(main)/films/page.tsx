@@ -48,23 +48,21 @@ async function page() {
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["films", user.userID],
     queryFn: ({ pageParam }) =>
-      getFilms({
-        userID: user?.userID,
-        range: calculateRange(pageParam, 20),
-      }),
+      getFilms({ userID: user?.userID, range: calculateRange(pageParam, 20) }),
 
     initialPageParam: 0,
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="pb-20">
-        <div className="py-10">
-          <h1 className="font-semibold text-md sm:text-lg">All Films</h1>
+      <div className="pages">
+        <div>
+          <h1 className="font-semibold text-md sm:text-lg">Films</h1>
           <p className="text-sml">
             {"Here are all the films you've saved so far."}
           </p>
         </div>
+
         <Films user={user} targetUser={{ userID: user.userID }} />
       </div>
     </HydrationBoundary>
