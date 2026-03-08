@@ -3,6 +3,7 @@
 import Prompt from "@/components/auth/Prompt";
 import CollectionCoverPicker from "@/components/modal/CollectionCoverPicker";
 import CreateCollection from "@/components/modal/CreateCollection";
+import DeleteCollection from "@/components/modal/DeleteCollection";
 import EditCollection from "@/components/modal/EditCollection";
 import EditProfile from "@/components/modal/EditProfile";
 import FilmCollection from "@/components/modal/FilmCollection";
@@ -60,6 +61,9 @@ function ModalManager() {
 
       case ModalEnum.EDIT_PROFILE:
         return <EditProfile />;
+
+      case ModalEnum.DELETE_COLLECTION:
+        return <DeleteCollection />;
 
       default:
         throw new Error(

@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import { LoadingIcon } from "@/components/icons";
 import { useModal } from "@/context/useModal";
 import { createCollection } from "@/server-actions/create-collection";
+import { ModalEnum } from "@/types/modal";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,9 +20,16 @@ import { toast } from "sonner";
 //const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function CreateCollection() {
-  const { stopPropagation, closeModal } = useModal();
+  const {
+    stopPropagation,
+    closeModal,
+    state: { modal },
+  } = useModal();
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
+
+  const collectionPayload =
+    modal?.type === ModalEnum.CREATE_COLLECTION ? modal.payload : null;
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -29,7 +37,7 @@ function CreateCollection() {
   const form = useForm<NewCollection>({
     resolver: zodResolver(NewCollectionSchema),
     defaultValues: {
-      name: "",
+      name: collectionPayload?.collectionName ?? "",
       description: "",
       private: false,
     },
@@ -39,26 +47,45 @@ function CreateCollection() {
 
   function onSubmitForm(input: NewCollection) {
     startCreateCollectionTransition(async () => {
-      const formData = new FormData();
-      formData.append("name", input.name);
-      formData.append("description", input.description || "");
-      formData.append("private", input.private as unknown as string);
-
       try {
-        const { data, error } = await createCollection(formData);
-
-        if (error) throw error;
-
-        if (!data) throw new Error("Something went wrong");
-
-        const { username, slug } = data;
-        router.replace("/" + username + "/" + slug);
-
-        queryClient.invalidateQueries({
-          queryKey: ["collections", username],
+        const film = collectionPayload?.film;
+        const { data, error } = await createCollection({
+          collection: {
+            name: input.name,
+            description: input.description ?? "",
+            isPrivate: input.private ? true : false,
+          },
+          film: film,
         });
 
+        if (error) throw error;
+        if (!data) throw new Error("Something went wrong");
+
+        const {
+          user: { username, user_id },
+          collection: { slug, id: collectionID },
+        } = data;
+
+        const keys = [
+          ["collections", user_id],
+          ["collection", "meta"],
+          // ["film", film?.id, "collections"],
+        ];
+
+        queryClient.setQueryData(
+          ["film", film?.id, "collections"],
+          (old: number[]) => [collectionID, ...(old ?? [])],
+        );
+
+        await Promise.all(
+          keys.map((key) => queryClient.invalidateQueries({ queryKey: key })),
+        );
+
+        router.push("/" + username + "/" + slug);
+
         closeModal();
+
+        toast("Collection created!");
       } catch (error) {
         console.log(error);
 
@@ -72,7 +99,7 @@ function CreateCollection() {
           return;
         }
 
-        toast("Soemthing went wrong");
+        toast("Something went wrong");
       }
     });
   }
@@ -82,8 +109,14 @@ function CreateCollection() {
       className="relative panel grid grid-rows-[auto_1fr] gap-4 w-76 h-110"
       onClick={stopPropagation}
     >
-      <header>
+      <header className="flex flex-col gap-4">
         <p className="text-xs font-medium text-center">Create Collection</p>
+
+        {collectionPayload?.film && (
+          <p className="text-sml p-2 rounded-xl bg-red-700 text-white font-medium">
+            Adding {collectionPayload.film.title}
+          </p>
+        )}
 
         {errors.root && (
           <p className="py-1 input-error">{errors.root.message}</p>

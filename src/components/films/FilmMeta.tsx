@@ -71,7 +71,7 @@ function FilmMeta(props: Props) {
       toast(`Saved film to your collection.`);
 
       queryClient.invalidateQueries({
-        queryKey: ["collection", "films", film.id],
+        queryKey: ["film", film.id, "collections"],
         refetchType: "all",
       });
 

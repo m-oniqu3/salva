@@ -79,9 +79,11 @@ function MassDeleteFilms() {
       onClick={stopPropagation}
     >
       <div className="p-4">
-        <h1 className="text-base font-bold text-center">Delete Films</h1>
+        <h1 className="text-xs font-medium text-center">Delete Collection</h1>
 
-        <p className="text-sml">Are you sure you want to remove these films?</p>
+        <p className="text-sml text-center">
+          Are you sure you want to remove these films?
+        </p>
       </div>
 
       <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">

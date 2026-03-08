@@ -2,15 +2,12 @@
 
 import Menu from "@/components/context-menu/Menu";
 import { useContextMenu } from "@/context/useContextMenu";
-import { useModal } from "@/context/useModal";
 import { useCurrentUrl } from "@/hooks/useCurrentURL";
 import { ContextMenuEnum, MenuOption } from "@/types/context-menu";
-import { ModalEnum } from "@/types/modal";
 import { shareLink } from "@utils/share-link";
 import { toast } from "sonner";
 
-function CollectionOptionsMenu() {
-  const { openModal } = useModal();
+function ProfileOptionsMenu() {
   const {
     closeMenu,
     state: { menu },
@@ -19,21 +16,10 @@ function CollectionOptionsMenu() {
   const currentUrl = useCurrentUrl();
 
   if (!menu) return null;
+  if (menu.type !== ContextMenuEnum.PROFILE_OPTIONS) return null;
 
-  function handleDeleteCollection() {
-    const collectionSummary =
-      menu?.type === ContextMenuEnum.COLLECTION_OPTIONS
-        ? menu?.payload?.summary
-        : null;
-
-    if (!collectionSummary) return;
-
-    closeMenu();
-
-    openModal({
-      type: ModalEnum.DELETE_COLLECTION,
-      payload: { summary: collectionSummary },
-    });
+  function deleteProfile() {
+    console.log("Deleting profile...");
   }
 
   function handleShare() {
@@ -52,11 +38,11 @@ function CollectionOptionsMenu() {
     {
       label: "Delete",
       className: "text-red-600 hover:bg-red-700/50 hover:text-white",
-      onClick: handleDeleteCollection,
+      onClick: deleteProfile,
     },
   ];
 
   return <Menu items={options} />;
 }
 
-export default CollectionOptionsMenu;
+export default ProfileOptionsMenu;

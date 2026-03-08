@@ -58,46 +58,39 @@ function SelectCollection(props: Props) {
                         ? getTMDBImageURL(cover_image)
                         : null;
 
-                  const image = url ? (
-                    <figure>
-                      <Image
-                        src={url}
-                        alt={name}
-                        width={40}
-                        height={40}
-                        className="size-10 object-cover bg-neutral-200 rounded-xl"
-                      />
-                    </figure>
-                  ) : (
-                    <div className="size-10 bg-neutral-200 rounded-xl" />
-                  );
-
                   return (
                     <li
                       key={id}
                       onClick={() => selectCollection(id)}
-                      className="grid place-items-center grid-cols-[40px_auto_40px] p-2 gap-4 rounded-2xl transition-all duration-300 ease-in-out cursor-pointer hover:gray"
+                      className="grid place-items-center grid-cols-[40px_auto_40px] p-2  gap-4 rounded-2xl transition-all duration-300 ease-in-out cursor-pointer hover:gray"
                     >
-                      {image}
+                      <figure className="relative grid place-items-center">
+                        {url ? (
+                          <Image
+                            src={url}
+                            alt={name}
+                            width={40}
+                            height={40}
+                            className="size-10 object-cover bg-neutral-200 rounded-xl"
+                          />
+                        ) : (
+                          <div className="size-10 bg-neutral-200 rounded-xl grid place-items-center" />
+                        )}
+                        {is_private && (
+                          <div className="absolute">
+                            <SolidLockClosedIcon className="size-3.5 text-zinc-500" />
+                          </div>
+                        )}
+                      </figure>
 
                       <div className="w-full text-start">
                         <p className="text-sml line-clamp-1 text-neutral-800 font-medium">
                           {name}
                         </p>
 
-                        <div className="flex gap-1 items-center">
-                          <p className="text-sml text-zinc-500">
-                            {films_count} films
-                          </p>
-
-                          {is_private && (
-                            <div className="flex items-center gap-1">
-                              &bull;
-                              {/* <p className="text-sml text-zinc-500">Private</p> */}
-                              <SolidLockClosedIcon className="size-3.5 text-zinc-500" />
-                            </div>
-                          )}
-                        </div>
+                        <p className="text-sml text-zinc-500">
+                          {films_count} {films_count === 1 ? "film" : "films"}
+                        </p>
                       </div>
 
                       <div

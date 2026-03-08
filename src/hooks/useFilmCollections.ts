@@ -16,8 +16,9 @@ function useFilmCollections(props?: Props) {
     },
   });
 
+  //rename this key to film - id- collctions
   const collectionFilmsQuery = useQuery({
-    queryKey: ["collection", "films", props?.filmID],
+    queryKey: ["film", props?.filmID, "collections"],
     queryFn: async () => {
       if (!props?.filmID) throw new Error("No film ID.");
 

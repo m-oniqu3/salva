@@ -11,7 +11,7 @@ function CollectionSearchbar(props: Props) {
   const { search, onSearchChange, onClearSearch } = props;
 
   return (
-    <form className="grid grid-cols-[30px_auto_30px] ">
+    <form className="grid grid-cols-[30px_auto_30px]">
       <div className="gray pl-4 flex-center rounded-l-2xl">
         <SearchIcon className="size-4 text-neutral-400" />
       </div>

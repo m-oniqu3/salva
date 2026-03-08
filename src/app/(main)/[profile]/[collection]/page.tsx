@@ -24,23 +24,21 @@ async function page({ params }: Props) {
 
   if (collection.error) {
     return (
-      <div className="error-state-wrapper">
-        <ErrorState
-          heading="The director called cut."
-          message="There was a problem loading your collections. Try refreshing the page."
-        />
-      </div>
+      <ErrorState
+        heading="Something went off script."
+        message="There was a problem loading this collection. Try refreshing the page."
+        className="error-state-wrapper"
+      />
     );
   }
 
   if (!collection.data) {
     return (
-      <div className="error-state-wrapper">
-        <ErrorState
-          heading="Scene not found."
-          message="This collection doesn’t exist — or it’s no longer available to view."
-        />
-      </div>
+      <ErrorState
+        heading="Scene not found."
+        message="This collection doesn’t exist — or it’s no longer available to view."
+        className="error-state-wrapper"
+      />
     );
   }
 
