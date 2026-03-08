@@ -18,11 +18,11 @@ function Tool(props: Props) {
   return (
     <button
       key={tool.name}
-      className="rounded-full size-9 flex justify-center items-center gray cursor-pointer transition-colors duration-200 ease-in-out hover:bg-neutral-200"
+      className="rounded-full size-9 flex justify-center items-center gray cursor-pointer transition-colors duration-200 ease-in-out hover:bg-neutral-200 "
       disabled={tool.disabled}
       onClick={tool.handler}
     >
-      <Icon className="size-3.5 text-neutral-800/60" />
+      <Icon className="size-3.5 text-neutral-800/60 " />
     </button>
   );
 }

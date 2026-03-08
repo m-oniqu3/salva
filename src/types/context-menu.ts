@@ -1,5 +1,5 @@
 import { CollectionSummary } from "@/types/collection";
-import { ProfileSummary } from "@/types/user";
+import { ProfileSummary, UserMeta } from "@/types/user";
 
 export enum ContextMenuEnum {
   "PROFILE_MENU" = "PROFILE_MENU",
@@ -14,7 +14,12 @@ type ContextMenuState<K = ContextMenuEnum, P = undefined> = {
 };
 
 // might need user ID here in the payload
-type ProfileMenu = ContextMenuState<ContextMenuEnum.PROFILE_MENU, null>;
+type ProfileMenu = ContextMenuState<
+  ContextMenuEnum.PROFILE_MENU,
+  {
+    user: UserMeta;
+  }
+>;
 
 type CollectionActionsMenu = ContextMenuState<
   ContextMenuEnum.COLLECTION_OPTIONS,
@@ -34,3 +39,9 @@ export type ContextMenu =
   | CollectionActionsMenu
   | ProfileOptionsMenu
   | SortCollectionPreviewsMenu;
+
+export type MenuOption = {
+  label: string;
+  onClick: () => void;
+  className?: string;
+};

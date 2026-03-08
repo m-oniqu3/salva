@@ -8,7 +8,6 @@ import {
   LockOpenIcon,
   MoreHorizontalIcon,
   OrganizeIcon,
-  SortIcon,
 } from "@/components/icons";
 import Tool from "@/components/Tool";
 import { useContextMenu } from "@/context/useContextMenu";
@@ -115,7 +114,6 @@ function CollectionToolbar(props: Props) {
       disabled: isTogglingPrivacy,
     },
     { name: "Organize", icon: OrganizeIcon, handler: organizeCollection },
-    { name: "Sort", icon: SortIcon, handler: () => {} },
     { name: "More", icon: MoreHorizontalIcon, handler: handleMore },
   ];
 
@@ -128,7 +126,6 @@ function CollectionToolbar(props: Props) {
           name={summary.user.firstname || summary.user.username}
           className={"size-9 rounded-full"}
         />
-
         {!isCollectionOwner && (
           <figcaption className="text-sml">
             By &nbsp;

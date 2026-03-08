@@ -7,7 +7,6 @@ import {
   BookmarkIcon,
   EditIcon,
   MoreHorizontalIcon,
-  SortIcon,
 } from "@/components/icons";
 import Tool from "@/components/Tool";
 import { useContextMenu } from "@/context/useContextMenu";
@@ -60,16 +59,10 @@ function ProfileToolbar(props: Props) {
     router.push("/films");
   }
 
-  function handleSort() {
-    openMenu({ type: ContextMenuEnum.SORT_COLLECTION_PREVIEWS });
-  }
-
   const toolbar = [
     { name: "Films", icon: BookmarkIcon, handler: handleViewFilms },
     { name: "Create", icon: AddIcon, handler: handleCreateCollection },
     { name: "Edit", icon: EditIcon, handler: handleEditModal },
-
-    { name: "Sort", icon: SortIcon, handler: handleSort },
     { name: "More", icon: MoreHorizontalIcon, handler: handleMore },
   ];
 

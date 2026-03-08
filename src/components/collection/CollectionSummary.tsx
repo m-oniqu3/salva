@@ -2,25 +2,17 @@
 
 import CollectionToolbar from "@/components/collection/CollectionToolbar";
 import { SolidLockClosedIcon } from "@/components/icons";
-import { useContextMenu } from "@/context/useContextMenu";
 import type { CollectionSummary } from "@/types/collection";
-import { ContextMenuEnum } from "@/types/context-menu";
 
 type Props = { summary: CollectionSummary; userID: string | null };
 
 function CollectionSummary({ summary, userID }: Props) {
   const {
     user: { user_id: collectionOwnerID },
-    collection: { id, name, is_private: isPrivate, description, film_count },
+    collection: { name, is_private: isPrivate, description, film_count },
   } = summary;
 
   const isCollectionOwner = userID === collectionOwnerID;
-  const {
-    state: { menu },
-    openContextMenu,
-    updateContextMenuPosition,
-  } = useContextMenu();
-  const isCOM = menu?.type === ContextMenuEnum.COM;
 
   return (
     <div className="">

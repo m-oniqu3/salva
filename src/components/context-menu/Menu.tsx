@@ -1,8 +1,9 @@
 import { useContextMenu } from "@/context/useContextMenu";
+import { MenuOption } from "@/types/context-menu";
 
 type Props = {
   heading?: string;
-  items: Array<{ label: string; onClick: () => void; className?: string }>;
+  items: Array<MenuOption>;
 };
 
 function Menu(props: Props) {
@@ -14,7 +15,6 @@ function Menu(props: Props) {
     <ul className="context-panel w-48" onClick={stopPropagation}>
       {heading && (
         <li className="pl-3 text-xs text-neutral-400 font-semibold pb-2">
-          {" "}
           {heading}
         </li>
       )}
