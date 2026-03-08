@@ -3,7 +3,10 @@
 import Menu from "@/components/context-menu/Menu";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types/context-menu";
+import { useQueryClient } from "@tanstack/react-query";
+import { createClient } from "@utils/supabase/client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function ProfileMenu() {
   const {
@@ -12,6 +15,7 @@ function ProfileMenu() {
   } = useContextMenu();
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   if (!menu) return null;
   if (menu.type !== ContextMenuEnum.PROFILE_MENU) return null;
@@ -23,7 +27,23 @@ function ProfileMenu() {
     closeMenu();
   }
 
-  function handleLogout() {}
+  function handleLogout() {
+    const supabase = createClient();
+
+    supabase.auth
+      .signOut()
+      .then((result) => {
+        const { error } = result;
+
+        if (error) throw error;
+
+        router.replace("/");
+        queryClient.clear();
+      })
+      .catch((error) => {
+        toast("Failed to logout");
+      });
+  }
 
   const options = [
     { label: "Profile", onClick: handleNavigate.bind(null, user!.username) },
