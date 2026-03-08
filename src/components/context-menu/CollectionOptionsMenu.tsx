@@ -5,6 +5,7 @@ import { useContextMenu } from "@/context/useContextMenu";
 import { useModal } from "@/context/useModal";
 import { useCurrentUrl } from "@/hooks/useCurrentURL";
 import { ContextMenuEnum, MenuOption } from "@/types/context-menu";
+import { ModalEnum } from "@/types/modal";
 import { shareLink } from "@utils/share-link";
 import { toast } from "sonner";
 
@@ -12,18 +13,27 @@ function CollectionOptionsMenu() {
   const { openModal } = useModal();
   const {
     closeMenu,
-    stopPropagation,
     state: { menu },
   } = useContextMenu();
+
   const currentUrl = useCurrentUrl();
 
   if (!menu) return null;
-  if (menu.type !== ContextMenuEnum.COLLECTION_OPTIONS) return null;
 
-  const collectionSummary = menu.payload!.summary;
+  function handleDeleteCollection() {
+    const collectionSummary =
+      menu?.type === ContextMenuEnum.COLLECTION_OPTIONS
+        ? menu?.payload?.summary
+        : null;
 
-  function deleteCollection() {
-    console.log("Deleting collection...");
+    if (!collectionSummary) return;
+
+    closeMenu();
+
+    openModal({
+      type: ModalEnum.DELETE_COLLECTION,
+      payload: { summary: collectionSummary },
+    });
   }
 
   function handleShare() {
@@ -42,7 +52,7 @@ function CollectionOptionsMenu() {
     {
       label: "Delete",
       className: "text-red-600 hover:bg-red-700/50 hover:text-white",
-      onClick: deleteCollection,
+      onClick: handleDeleteCollection,
     },
   ];
 
