@@ -3,6 +3,7 @@
 import Button from "@/components/Button";
 import CollectionSearchbar from "@/components/collection/CollectionSearchbar";
 import SelectCollection from "@/components/collection/SelectCollection";
+import { AddIcon } from "@/components/icons";
 import { useRecentlySavedFilmContext } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import useCollectionSelection from "@/hooks/useCollectionSelection";
@@ -27,6 +28,7 @@ function FilmCollection() {
   const {
     state: { modal },
     closeModal,
+    openModal,
     stopPropagation,
   } = useModal();
 
@@ -64,44 +66,55 @@ function FilmCollection() {
 
   //save the film to collections
   async function handleSubmit() {
-    if (!film) return;
-
-    setIsSavingFilm(true);
-
-    // Optimistic UI update
-    const collections = collectionsMetaQuery.data;
-    const firstCollection = collections?.find((c) => c.id === changes.toAdd[0]);
-
-    if (firstCollection) {
-      setRecentlySavedFilm({
-        filmID: film.id,
-        collection: firstCollection.name,
-        savedToCollectionCount: changes.toAdd.length,
-      });
-
-      setCollectionLastSavedTo({
-        id: firstCollection.id,
-        name: firstCollection.name,
-      });
-    }
-
-    closeModal();
-
     try {
-      await toast.promise(
-        addFilmToCollection({
-          film,
-          newIDs: changes.toAdd,
-          deletedIDs: changes.toRemove,
-        }),
+      if (!film) return;
+
+      setIsSavingFilm(true);
+
+      // Optimistic UI update
+      const collections = collectionsMetaQuery.data;
+      const firstCollection = collections?.find(
+        (c) => c.id === changes.toAdd[0],
+      );
+
+      if (firstCollection) {
+        setRecentlySavedFilm({
+          filmID: film.id,
+          collection: firstCollection.name,
+          savedToCollectionCount: changes.toAdd.length,
+        });
+
+        setCollectionLastSavedTo({
+          id: firstCollection.id,
+          name: firstCollection.name,
+        });
+      }
+
+      closeModal();
+
+      toast.promise(
+        async () => {
+          const { error } = await addFilmToCollection({
+            film,
+            newIDs: changes.toAdd,
+            deletedIDs: changes.toRemove,
+          });
+
+          if (error) throw error;
+        },
         {
           loading: "Updating your collections...",
           success: async () => {
-            // Invalidate in background (no need to await)
-            queryClient.invalidateQueries({
-              queryKey: ["collection", "films", film.id],
-              refetchType: "all",
-            });
+            // Manually update the cache
+            queryClient.setQueryData(
+              ["film", film.id, "collections"],
+              (old: number[]) => {
+                const updated = (old ?? []).filter(
+                  (id) => !changes.toRemove.includes(id),
+                );
+                return [...changes.toAdd, ...updated];
+              },
+            );
 
             queryClient.invalidateQueries({
               queryKey: ["films"],
@@ -109,7 +122,7 @@ function FilmCollection() {
             });
 
             queryClient.invalidateQueries({
-              queryKey: ["collections", user?.username ?? ""],
+              queryKey: ["collections", user?.userID],
             });
 
             return "Updated your collections.";
@@ -126,22 +139,43 @@ function FilmCollection() {
     }
   }
 
+  function handleCreateCollection() {
+    if (!film || !search) return;
+
+    // closeModal();
+
+    openModal({
+      type: ModalEnum.CREATE_COLLECTION,
+      payload: {
+        collectionName: search,
+        film,
+      },
+    });
+  }
+
   return (
     <div
       className="relative p-0 rounded-3xl overflow-hidden h-110 w-76 bg-white "
       onClick={stopPropagation}
     >
       <div className="grid grid-rows-[auto_auto_1fr_64px] h-full">
-        <div className="flex flex-col gap-4 p-4 border-b border-gray-50 ">
+        <div className="flex flex-col gap-2 p-4  border-b border-gray-50 ">
           <p className="text-xs font-medium text-center">Add to Collection</p>
-          <CollectionSearchbar
-            search={search}
-            onSearchChange={handleSearch}
-            onClearSearch={clearSearch}
-          />
-        </div>
-        <div>
-          <button>Create Collection</button>
+
+          <div className="w-full flex gap-2">
+            <CollectionSearchbar
+              search={search}
+              onSearchChange={handleSearch}
+              onClearSearch={clearSearch}
+            />
+
+            <button
+              onClick={handleCreateCollection}
+              className="p-4  gray rounded-2xl grid place-items-center cursor-pointer  hover:bg-neutral-800 text-neutral-500 hover:text-white transition-colors ease-in-out duration-300"
+            >
+              <AddIcon className="size-4 " />
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">

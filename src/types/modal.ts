@@ -30,7 +30,7 @@ type ModalState<K extends ModalEnum, P = null> = {
 
 type CreateCollectionModal = ModalState<
   ModalEnum.CREATE_COLLECTION,
-  { collectionName: string }
+  { collectionName: string; film: TMDBFilm } | null
 >;
 
 type MobileMenuModal = ModalState<ModalEnum.MOBILE_MENU, { profile: Profile }>;
