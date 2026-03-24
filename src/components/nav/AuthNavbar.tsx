@@ -52,13 +52,13 @@ function AuthNavbar({ profile }: Props) {
   return (
     <div className="relative">
       <header className="flex items-center sticky top-0 left-0 h-28 z-10 bg-white w-full ">
-        <nav className="wrapper grid grid-cols-[auto_1fr_auto] md:grid-cols-3 items-center justify-between gap-8 md:gap-6">
+        <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 lg:gap-6">
           <div className="flex items-center gap-4">
             <Link href="/home" className="">
               <FilmIcon className="size-6 text-neutral-800" />
             </Link>
 
-            <ul className="hidden md:flex gap-4 items-center">
+            <ul className="hidden lg:flex gap-4 items-center">
               {links.map((link) => {
                 return (
                   <Link
@@ -81,7 +81,7 @@ function AuthNavbar({ profile }: Props) {
             <button
               type="button"
               onClick={handleMobileMenu}
-              className="flex-center md:hidden cursor-pointer"
+              className="flex-center lg:hidden cursor-pointer"
             >
               <MenuIcon className="size-5" />
             </button>
@@ -93,7 +93,7 @@ function AuthNavbar({ profile }: Props) {
             </div>
           )} */}
 
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4">
               <Button
                 onClick={() => openModal({ type: ModalEnum.CREATE_COLLECTION })}
                 className="bg-neutral-800 text-white"
@@ -126,7 +126,7 @@ function AuthNavbar({ profile }: Props) {
         </nav>
 
         {isProfileMenu && (
-          <div className="hidden md:block w-full absolute top-25 z-10 ">
+          <div className="hidden lg:block w-full absolute top-25 z-10 ">
             <div className="relative wrapper">
               <div className="div absolute right-0">
                 <ProfileMenu />
