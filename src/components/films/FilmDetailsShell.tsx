@@ -47,13 +47,15 @@ function FilmDetailsShell(props: Props) {
 
   return (
     <div className="overflow-y-scroll h-full w-full z-50">
-      <button
-        type="button"
-        onClick={router.back}
-        className="gray size-8 rounded-full flex-center cursor-pointer fixed top-4 left-4 z-50"
-      >
-        <ChevronLeftIcon className="size-5" />
-      </button>
+      <div className="h-20 flex-center fixed top-0 left-5 z-50">
+        <button
+          type="button"
+          onClick={router.back}
+          className="gray size-8 rounded-full flex-center cursor-pointer"
+        >
+          <ChevronLeftIcon className="size-5" />
+        </button>
+      </div>
 
       <div
         className={`bg-white absolute top-0 left-0 h-[110dvh] w-full   z-30  transition-opacity duration-200 ease-in-out  ${isIntersecting ? "opacity-100 block" : "opacity-0 hidden"}`}

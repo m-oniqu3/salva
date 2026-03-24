@@ -147,29 +147,30 @@ function FilmOverview(props: Props) {
   }
 
   return (
-    <section className="relative bg-white h-screen grid grid-rows-[100px_auto] border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
-      <header className="w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
-        <div className="wrapper grid grid-cols-[1fr_auto] gap-4 items-center ">
-          <div className="grid grid-cols-2 items-center w-fit sm:gap-2">
+    <section className="max-w-xl relative h-[100dvh] flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
+      <header className="h-20 w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
+        <div className="wrapper grid grid-cols-[1fr_auto]  gap-4 items-center ">
+          <div className="grid grid-cols-2 items-center w-full gap-2">
             <RecentCollection
               filmID={film.id}
               username={user?.username ?? null}
+              className="text-sml"
             />
 
-            {
-              <button
-                className="flex-center cursor-pointer w-fit"
-                onClick={handleFilmCollectionModal}
-              >
-                <ChevronDownIcon className="size-5 text-zinc-500" />
-              </button>
-            }
+            <button
+              className="flex-center cursor-pointer w-fit"
+              onClick={handleFilmCollectionModal}
+            >
+              <ChevronDownIcon className="size-5 text-zinc-500" />
+            </button>
           </div>
 
           <button
-            className="bg-neutral-800 rounded-full size-10 sm:size-12 grid place-items-center cursor-pointer"
+            className="bg-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer disabled:opacity-50"
             type="button"
-            disabled={isLoading || !collectionLastSavedTo}
+            disabled={
+              isLoading || !collectionLastSavedTo || isFilmRecentlySaved
+            }
             onClick={handleSaveFilm}
           >
             {isFilmRecentlySaved ? (
@@ -181,22 +182,16 @@ function FilmOverview(props: Props) {
         </div>
       </header>
 
-      <article className="flex flex-col gap-4 wrapper py-12">
+      <article className="flex flex-col gap-4 wrapper py-12 h-full overflow-y-scroll no-scrollbar">
         <p className="text-sml text-zinc-500">{formattedDate}</p>
-        <h1 className="font-semibold text-xl text-neutral-800">{title}</h1>
+        <div>
+          <h1 className="font-semibold text-lg text-neutral-800">{title}</h1>
+          <p className="text-sml text-zinc-500">{film.tagline}</p>
+        </div>
 
-        <p className="text-sml text-zinc-500">{film.tagline}</p>
+        <p className="text-sml leading-6  ">{film.overview}</p>
 
-        <p className="text-sml leading-6">{film.overview}</p>
-
-        <div className="flex flex-col gap-4 py-4">
-          <p className="text-sml">
-            Genres - &nbsp;
-            <span className="text-zinc-500">
-              {film.genres.map((genre) => genre.name).join(", ")}.
-            </span>
-          </p>
-
+        {/* <div className="flex flex-col gap-4 py-4">
           {credits.cast && (
             <p className="text-sml text-zinc-500">
               <span className="shrink-0 text-black">Cast - &nbsp;</span>
@@ -238,7 +233,7 @@ function FilmOverview(props: Props) {
               <span className="text-zinc-500">{production_companies}</span>.
             </p>
           )}
-        </div>
+        </div> */}
 
         {/* {film.backdrop_path && (
           <figure className="py-8">
