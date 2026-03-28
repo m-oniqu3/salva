@@ -37,8 +37,8 @@ function FilmImage(props: Props) {
   ];
 
   return (
-    <section className="h-screen wrapper flex flex-col items-center ">
-      <header className="h-22 px-8 wrapper flex items-center justify-between gap-4 ">
+    <section className="h-screen  flex flex-col items-center ">
+      <header className="h-22 w-full flex items-center justify-between gap-4 ">
         <ul className="flex items-center gap-4 ">
           {Object.entries(links).map(([link, handler]) => {
             return (
@@ -52,24 +52,6 @@ function FilmImage(props: Props) {
             );
           })}
         </ul>
-
-        <>
-          {buttons.map(({ name, handler }) => {
-            return (
-              <Button
-                key={name}
-                onClick={handler}
-                className={`flex items-center gap-2 text-sml font-semibold cursor-pointer bg-neutral-800 text-white`}
-              >
-                <span className="w-full">{name}</span>
-
-                <span>
-                  <ChevronDownIcon className="size-4.5" />
-                </span>
-              </Button>
-            );
-          })}
-        </>
       </header>
       {/* 
           <div
@@ -99,6 +81,24 @@ function FilmImage(props: Props) {
           }}
           user={user}
         />
+
+        <>
+          {buttons.map(({ name, handler }) => {
+            return (
+              <Button
+                key={name}
+                onClick={handler}
+                className={`flex items-center gap-2 text-sml font-semibold cursor-pointer bg-neutral-800 text-white`}
+              >
+                <span className="w-full">{name}</span>
+
+                <span>
+                  <ChevronDownIcon className="size-4.5" />
+                </span>
+              </Button>
+            );
+          })}
+        </>
       </div>
     </section>
   );

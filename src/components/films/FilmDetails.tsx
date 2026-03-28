@@ -17,8 +17,8 @@ type Props = {
 
 function FilmDetails(props: Props) {
   return (
-    <div className="h-full bg-white">
-      <div className="grid h-full lg:grid-cols-[1fr_400px] ">
+    <div className="h-full bg-white wrapper ">
+      <div className="grid h-full lg:grid-cols-[1fr_1fr] ">
         <FilmImage {...props} />
 
         <div className={`hidden h-full lg:flex`}>

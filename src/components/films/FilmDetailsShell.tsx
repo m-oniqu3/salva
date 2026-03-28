@@ -46,8 +46,8 @@ function FilmDetailsShell(props: Props) {
   }, []);
 
   return (
-    <div className="overflow-y-scroll h-full w-full z-50">
-      <div className="h-20 flex-center fixed top-0 left-5 z-50">
+    <div className="overflow-y-scroll h-full w-screen  z-50 bg-amber-200">
+      <div className="h-20 flex-center fixed top-0 left-5 z-50 ">
         <button
           type="button"
           onClick={router.back}
@@ -61,7 +61,7 @@ function FilmDetailsShell(props: Props) {
         className={`bg-white absolute top-0 left-0 h-[110dvh] w-full   z-30  transition-opacity duration-200 ease-in-out  ${isIntersecting ? "opacity-100 block" : "opacity-0 hidden"}`}
       />
 
-      <div className="h-screen w-screen fixed top-0 left-0 z-20">
+      <div className="h-screen w-screen fixed bg-white top-0 left-0 z-20 ">
         <FilmDetails
           film={data.film}
           credits={data.credits}

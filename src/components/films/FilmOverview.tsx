@@ -147,7 +147,7 @@ function FilmOverview(props: Props) {
   }
 
   return (
-    <section className="max-w-xl relative h-[100dvh] flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
+    <section className="w-full relative h-[100dvh] flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
       <header className="h-20 w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
         <div className="wrapper grid grid-cols-[1fr_auto]  gap-4 items-center ">
           <div className="grid grid-cols-2 items-center w-full gap-2">
@@ -189,9 +189,9 @@ function FilmOverview(props: Props) {
           <p className="text-sml text-zinc-500">{film.tagline}</p>
         </div>
 
-        <p className="text-sml leading-6  ">{film.overview}</p>
+        <p className="text-sml leading-6 pt-8 ">{film.overview}</p>
 
-        {/* <div className="flex flex-col gap-4 py-4">
+        <div className="flex flex-col gap-4 py-4">
           {credits.cast && (
             <p className="text-sml text-zinc-500">
               <span className="shrink-0 text-black">Cast - &nbsp;</span>
@@ -233,7 +233,7 @@ function FilmOverview(props: Props) {
               <span className="text-zinc-500">{production_companies}</span>.
             </p>
           )}
-        </div> */}
+        </div>
 
         {/* {film.backdrop_path && (
           <figure className="py-8">
