@@ -19,7 +19,7 @@ export type CollectionPreview = {
     slug: string;
     film_count: number;
   };
-  user: { user_id: string; username: string };
+  user: { user_id: string; username: string; avatar?: string | null };
 };
 
 export type CollectionSummary = {

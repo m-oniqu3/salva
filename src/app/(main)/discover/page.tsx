@@ -1,5 +1,11 @@
+import TopCollections from "@/components/discover/TopCollections";
+
 function DiscoverPage() {
-  return <div>discover</div>;
+  return (
+    <div>
+      <TopCollections />
+    </div>
+  );
 }
 
 export default DiscoverPage;
