@@ -39,11 +39,15 @@ function TopCollections() {
   console.log(data);
 
   return (
-    <div className="content-grid">
-      {data?.map((col) => (
-        <CollectionPreview key={col.collection.id} preview={col} />
-      ))}
-    </div>
+    <section className="flex flex-col gap-4">
+      <h3 className="font-medium">Collections</h3>
+
+      <div className="content-grid">
+        {data?.map((col) => (
+          <CollectionPreview key={col.collection.id} preview={col} />
+        ))}
+      </div>
+    </section>
   );
 }
 

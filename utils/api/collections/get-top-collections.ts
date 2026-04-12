@@ -16,7 +16,7 @@ export async function getTopCollections(): GetTopCollectionsResponse {
       .select(
         `
     id, name, is_private, cover_image, slug, cover_type, film_count,
-    user:profiles(user_id,username,avatar)
+    user:profiles(user_id,username,avatar,firstname)
   `,
       )
       .eq("is_private", false)
