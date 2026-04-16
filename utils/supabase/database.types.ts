@@ -45,6 +45,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "collection_films_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections_with_film_count"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "collection_films_film_id_fkey"
             columns: ["film_id"]
             isOneToOne: false
@@ -188,7 +195,30 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      collections_with_film_count: {
+        Row: {
+          cover_image: string | null
+          cover_type: string | null
+          created_at: string | null
+          description: string | null
+          film_count: number | null
+          id: number | null
+          is_private: boolean | null
+          name: string | null
+          slug: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collections_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

@@ -1,5 +1,10 @@
+import Avatar from "@/components/Avatar";
 import { type CollectionPreview } from "@/types/collection";
-import { getCollectionCoverUrl, getTMDBImageURL } from "@utils/get-cover-url";
+import {
+  getAvatarURL,
+  getCollectionCoverUrl,
+  getTMDBImageURL,
+} from "@utils/get-cover-url";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +18,7 @@ function CollectionPreview(props: Props) {
 
   const {
     collection: { is_private, name, cover_image, cover_type, slug, film_count },
-    user: { username },
+    user: { username, avatar, firstname },
   } = preview;
 
   const url =
@@ -42,26 +47,35 @@ function CollectionPreview(props: Props) {
         {cover}
       </figure>
 
-      <div className="">
-        <h3 className="font-semibold line-clamp-1 w-full text-sml sm:text-sm">
-          {name}
-        </h3>
+      <figcaption className="flex gap-4 ">
+        <Avatar
+          avatar={avatar ? getAvatarURL(avatar) : ""}
+          username={username}
+          name={firstname || username}
+          className={"size-9 rounded-full"}
+        />
 
-        <div className="flex items-center gap-1">
-          <p className="text-xs font-medium text-neutral-600">
-            {film_count} {film_count === 1 ? "film" : "films"}
-          </p>
+        <div className="">
+          <h3 className="font-semibold line-clamp-1 w-full text-sml sm:text-sm">
+            {name}
+          </h3>
 
-          {is_private && (
-            <p className="flex items-center gap-1">
-              <span className="text-neutral-600">&#xb7;</span>
-              <span className="text-neutral-600 text-xs font-medium">
-                Private
-              </span>
+          <div className="flex items-center gap-1">
+            <p className="text-xs font-medium text-neutral-600">
+              {film_count} {film_count === 1 ? "film" : "films"}
             </p>
-          )}
+
+            {is_private && (
+              <p className="flex items-center gap-1">
+                <span className="text-neutral-600">&#xb7;</span>
+                <span className="text-neutral-600 text-xs font-medium">
+                  Private
+                </span>
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      </figcaption>
     </Link>
   );
 }
