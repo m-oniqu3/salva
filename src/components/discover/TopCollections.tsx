@@ -36,7 +36,7 @@ function TopCollections() {
     );
   }
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <section className="flex flex-col gap-4">

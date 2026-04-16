@@ -1,28 +1,31 @@
 "use client";
 
-import { GENRES } from "@utils/tmdb-genres";
-import { slugify } from "@utils/validation/slug";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { TMDB_GENRE_MAP } from "@utils/tmdb-genres";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 function FilmGenres() {
   const pathname = usePathname();
-  const genre = pathname.split("/").pop();
+  const genreKey = pathname.split("/").pop();
 
-  const [selectedGenre, setSelectedGenre] = useState(genre);
+  const [selectedGenreKey, setSelectedGenreKey] = useState(genreKey);
+  const router = useRouter();
+
+  function handleGenre(key: string) {
+    router.push("/discover/" + key);
+    setSelectedGenreKey(key);
+  }
 
   return (
     <ul className="flex flex-wrap gap-8">
-      {GENRES.map((genre) => {
-        const slug = slugify(genre);
+      {Object.entries(TMDB_GENRE_MAP).map(([key, genre]) => {
         return (
           <li
-            key={genre}
-            className={`text-xs font-semibold  p-3 h-9 rounded-full cursor-pointer flex items-center justify-center ${selectedGenre === slug ? "bg-neutral-800 text-white opacity-100" : "opacity-50"}`}
-            onClick={() => setSelectedGenre(slug)}
+            key={key}
+            className={`text-xs font-semibold  p-3 h-9 rounded-full cursor-pointer flex items-center justify-center ${selectedGenreKey === key ? "bg-neutral-800 text-white opacity-100" : "opacity-50 gray"}`}
+            onClick={() => handleGenre(key)}
           >
-            <Link href={"/discover/" + slug}>{genre}</Link>
+            {genre}
           </li>
         );
       })}

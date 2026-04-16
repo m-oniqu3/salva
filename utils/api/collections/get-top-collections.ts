@@ -20,7 +20,7 @@ export async function getTopCollections(): GetTopCollectionsResponse {
   `,
       )
       .eq("is_private", false)
-      .gt("film_count", 10)
+      .gt("film_count", 7)
       // .gte(
       //   "created_at",
       //   new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
