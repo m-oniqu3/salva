@@ -22,7 +22,7 @@ type Props = {
   profile: Profile;
 };
 
-const links = ["discover", "discuss"];
+const links = ["discover"];
 
 function AuthNavbar({ profile }: Props) {
   const { openModal } = useModal();

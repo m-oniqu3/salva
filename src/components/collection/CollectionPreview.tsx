@@ -48,12 +48,16 @@ function CollectionPreview(props: Props) {
       </figure>
 
       <figcaption className="flex gap-4 ">
-        <Avatar
-          avatar={avatar ? getAvatarURL(avatar) : ""}
-          username={username}
-          name={firstname || username}
-          className={"size-9 rounded-full"}
-        />
+        {avatar && (
+          <figure>
+            <Avatar
+              avatar={avatar ? getAvatarURL(avatar) : ""}
+              username={username}
+              name={firstname || username}
+              className={"size-9 rounded-full"}
+            />
+          </figure>
+        )}
 
         <div className="">
           <h3 className="font-semibold line-clamp-1 w-full text-sml sm:text-sm">

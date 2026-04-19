@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { HTMLAttributes } from "react";
 
 type Props<T> = {
@@ -12,9 +12,14 @@ type Props<T> = {
 function Avatar<T>(props: Props<T>) {
   const { avatar, username, name, className = "" } = props;
 
+  const router = useRouter();
+  function handleNavigation() {
+    router.push("/" + username);
+  }
+
   return (
-    <Link
-      href={`/${username}`}
+    <button
+      onClick={handleNavigation}
       className={`flex items-center justify-center overflow-hidden ${className}`}
     >
       {avatar && (
@@ -35,7 +40,7 @@ function Avatar<T>(props: Props<T>) {
           {name.at(0)}
         </span>
       )}
-    </Link>
+    </button>
   );
 }
 

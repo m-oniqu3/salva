@@ -70,6 +70,7 @@ function DiscoverFilms(props: Props) {
             </li>
           );
         })}
+
         {selectedGenreKey && (
           <Button
             className="gray opacity-50 hover:bg-neutral-800 hover:text-white hover:opacity-100"
