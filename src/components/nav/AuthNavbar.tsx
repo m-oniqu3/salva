@@ -19,7 +19,7 @@ import { getAvatarURL } from "@utils/get-cover-url";
 import Link from "next/link";
 
 type Props = {
-  profile: Profile;
+  profile: Profile | null;
 };
 
 const links = ["discover"];
@@ -34,6 +34,8 @@ function AuthNavbar({ profile }: Props) {
   const isProfileMenu = menu?.type === ContextMenuEnum.PROFILE_MENU;
 
   function handleProfileContextMenu() {
+    if (!profile) return;
+
     openMenu({
       type: ContextMenuEnum.PROFILE_MENU,
       payload: {
@@ -43,9 +45,11 @@ function AuthNavbar({ profile }: Props) {
   }
 
   function handleMobileMenu() {
+    // if (!profile) return;
+
     openModal({
       type: ModalEnum.MOBILE_MENU,
-      payload: { profile },
+      payload: { profile: profile ?? null },
     });
   }
 
@@ -81,47 +85,53 @@ function AuthNavbar({ profile }: Props) {
           <button
             type="button"
             onClick={handleMobileMenu}
-            className="flex-center lg:hidden cursor-pointer"
+            className="flex-center md:hidden cursor-pointer"
           >
             <MenuIcon className="size-5" />
           </button>
 
-          {/* {!profile && (
+          {!profile && (
             <div className="hidden md:flex items-center gap-4">
               <Button>Log In</Button>
               <Button className="bg-neutral-800 text-white">Sign Up</Button>
             </div>
-          )} */}
+          )}
 
-          <div className="hidden lg:flex items-center gap-4">
-            <Button
-              onClick={() => openModal({ type: ModalEnum.CREATE_COLLECTION })}
-              className="bg-neutral-800 text-white"
-            >
-              Create
-            </Button>
+          {profile && (
+            <>
+              <div className="hidden lg:flex items-center gap-4">
+                <Button
+                  onClick={() =>
+                    openModal({ type: ModalEnum.CREATE_COLLECTION })
+                  }
+                  className="bg-neutral-800 text-white"
+                >
+                  Create
+                </Button>
 
-            <Link href={"/films"}>
-              <BookmarkIcon className="size-4" />
-            </Link>
+                <Link href={"/films"}>
+                  <BookmarkIcon className="size-4" />
+                </Link>
 
-            {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
-            <Avatar
-              avatar={profile.avatar ? getAvatarURL(profile.avatar) : ""}
-              username={profile.username}
-              name={profile.firstname || profile.username}
-              className={"size-7 rounded-full text-[12px]"}
-            />
+                {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
+                <Avatar
+                  avatar={profile.avatar ? getAvatarURL(profile.avatar) : ""}
+                  username={profile.username}
+                  name={profile.firstname || profile.username}
+                  className={"size-7 rounded-full text-[12px]"}
+                />
 
-            <button
-              type="button"
-              className="cursor-pointer"
-              onClick={handleProfileContextMenu}
-              name="Profile User Menu"
-            >
-              <ArrowDownIcon className="size-4" />
-            </button>
-          </div>
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={handleProfileContextMenu}
+                  name="Profile User Menu"
+                >
+                  <ArrowDownIcon className="size-4" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </nav>
 

@@ -33,7 +33,10 @@ type CreateCollectionModal = ModalState<
   { collectionName: string; film: TMDBFilm } | null
 >;
 
-type MobileMenuModal = ModalState<ModalEnum.MOBILE_MENU, { profile: Profile }>;
+type MobileMenuModal = ModalState<
+  ModalEnum.MOBILE_MENU,
+  { profile: Profile | null }
+>;
 type AuthModal = ModalState<ModalEnum.A>;
 
 type EditProfileModal = ModalState<

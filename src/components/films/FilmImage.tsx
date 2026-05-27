@@ -37,15 +37,16 @@ function FilmImage(props: Props) {
   ];
 
   return (
-    <section className="h-screen  flex flex-col items-center ">
-      <header className="h-22 w-full flex items-center justify-between gap-4 ">
-        <ul className="flex items-center gap-4 ">
+    <section className="h-screen flex flex-col items-center ">
+      <header className="h-28 w-full flex items-center ">
+        <ul className="wrapper flex items-center gap-4  ">
           {Object.entries(links).map(([link, handler]) => {
+            const visible = user ? "" : "hidden";
             return (
               <li
                 key={link}
                 onClick={handler}
-                className="text-sml font-semibold cursor-pointer text-neutral-800 text-sml"
+                className={`text-sml font-semibold cursor-pointer text-neutral-800 text-sml ${visible}`}
               >
                 {link}
               </li>
@@ -70,19 +71,20 @@ function FilmImage(props: Props) {
           )} */}
 
       <div
-        className={`h-full w-full max-w-72 grid place-items-center z-10 transition-transform duration-300 ease-in-out ${isIntersecting ? "opacity-0 pointer-events-none" : "opacity-100 "}`}
+        className={`h-full w-full max-w-96 grid place-items-center content-start gap-20 z-10 transition-transform duration-300 ease-in-out ${isIntersecting ? "opacity-0 pointer-events-none" : "opacity-100 "}`}
       >
-        <Film
-          film={{
-            id: film.id,
-            title: title,
-            poster_path: getTMDBImageURL(film.poster_path!),
-            media_type,
-          }}
-          user={user}
-        />
-
-        <>
+        <div className="w-full max-w-80 py-12">
+          <Film
+            film={{
+              id: film.id,
+              title: title,
+              poster_path: getTMDBImageURL(film.poster_path!),
+              media_type,
+            }}
+            user={user}
+          />
+        </div>
+        <div className=" h-full">
           {buttons.map(({ name, handler }) => {
             return (
               <Button
@@ -98,7 +100,7 @@ function FilmImage(props: Props) {
               </Button>
             );
           })}
-        </>
+        </div>
       </div>
     </section>
   );

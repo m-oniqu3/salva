@@ -16,6 +16,8 @@ type Props = {
 function AllFilms(props: Props) {
   const { user } = props;
 
+  console.log(user);
+
   const {
     isLoading,
     data,

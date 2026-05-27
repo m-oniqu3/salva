@@ -1,5 +1,6 @@
 "use client";
 
+import AuthButtons from "@/components/auth/AuthButtons";
 import RecentCollection from "@/components/collection/RecentCollection";
 import { AddIcon, CheckIcon, ChevronDownIcon } from "@/components/icons";
 import { useRecentlySavedFilmContext } from "@/context/RecentlySavedFilmContext";
@@ -29,7 +30,7 @@ function truncate(text: string, max: number) {
 }
 
 function FilmOverview(props: Props) {
-  const { film, media_type, user, credits, recommendations } = props;
+  const { film, media_type, user, credits } = props;
 
   const title = "title" in film ? film.title : film.name;
 
@@ -148,38 +149,44 @@ function FilmOverview(props: Props) {
 
   return (
     <section className="w-full relative h-[100dvh] flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
-      <header className="h-20 w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
-        <div className="wrapper grid grid-cols-[1fr_auto]  gap-4 items-center ">
-          <div className="grid grid-cols-2 items-center w-full gap-2">
-            <RecentCollection
-              filmID={film.id}
-              username={user?.username ?? null}
-              className="text-sml"
-            />
+      <header className="h-28 w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
+        {user ? (
+          <div className="wrapper grid grid-cols-[1fr_auto]  gap-4 items-center ">
+            <div className="grid grid-cols-2 items-center w-full gap-2">
+              <RecentCollection
+                filmID={film.id}
+                username={user?.username ?? null}
+                className="text-sml"
+              />
+
+              <button
+                className="flex-center cursor-pointer w-fit"
+                onClick={handleFilmCollectionModal}
+              >
+                <ChevronDownIcon className="size-5 text-zinc-500" />
+              </button>
+            </div>
 
             <button
-              className="flex-center cursor-pointer w-fit"
-              onClick={handleFilmCollectionModal}
+              className="bg-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer disabled:opacity-50"
+              type="button"
+              disabled={
+                isLoading || !collectionLastSavedTo || isFilmRecentlySaved
+              }
+              onClick={handleSaveFilm}
             >
-              <ChevronDownIcon className="size-5 text-zinc-500" />
+              {isFilmRecentlySaved ? (
+                <CheckIcon className={`size-5 text-white`} />
+              ) : (
+                <AddIcon className={`size-5 text-white`} />
+              )}
             </button>
           </div>
-
-          <button
-            className="bg-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer disabled:opacity-50"
-            type="button"
-            disabled={
-              isLoading || !collectionLastSavedTo || isFilmRecentlySaved
-            }
-            onClick={handleSaveFilm}
-          >
-            {isFilmRecentlySaved ? (
-              <CheckIcon className={`size-5 text-white`} />
-            ) : (
-              <AddIcon className={`size-5 text-white`} />
-            )}
-          </button>
-        </div>
+        ) : (
+          <div className=" flex  items-center justify-end w-full">
+            <AuthButtons />
+          </div>
+        )}
       </header>
 
       <article className="flex flex-col gap-4 wrapper py-12 h-full overflow-y-scroll no-scrollbar">
