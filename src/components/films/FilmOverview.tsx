@@ -149,7 +149,7 @@ function FilmOverview(props: Props) {
 
   return (
     <section className="w-full relative h-[100dvh] flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
-      <header className="h-28 w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
+      <header className="h-32 w-full sticky top-0 left-0 flex-center border-b border-gray-50/50 bg-white ">
         {user ? (
           <div className="wrapper grid grid-cols-[1fr_auto]  gap-4 items-center ">
             <div className="grid grid-cols-2 items-center w-full gap-2">

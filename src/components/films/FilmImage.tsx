@@ -38,7 +38,7 @@ function FilmImage(props: Props) {
 
   return (
     <section className="h-screen flex flex-col items-center ">
-      <header className="h-28 w-full flex items-center ">
+      <header className="h-32 w-full flex items-center ">
         <ul className="wrapper flex items-center gap-4  ">
           {Object.entries(links).map(([link, handler]) => {
             const visible = user ? "" : "hidden";

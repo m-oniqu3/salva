@@ -31,7 +31,7 @@ export default async function MainLayout({ children }: Props) {
   // if (!profile) redirect("/");
 
   return (
-    <div className="flex flex-col gap-8 pb-20">
+    <div className="pages">
       <AuthNavbar profile={profile} />
       <main className="wrapper ">{children}</main>
     </div>
