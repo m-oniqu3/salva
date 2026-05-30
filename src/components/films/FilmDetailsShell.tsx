@@ -47,7 +47,7 @@ function FilmDetailsShell(props: Props) {
 
   return (
     <div className="overflow-y-scroll h-full w-screen  z-50 ">
-      <div className=" top-8.5 fixed  left-5 z-50 ">
+      <div className=" top-11.5 fixed  left-5 z-50 ">
         <button
           type="button"
           onClick={router.back}

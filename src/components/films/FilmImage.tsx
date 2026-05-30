@@ -1,8 +1,6 @@
 "use client";
 
-import Button from "@/components/Button";
 import Film from "@/components/films/Film";
-import { ChevronDownIcon } from "@/components/icons";
 import { MediaType, Movie, TVShow } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
 import { getTMDBImageURL } from "@utils/get-cover-url";
@@ -22,38 +20,8 @@ function FilmImage(props: Props) {
 
   const router = useRouter();
 
-  function handleNavigate(href: string) {
-    router.push("/" + href);
-  }
-
-  const links = {
-    Home: handleNavigate.bind(null, "home"),
-    Profile: handleNavigate.bind(null, user?.username ?? ""),
-  };
-
-  const buttons = [
-    // { name: "Film Details", handler: () => {}, className: "lg:hidden" },
-    { name: "Similar", handler: onScrollToSection },
-  ];
-
   return (
-    <section className="h-screen flex flex-col items-center ">
-      <header className="h-32 w-full flex items-center ">
-        <ul className="wrapper flex items-center gap-4  ">
-          {Object.entries(links).map(([link, handler]) => {
-            const visible = user ? "" : "hidden";
-            return (
-              <li
-                key={link}
-                onClick={handler}
-                className={`text-sml font-semibold cursor-pointer text-neutral-800 text-sml ${visible}`}
-              >
-                {link}
-              </li>
-            );
-          })}
-        </ul>
-      </header>
+    <section className="h-full flex flex-col items-center ">
       {/* 
           <div
             className={`absolute h-full inset-0  blur-2xl transition-colors duration-100 ease-in-out  ${isIntersecting ? "bg-white" : "bg-[linear-gradient(to_left,white_0%,white_70%,transparent_100%)]"}`}
@@ -84,7 +52,7 @@ function FilmImage(props: Props) {
             user={user}
           />
         </div>
-        <div className=" h-full">
+        {/* <div className=" h-full">
           {buttons.map(({ name, handler }) => {
             return (
               <Button
@@ -100,7 +68,7 @@ function FilmImage(props: Props) {
               </Button>
             );
           })}
-        </div>
+          </div> */}
       </div>
     </section>
   );

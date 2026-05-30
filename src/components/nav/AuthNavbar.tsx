@@ -59,7 +59,7 @@ function AuthNavbar({ profile }: Props) {
       <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 lg:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/home" className="">
-            <FilmIcon className="size-8 text-neutral-800" />
+            <FilmIcon className="size-5 text-neutral-800" />
           </Link>
 
           <ul className="hidden lg:flex gap-4 items-center">
@@ -110,7 +110,7 @@ function AuthNavbar({ profile }: Props) {
                 </Button>
 
                 <Link href={"/films"}>
-                  <BookmarkIcon className="size-4" />
+                  <BookmarkIcon className="size-5" />
                 </Link>
 
                 {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}

@@ -70,7 +70,7 @@ function RecentCollection(props: Props) {
     <>
       {/* <p className="sm:hidden font-semibold text-white line-clamp-1">...</p> */}
       <p
-        className={`block font-semibold  overflow-hidden text-ellipsis whitespace-nowrap min-w-0 ${className}`}
+        className={`block font-medium  overflow-hidden text-ellipsis whitespace-nowrap min-w-0 ${className}`}
       >
         {content}
       </p>

@@ -1,5 +1,6 @@
 "use client";
 
+import FilmDetailsHeader from "@/components/films/FilmDetailsHeader";
 import FilmImage from "@/components/films/FilmImage";
 import FilmOverview from "@/components/films/FilmOverview";
 import { Credits, MediaType, Movie, TMDBFilm, TVShow } from "@/types/tmdb";
@@ -18,6 +19,8 @@ type Props = {
 function FilmDetails(props: Props) {
   return (
     <div className="h-full bg-white wrapper ">
+      <FilmDetailsHeader {...props} />
+
       <div className="grid h-full lg:grid-cols-[1fr_1fr] ">
         <FilmImage {...props} />
 
