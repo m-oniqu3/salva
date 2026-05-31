@@ -117,22 +117,30 @@ function FilmDetailsHeader(props: Props) {
     }
   }
   return (
-    <header className="h-32  grid grid-cols-2">
+    <header className="h-32  grid grid-cols-1 lg:grid-cols-2">
       <div className="flex wrapper items-center justify-between">
-        <ul className=" flex items-center gap-4  ">
-          {Object.entries(links).map(([link, handler]) => {
-            const visible = user ? "" : "hidden";
-            return (
-              <li
-                key={link}
-                onClick={handler}
-                className={`text-sml font-medium cursor-pointer text-neutral-800 text-sml ${visible}`}
-              >
-                {link}
-              </li>
-            );
-          })}
-        </ul>
+        {user ? (
+          <ul className=" flex items-center gap-4  ">
+            {Object.entries(links).map(([link, handler]) => {
+              const visible = user ? "" : "hidden";
+              return (
+                <li
+                  key={link}
+                  onClick={handler}
+                  className={`text-sml font-medium cursor-pointer text-neutral-800 text-sml ${visible}`}
+                >
+                  {link}
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <>
+            <div className=" flex items-center  w-fit lg:invisible">
+              <AuthButtons />
+            </div>
+          </>
+        )}
 
         <div className="flex gap-4">
           <button
@@ -161,43 +169,45 @@ function FilmDetailsHeader(props: Props) {
         </div>
       </div>
 
-      {user ? (
-        <div className="wrapper grid grid-cols-[1fr_auto]  gap-4 items-center ">
-          <div className="grid grid-cols-2 items-center w-full gap-2">
-            <RecentCollection
-              filmID={film.id}
-              username={user?.username ?? null}
-              className="text-sml"
-            />
+      <div className="hidden  lg:flex items-center">
+        {user ? (
+          <div className="wrapper grid grid-cols-[1fr_auto]  gap-4 items-center ">
+            <div className="grid grid-cols-2 items-center w-full gap-2">
+              <RecentCollection
+                filmID={film.id}
+                username={user?.username ?? null}
+                className="text-sml"
+              />
+
+              <button
+                className="flex-center cursor-pointer w-fit"
+                onClick={handleFilmCollectionModal}
+              >
+                <ChevronDownIcon className="size-5 text-zinc-500" />
+              </button>
+            </div>
 
             <button
-              className="flex-center cursor-pointer w-fit"
-              onClick={handleFilmCollectionModal}
+              className="bg-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer disabled:opacity-50"
+              type="button"
+              disabled={
+                isLoading || !collectionLastSavedTo || isFilmRecentlySaved
+              }
+              onClick={handleSaveFilm}
             >
-              <ChevronDownIcon className="size-5 text-zinc-500" />
+              {isFilmRecentlySaved ? (
+                <CheckIcon className={`size-5 text-white`} />
+              ) : (
+                <AddIcon className={`size-5 text-white`} />
+              )}
             </button>
           </div>
-
-          <button
-            className="bg-neutral-800 rounded-full size-10 grid place-items-center cursor-pointer disabled:opacity-50"
-            type="button"
-            disabled={
-              isLoading || !collectionLastSavedTo || isFilmRecentlySaved
-            }
-            onClick={handleSaveFilm}
-          >
-            {isFilmRecentlySaved ? (
-              <CheckIcon className={`size-5 text-white`} />
-            ) : (
-              <AddIcon className={`size-5 text-white`} />
-            )}
-          </button>
-        </div>
-      ) : (
-        <div className=" flex  items-center justify-end w-full">
-          <AuthButtons />
-        </div>
-      )}
+        ) : (
+          <div className=" flex  items-center justify-end w-full">
+            <AuthButtons />
+          </div>
+        )}
+      </div>
     </header>
   );
 }

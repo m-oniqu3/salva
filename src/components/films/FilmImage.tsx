@@ -41,7 +41,7 @@ function FilmImage(props: Props) {
       <div
         className={`h-full w-full max-w-96 grid place-items-center content-start gap-20 z-10 transition-transform duration-300 ease-in-out ${isIntersecting ? "opacity-0 pointer-events-none" : "opacity-100 "}`}
       >
-        <div className="w-full max-w-80 py-12">
+        <div className="w-full max-w-72 py-12">
           <Film
             film={{
               id: film.id,

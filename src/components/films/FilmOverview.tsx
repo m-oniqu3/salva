@@ -74,14 +74,15 @@ function FilmOverview(props: Props) {
     <section className="w-full h-[calc(100dvh-8rem)] relative  flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
       <article className="flex flex-col gap-4 wrapper py-12 h-full overflow-y-scroll no-scrollbar">
         <p className="text-sml text-zinc-500">{formattedDate}</p>
+
         <div>
           <h1 className="font-semibold text-lg text-neutral-800">{title}</h1>
           <p className="text-sml text-zinc-500">{film.tagline}</p>
         </div>
 
-        <p className="text-sml leading-6 pt-8 ">{film.overview}</p>
+        <p className="text-sml leading-6">{film.overview}</p>
 
-        <div className="flex flex-col gap-4 py-4">
+        <div className="flex flex-col gap-4 ">
           {credits.cast && (
             <p className="text-sml text-zinc-500">
               <span className="shrink-0 text-black">Cast - &nbsp;</span>
