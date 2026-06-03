@@ -23,13 +23,13 @@ type Props = {
   media_type: MediaType;
   user: UserMeta;
   credits: Credits;
-  recommendations: TMDBFilm[];
-  isIntersecting: boolean;
-  onScrollToSection: () => void;
+  recommendations?: TMDBFilm[];
+  isIntersecting?: boolean;
+  onScrollToSection?: () => void;
 };
 
 function FilmDetailsHeader(props: Props) {
-  const { user, film, media_type, onScrollToSection } = props;
+  const { user, film, media_type, onScrollToSection, credits } = props;
   const title = "title" in film ? film.title : film.name;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -67,6 +67,13 @@ function FilmDetailsHeader(props: Props) {
     openModal({
       type: ModalEnum.FCM,
       payload: { film: filmMeta, user },
+    });
+  }
+
+  function handleFilmDetailsModal() {
+    openModal({
+      type: ModalEnum.FILM_DETAILS_MODAL,
+      payload: { data: { film, media_type, user, credits } },
     });
   }
 
@@ -118,11 +125,11 @@ function FilmDetailsHeader(props: Props) {
   }
   return (
     <header className="h-32  grid grid-cols-1 lg:grid-cols-2">
-      <div className="flex wrapper items-center justify-between">
+      <div className="flex wrapper items-center justify-between ">
         {user ? (
           <ul className=" flex items-center gap-4  ">
             {Object.entries(links).map(([link, handler]) => {
-              const visible = user ? "" : "hidden";
+              const visible = user ? "order-2" : "hidden";
               return (
                 <li
                   key={link}
@@ -136,7 +143,7 @@ function FilmDetailsHeader(props: Props) {
           </ul>
         ) : (
           <>
-            <div className=" flex items-center  w-fit lg:invisible">
+            <div className=" flex items-center w-fit lg:invisible ">
               <AuthButtons />
             </div>
           </>
@@ -144,8 +151,8 @@ function FilmDetailsHeader(props: Props) {
 
         <div className="flex gap-4">
           <button
-            onClick={onScrollToSection}
-            className={`cursor-pointer  text-neutral-800`}
+            onClick={handleFilmDetailsModal}
+            className={`lg:hidden cursor-pointer  text-neutral-800`}
           >
             {/* <span className="w-full">Similar</span> */}
 

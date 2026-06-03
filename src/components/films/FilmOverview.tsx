@@ -9,7 +9,7 @@ type Props = {
   media_type: MediaType;
   user: UserMeta;
   credits: Credits;
-  recommendations: TMDBFilm[];
+  recommendations?: TMDBFilm[];
 };
 function joinArray(array: Array<{ name: string }>) {
   return array.map((el) => el.name).join(", ");
