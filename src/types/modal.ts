@@ -17,7 +17,10 @@ export enum ModalEnum {
   EDIT_PROFILE = "EDIT_PROFILE-MODAL",
   DELETE_COLLECTION = "DELETE-COLLECTION_MODAL",
   FILM_DETAILS_MODAL = "FILM_DETAILS_MODAL",
+  LOADING = "LOADING_MODAL",
 }
+
+type LoadingModal = ModalState<ModalEnum.LOADING>;
 
 type FilmDetailsModal = ModalState<
   ModalEnum.FILM_DETAILS_MODAL,
@@ -122,4 +125,5 @@ export type Modal =
   | FilmDetailsModal
   | TransferFilmsModal
   | MassDeleteFilms
+  | LoadingModal
   | EditProfileModal;

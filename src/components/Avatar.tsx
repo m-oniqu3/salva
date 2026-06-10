@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { HTMLAttributes } from "react";
@@ -20,7 +22,7 @@ function Avatar<T>(props: Props<T>) {
   return (
     <button
       onClick={handleNavigation}
-      className={`flex items-center justify-center overflow-hidden ${className}`}
+      className={`flex items-center justify-center overflow-hidden cursor-pointer ${className}`}
     >
       {avatar && (
         <Image

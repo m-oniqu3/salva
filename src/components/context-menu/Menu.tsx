@@ -9,7 +9,7 @@ type Props = {
 function Menu(props: Props) {
   const { heading, items } = props;
 
-  const { stopPropagation } = useContextMenu();
+  const { stopPropagation, closeMenu } = useContextMenu();
 
   return (
     <ul className="context-panel w-48" onClick={stopPropagation}>
@@ -23,7 +23,10 @@ function Menu(props: Props) {
         return (
           <li
             key={item.label}
-            onClick={item.onClick}
+            onClick={() => {
+              item.onClick();
+              closeMenu();
+            }}
             className={`p-3 font-semibold text-xs cursor-pointer transition-all duration-100 hover:rounded-xl
 ${item.className ?? "text-neutral-500 hover:bg-[#ebebe9] hover:text-neutral-700"}`}
           >

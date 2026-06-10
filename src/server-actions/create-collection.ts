@@ -36,11 +36,12 @@ export async function createCollection(props: Props): CreateCollectionResponse {
     // Get logged-in user
     const user = await getAuthUser();
 
-    // Does the collection already exist
+    // Does the user already have this collection?
     const { data: duplicate, error: duplicateError } = await supabase
       .from("collections")
       .select("name, slug")
       .eq("name", name)
+      .eq("user_id", user.id)
       .maybeSingle();
 
     if (duplicateError) throw duplicateError;

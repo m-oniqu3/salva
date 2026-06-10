@@ -59,7 +59,7 @@ function AuthNavbar({ profile }: Props) {
       <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 lg:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/home" className="">
-            <FilmIcon className="size-5 text-neutral-800" />
+            <FilmIcon className="size-6 text-neutral-800" />
           </Link>
 
           <ul className="hidden lg:flex gap-4 items-center">
@@ -77,7 +77,7 @@ function AuthNavbar({ profile }: Props) {
           </ul>
         </div>
 
-        <div className="max-w-md mx-auto">
+        <div className="max-w-lg mx-auto">
           <Searchbar />
         </div>
 
@@ -85,13 +85,13 @@ function AuthNavbar({ profile }: Props) {
           <button
             type="button"
             onClick={handleMobileMenu}
-            className="flex-center md:hidden cursor-pointer"
+            className="flex-center lg:hidden cursor-pointer"
           >
             <MenuIcon className="size-5" />
           </button>
 
           {!profile && (
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4">
               <Button>Log In</Button>
               <Button className="bg-neutral-800 text-white">Sign Up</Button>
             </div>

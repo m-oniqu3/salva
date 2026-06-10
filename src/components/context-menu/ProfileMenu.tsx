@@ -4,7 +4,7 @@ import Menu from "@/components/context-menu/Menu";
 import { useContextMenu } from "@/context/useContextMenu";
 import { ContextMenuEnum } from "@/types/context-menu";
 import { useQueryClient } from "@tanstack/react-query";
-import { createClient } from "@utils/supabase/client";
+import { logout } from "@utils/api/auth/logout";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -28,15 +28,8 @@ function ProfileMenu() {
   }
 
   function handleLogout() {
-    const supabase = createClient();
-
-    supabase.auth
-      .signOut()
-      .then((result) => {
-        const { error } = result;
-
-        if (error) throw error;
-
+    logout()
+      .then(() => {
         router.replace("/");
         queryClient.clear();
       })
