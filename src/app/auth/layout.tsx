@@ -21,7 +21,7 @@ async function AuthLayout({ children }: LayoutProps) {
 
   return (
     <section className="wrapper">
-      <nav className="h-32  flex items-center">
+      <nav className="h-24  flex items-center">
         <Link href="/" className="">
           <FilmIcon className="size-6 text-neutral-800" />
         </Link>

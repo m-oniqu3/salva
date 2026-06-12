@@ -8,12 +8,14 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 const pages = new Set(["films", "collections", "profiles"]);
 
 function Searchbar() {
-  const [search, setSearch] = useState("");
+  const pathname = usePathname();
+  const [, page, query] = pathname.split("/").slice(1) as unknown as string[];
+
+  const searchTerm = pages.has(page) ? query : "";
+  const [search, setSearch] = useState(searchTerm);
+
   const searchRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
-
-  const pathname = usePathname();
-  const [, page] = pathname.split("/").slice(1) as unknown as string[];
 
   function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value);

@@ -55,7 +55,7 @@ function AuthNavbar({ profile }: Props) {
 
   return (
     // <div className="fixed">
-    <header className="flex items-center sticky top-0 left-0 h-32 z-10 bg-white w-full ">
+    <header className="flex items-center sticky top-0 left-0 h-24 z-10 bg-white w-full ">
       <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 lg:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/home" className="">

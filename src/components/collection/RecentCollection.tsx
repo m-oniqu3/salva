@@ -32,7 +32,7 @@ function RecentCollection(props: Props) {
     if (data) {
       setCollectionLastSavedTo(data);
     }
-  }, [data]);
+  }, [data, setCollectionLastSavedTo]);
 
   const isFilmSaved = !!savedFilms[filmID];
 

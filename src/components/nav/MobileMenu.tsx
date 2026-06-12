@@ -50,7 +50,7 @@ function MobileMenu() {
         })}
       </ul>
 
-      <footer className="fixed bottom-5 right-5 z-50 flex items-center justify-end h-20 p-8">
+      <footer className="wrapper fixed top-1 right-8 z-50 flex items-center justify-end h-20 p-8">
         <button onClick={closeModal} className=" cursor-pointer">
           <CloseIcon className="size-5" />
         </button>

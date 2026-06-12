@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import { LoadingIcon } from "@/components/icons";
+import { useRecentlySavedFilmContext } from "@/context/RecentlySavedFilmContext";
 import { useModal } from "@/context/useModal";
 import { createCollection } from "@/server-actions/create-collection";
 import { ModalEnum } from "@/types/modal";
@@ -25,6 +26,9 @@ function CreateCollection() {
     closeModal,
     state: { modal },
   } = useModal();
+
+  const { setRecentlySavedFilm } = useRecentlySavedFilmContext();
+
   const [isCreatingCollection, startCreateCollectionTransition] =
     useTransition();
 
@@ -84,6 +88,16 @@ function CreateCollection() {
         router.push("/" + username + "/" + slug);
 
         closeModal();
+
+        // add to recent collections
+
+        if (film) {
+          setRecentlySavedFilm({
+            filmID: film.id,
+            collection: data.collection.name,
+            savedToCollectionCount: 1,
+          });
+        }
 
         toast("Collection created!");
       } catch (error) {
