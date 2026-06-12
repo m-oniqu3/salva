@@ -17,7 +17,15 @@ function CollectionPreview(props: Props) {
   const { preview } = props;
 
   const {
-    collection: { is_private, name, cover_image, cover_type, slug, film_count },
+    collection: {
+      is_private,
+      name,
+      cover_image,
+      cover_type,
+      slug,
+      film_count,
+      created_at,
+    },
     user: { username, avatar, firstname },
   } = preview;
 
@@ -48,16 +56,16 @@ function CollectionPreview(props: Props) {
       </figure>
 
       <figcaption className="flex gap-4 ">
-        {avatar && (
-          <figure>
-            <Avatar
-              avatar={avatar ? getAvatarURL(avatar) : ""}
-              username={username}
-              name={firstname || username}
-              className={"size-9 rounded-full"}
-            />
-          </figure>
-        )}
+        {/* {avatar && ( */}
+        <figure>
+          <Avatar
+            avatar={avatar ? getAvatarURL(avatar) : ""}
+            username={username}
+            name={firstname || username}
+            className={"size-9 rounded-full"}
+          />
+        </figure>
+        {/* )} */}
 
         <div className="">
           <h3 className="font-semibold line-clamp-1 w-full text-sml sm:text-sm">
@@ -67,6 +75,8 @@ function CollectionPreview(props: Props) {
           <div className="flex items-center gap-1">
             <p className="text-xs font-medium text-neutral-600">
               {film_count} {film_count === 1 ? "film" : "films"}
+              {/* &bull; */}
+              {/* <> {formatDate(created_at)}</> */}
             </p>
 
             {is_private && (

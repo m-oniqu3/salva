@@ -60,7 +60,10 @@ function Collections(props: Props) {
     );
   }
 
-  if (!data || data.pages.length === 0) {
+  console.log(data);
+  const collections = data?.pages?.flatMap((col) => col ?? []) ?? [];
+
+  if (!collections || collections.length === 0) {
     return (
       <ErrorState
         heading="Nothing on screen"
@@ -70,7 +73,7 @@ function Collections(props: Props) {
     );
   }
 
-  const collections = data?.pages?.flatMap((col) => col ?? []) ?? [];
+  // const collections = data?.pages?.flatMap((col) => col ?? []) ?? [];
 
   //filter out collections
   const viewableCollections = collections.filter((col) => {
