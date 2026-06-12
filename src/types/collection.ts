@@ -18,6 +18,7 @@ export type CollectionPreview = {
     cover_type: CollectionCover | null;
     slug: string;
     film_count: number;
+    created_at: string;
   };
   user: {
     user_id: string;
@@ -46,6 +47,7 @@ export type CollectionSummary = {
     slug: string | null;
     description: string;
     film_count: number;
+    created_at: string;
   };
 };
 

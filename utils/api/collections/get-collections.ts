@@ -24,7 +24,7 @@ export async function getCollections(props: Props): GetCollectionsResponse {
     const { data, error } = await supabase
       .from("collections_with_film_count")
       .select(
-        ` id, name, is_private, cover_image, slug, cover_type, film_count,
+        ` id, name, is_private, cover_image, slug, cover_type, film_count, created_at,
          user:profiles(user_id,username)
         `,
       )
@@ -48,6 +48,7 @@ export async function getCollections(props: Props): GetCollectionsResponse {
             cover_type: col.cover_type
               ? (col.cover_type as CollectionCover)
               : null,
+            created_at: col.created_at!,
           },
           user: user!,
         };

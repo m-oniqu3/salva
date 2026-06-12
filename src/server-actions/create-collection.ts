@@ -15,7 +15,7 @@ type Props = {
 };
 
 type CreateCollectionResponse = Result<{
-  collection: { id: number; slug: string };
+  collection: { id: number; slug: string; name: string };
 
   user: {
     username: string;
@@ -36,11 +36,12 @@ export async function createCollection(props: Props): CreateCollectionResponse {
     // Get logged-in user
     const user = await getAuthUser();
 
-    // Does the collection already exist
+    // Does the user already have this collection?
     const { data: duplicate, error: duplicateError } = await supabase
       .from("collections")
       .select("name, slug")
       .eq("name", name)
+      .eq("user_id", user.id)
       .maybeSingle();
 
     if (duplicateError) throw duplicateError;
@@ -58,7 +59,7 @@ export async function createCollection(props: Props): CreateCollectionResponse {
       })
       .select(
         `id,
-        slug, 
+        slug, name,
         profiles(username)
         `,
       )
@@ -81,7 +82,7 @@ export async function createCollection(props: Props): CreateCollectionResponse {
 
     return {
       data: {
-        collection: { id: data.id, slug: data.slug },
+        collection: { id: data.id, slug: data.slug, name: data.name },
         user: { username, user_id: user.id },
       },
       error: null,

@@ -1,40 +1,41 @@
 "use client";
 
-import CollectionPreview from "@/components/collection/CollectionPreview";
 import ErrorState from "@/components/ErrorState";
+import Film from "@/components/films/Film";
 import { LoadingIcon } from "@/components/icons";
 import InfiniteScroll from "@/components/InfiniteScroll";
+import { UserMeta } from "@/types/user";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getCollections } from "@utils/api/collections/get-collections";
+import { getAllFilms } from "@utils/api/films/get-all-films";
+import { calculateRange } from "@utils/validation/paginate";
 
 type Props = {
-  targetUserID: string;
-  authUserID: string | null;
+  user: UserMeta;
 };
 
-function Collections(props: Props) {
-  const { targetUserID, authUserID } = props;
+function AllFilms(props: Props) {
+  const { user } = props;
 
   const {
+    isLoading,
     data,
     error,
-    isLoading,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: ["collections", targetUserID],
+    queryKey: ["films"],
     queryFn: async ({ pageParam }) => {
-      const { data, error } = await getCollections({
-        targetUserID,
-        page: pageParam,
+      const { data, error } = await getAllFilms({
+        range: calculateRange(pageParam, 10),
       });
 
       if (error) throw error;
-
       return data;
     },
+
     initialPageParam: 0,
+
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage?.length) return undefined;
       return allPages.length;
@@ -60,10 +61,7 @@ function Collections(props: Props) {
     );
   }
 
-  console.log(data);
-  const collections = data?.pages?.flatMap((col) => col ?? []) ?? [];
-
-  if (!collections || collections.length === 0) {
+  if (!data || data.pages.length === 0) {
     return (
       <ErrorState
         heading="Nothing on screen"
@@ -73,13 +71,7 @@ function Collections(props: Props) {
     );
   }
 
-  // const collections = data?.pages?.flatMap((col) => col ?? []) ?? [];
-
-  //filter out collections
-  const viewableCollections = collections.filter((col) => {
-    const isCollectionOwner = authUserID === col.user.user_id;
-    return isCollectionOwner || !col.collection.is_private;
-  });
+  const films = data?.pages?.flatMap((f) => f ?? []) ?? [];
 
   return (
     <InfiniteScroll
@@ -88,12 +80,12 @@ function Collections(props: Props) {
       fetchMoreData={() => hasNextPage && fetchNextPage()}
     >
       <div className="content-grid">
-        {viewableCollections.map((col) => (
-          <CollectionPreview key={col.collection.id} preview={col} />
+        {films?.map((film) => (
+          <Film key={film.id} film={film} user={user} />
         ))}
       </div>
     </InfiniteScroll>
   );
 }
 
-export default Collections;
+export default AllFilms;

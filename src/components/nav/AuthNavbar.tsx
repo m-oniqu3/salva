@@ -19,10 +19,10 @@ import { getAvatarURL } from "@utils/get-cover-url";
 import Link from "next/link";
 
 type Props = {
-  profile: Profile;
+  profile: Profile | null;
 };
 
-const links = ["discover", "discuss"];
+const links = ["discover"];
 
 function AuthNavbar({ profile }: Props) {
   const { openModal } = useModal();
@@ -34,6 +34,8 @@ function AuthNavbar({ profile }: Props) {
   const isProfileMenu = menu?.type === ContextMenuEnum.PROFILE_MENU;
 
   function handleProfileContextMenu() {
+    if (!profile) return;
+
     openMenu({
       type: ContextMenuEnum.PROFILE_MENU,
       payload: {
@@ -43,15 +45,17 @@ function AuthNavbar({ profile }: Props) {
   }
 
   function handleMobileMenu() {
+    // if (!profile) return;
+
     openModal({
       type: ModalEnum.MOBILE_MENU,
-      payload: { profile },
+      payload: { profile: profile ?? null },
     });
   }
 
   return (
     // <div className="fixed">
-    <header className="flex items-center sticky top-0 left-0 h-28 z-10 bg-white w-full ">
+    <header className="flex items-center sticky top-0 left-0 h-24 z-10 bg-white w-full ">
       <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 lg:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/home" className="">
@@ -73,7 +77,7 @@ function AuthNavbar({ profile }: Props) {
           </ul>
         </div>
 
-        <div className="max-w-md mx-auto">
+        <div className="max-w-lg mx-auto">
           <Searchbar />
         </div>
 
@@ -86,42 +90,48 @@ function AuthNavbar({ profile }: Props) {
             <MenuIcon className="size-5" />
           </button>
 
-          {/* {!profile && (
-            <div className="hidden md:flex items-center gap-4">
+          {!profile && (
+            <div className="hidden lg:flex items-center gap-4">
               <Button>Log In</Button>
               <Button className="bg-neutral-800 text-white">Sign Up</Button>
             </div>
-          )} */}
+          )}
 
-          <div className="hidden lg:flex items-center gap-4">
-            <Button
-              onClick={() => openModal({ type: ModalEnum.CREATE_COLLECTION })}
-              className="bg-neutral-800 text-white"
-            >
-              Create
-            </Button>
+          {profile && (
+            <>
+              <div className="hidden lg:flex items-center gap-4">
+                <Button
+                  onClick={() =>
+                    openModal({ type: ModalEnum.CREATE_COLLECTION })
+                  }
+                  className="bg-neutral-800 text-white"
+                >
+                  Create
+                </Button>
 
-            <Link href={"/films"}>
-              <BookmarkIcon className="size-4" />
-            </Link>
+                <Link href={"/films"}>
+                  <BookmarkIcon className="size-5" />
+                </Link>
 
-            {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
-            <Avatar
-              avatar={profile.avatar ? getAvatarURL(profile.avatar) : ""}
-              username={profile.username}
-              name={profile.firstname || profile.username}
-              className={"size-7 rounded-full text-[12px]"}
-            />
+                {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}
+                <Avatar
+                  avatar={profile.avatar ? getAvatarURL(profile.avatar) : ""}
+                  username={profile.username}
+                  name={profile.firstname || profile.username}
+                  className={"size-7 rounded-full text-[12px]"}
+                />
 
-            <button
-              type="button"
-              className="cursor-pointer"
-              onClick={handleProfileContextMenu}
-              name="Profile User Menu"
-            >
-              <ArrowDownIcon className="size-4" />
-            </button>
-          </div>
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={handleProfileContextMenu}
+                  name="Profile User Menu"
+                >
+                  <ArrowDownIcon className="size-4" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </nav>
 

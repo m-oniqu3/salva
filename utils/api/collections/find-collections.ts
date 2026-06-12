@@ -1,32 +1,40 @@
 "use server";
 
 import { CollectionCover, CollectionPreview } from "@/types/collection";
-import { Result } from "@/types/result";
 import formErrorMesage from "@utils/form-error-message";
 import { createClient } from "@utils/supabase/server";
 
-type GetTopCollectionsResponse = Result<Array<CollectionPreview> | null>;
+type Props = {
+  range: [number, number];
+  query: string;
+};
 
-export async function getTopCollections(): GetTopCollectionsResponse {
+export async function findCollections(props: Props) {
   try {
+    const { range, query } = props;
+    const [page, end] = range;
+
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .from("collections_with_film_count")
       .select(
         `
-    id, name, is_private, cover_image, slug, cover_type, film_count,created_at,
-    user:profiles(user_id,username,avatar,firstname)
+            id,
+            name,
+            is_private,
+            cover_image,
+            slug,
+            cover_type,
+            film_count,
+            created_at,
+            user:profiles(user_id, username, avatar, firstname)
   `,
       )
       .eq("is_private", false)
-      .gt("film_count", 7)
-      // .gte(
-      //   "created_at",
-      //   new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      // )
+      .ilike("name", `%${query}%`)
       .order("created_at", { ascending: false })
-      .limit(12);
+      .range(page, end);
 
     if (error) throw error;
 

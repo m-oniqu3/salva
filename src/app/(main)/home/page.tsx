@@ -1,50 +1,36 @@
-"use client";
+import AllFilms from "@/components/films/AllFilms";
+import { UserMeta } from "@/types/user";
+import { QueryClient } from "@tanstack/react-query";
+import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
+import { getProfile } from "@utils/api/profile/get-profile";
+import { createClient } from "@utils/supabase/server";
 
-import { AddIcon, MoreHorizontalIcon } from "@/components/icons";
-import { ContextMenuActionEnum } from "@/context/actions/ContextMenuActions";
-import { useContextMenu } from "@/context/useContextMenu";
-import { ContextMenuEnum } from "@/types/context-menu";
+async function HomePage() {
+  const queryClient = new QueryClient();
 
-function HomePage() {
-  const { dispatch: ctxDispatch } = useContextMenu();
+  const supabase = await createClient();
+  const auth = await supabase.auth.getUser();
 
-  function handleMore() {
-    ctxDispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.EDIT_BOARD_MENU,
-        position: { x: 500, y: 15 },
+  const [profile] = await Promise.all([
+    auth.data.user && getProfile({ key: "user_id", value: auth.data.user?.id }),
+
+    await queryClient.prefetchQuery({
+      queryKey: ["collection", "meta"],
+      queryFn: async () => {
+        const { data, error } = await getCollectionsMeta();
+        if (error) throw error;
+        return data;
       },
-    });
-  }
+    }),
+  ]);
 
-  function handleAdd() {
-    ctxDispatch({
-      type: ContextMenuActionEnum.OPEN_CONTEXT_MENU,
-      payload: {
-        currentContextMenu: ContextMenuEnum.ADD_ELEMENT_MENU,
-        position: { x: 500, y: 15 },
-      },
-    });
-  }
+  const user: UserMeta = profile?.data
+    ? { userID: profile.data.user_id, username: profile.data.username }
+    : null;
 
   return (
     <div className="">
-      <div className="flex justify-center gap-4 mt-10">
-        <button
-          onClick={handleAdd}
-          className="rounded-full size-10 flex justify-center items-center bg-gray-200"
-        >
-          <AddIcon className="size-5" />
-        </button>
-
-        <button
-          onClick={handleMore}
-          className="rounded-full size-10 flex justify-center items-center bg-gray-200"
-        >
-          <MoreHorizontalIcon className="size-5" />
-        </button>
-      </div>
+      <AllFilms user={user} />
     </div>
   );
 }

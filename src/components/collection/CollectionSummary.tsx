@@ -3,13 +3,20 @@
 import CollectionToolbar from "@/components/collection/CollectionToolbar";
 import { SolidLockClosedIcon } from "@/components/icons";
 import type { CollectionSummary } from "@/types/collection";
+import { formatDate } from "@utils/validation/format-date";
 
 type Props = { summary: CollectionSummary; userID: string | null };
 
 function CollectionSummary({ summary, userID }: Props) {
   const {
     user: { user_id: collectionOwnerID },
-    collection: { name, is_private: isPrivate, description, film_count },
+    collection: {
+      name,
+      is_private: isPrivate,
+      description,
+      film_count,
+      created_at,
+    },
   } = summary;
 
   const isCollectionOwner = userID === collectionOwnerID;
@@ -29,6 +36,10 @@ function CollectionSummary({ summary, userID }: Props) {
           )}
 
           <div className="flex gap-2 font-semibold text-xs mt-1 text-neutral-800">
+            <p>{formatDate(created_at)}</p>
+
+            <span>&#xb7;</span>
+
             {isPrivate && (
               <p className="flex gap-1 font-semibold">
                 Private

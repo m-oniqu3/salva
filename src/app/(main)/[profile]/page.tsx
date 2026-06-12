@@ -28,6 +28,8 @@ async function page({ params }: Props) {
     supabase.auth.getUser(),
   ]);
 
+  console.log(profileSummary);
+
   const { user } = userDetails.data;
   const { data: profile_summary } = profileSummary;
 

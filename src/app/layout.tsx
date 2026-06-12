@@ -39,6 +39,13 @@ type LayoutProps = {
 };
 
 export default async function RootLayout({ children }: LayoutProps) {
+  // const { data, error } = await checkAuthUser();
+
+  // console.log({ data, error });
+
+  // if (data) {
+  //   redirect("/home");
+  // } else
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`} id="body">

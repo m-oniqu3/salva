@@ -1,8 +1,11 @@
+"use client";
+
 import FilmMeta from "@/components/films/FilmMeta";
 import { TMDBFilm } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
 import { getTMDBImageURL } from "@utils/get-cover-url";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   film: TMDBFilm;
@@ -19,8 +22,18 @@ function Film(props: Props) {
   const isAuth = !!user?.userID;
   const url = getTMDBImageURL(poster_path);
 
+  const router = useRouter();
+  const pathname = usePathname();
+
+  function handleNavigation() {
+    const route = `/film/${film.media_type}/${id}`;
+    if (pathname === route) return;
+
+    router.push(route);
+  }
+
   return (
-    <div className="w-full">
+    <div className="w-full cursor-pointer" onClick={handleNavigation}>
       <figure className="group relative size-full">
         <Image
           key={id}

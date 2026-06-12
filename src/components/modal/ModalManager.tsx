@@ -7,6 +7,8 @@ import DeleteCollection from "@/components/modal/DeleteCollection";
 import EditCollection from "@/components/modal/EditCollection";
 import EditProfile from "@/components/modal/EditProfile";
 import FilmCollection from "@/components/modal/FilmCollection";
+import FilmDetails from "@/components/modal/FilmDetails";
+import LoadingModal from "@/components/modal/LoadingModal";
 import MassDeleteFilms from "@/components/modal/MassDeleteFilms";
 import Modal from "@/components/modal/Modal";
 import TransferFilms from "@/components/modal/TransferFilms";
@@ -64,6 +66,12 @@ function ModalManager() {
 
       case ModalEnum.DELETE_COLLECTION:
         return <DeleteCollection />;
+
+      case ModalEnum.FILM_DETAILS_MODAL:
+        return <FilmDetails />;
+
+      case ModalEnum.LOADING:
+        return <LoadingModal />;
 
       default:
         throw new Error(
