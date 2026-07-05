@@ -26,7 +26,7 @@ function ProfileSummary({ profileSummary, authUserID }: Props) {
   const isLoggedIn = Boolean(authUserID);
 
   return (
-    <section className="py-4 max-w-[450px]">
+    <section className=" max-w-[450px]">
       <article className="flex flex-col gap-4">
         <Avatar
           avatar={avatar ? getAvatarURL(avatar) : ""}

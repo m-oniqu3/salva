@@ -124,8 +124,9 @@ function CollectionToolbar(props: Props) {
           avatar={summary.user.avatar ? getAvatarURL(summary.user.avatar) : ""}
           username={summary.user.username}
           name={summary.user.firstname || summary.user.username}
-          className={"size-9 rounded-full"}
+          className={"size-8 rounded-full"}
         />
+
         {!isCollectionOwner && (
           <figcaption className="text-sml">
             By &nbsp;

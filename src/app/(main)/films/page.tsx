@@ -56,12 +56,12 @@ async function page() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="pages">
-        <div>
+        {/* <div>
           <h1 className="font-semibold text-md sm:text-lg">Films</h1>
           <p className="text-sml">
             {"Here are all the films you've saved so far."}
           </p>
-        </div>
+        </div> */}
 
         <Films user={user} targetUser={{ userID: user.userID }} />
       </div>

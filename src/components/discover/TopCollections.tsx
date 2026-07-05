@@ -44,7 +44,7 @@ function TopCollections() {
 
       <div className="content-grid">
         {data?.map((col) => (
-          <CollectionPreview key={col.collection.id} preview={col} />
+          <CollectionPreview key={col.collection.id} preview={col} showAvatar />
         ))}
       </div>
     </section>

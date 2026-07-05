@@ -37,7 +37,7 @@ curate and discuss films.
 - comment on films
 - sort collections
 - sort films 
-
+- add browser extension to add any film, from any site to the list 
 
 
 

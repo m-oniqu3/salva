@@ -3,7 +3,7 @@
 import CollectionToolbar from "@/components/collection/CollectionToolbar";
 import { SolidLockClosedIcon } from "@/components/icons";
 import type { CollectionSummary } from "@/types/collection";
-import { formatDate } from "@utils/validation/format-date";
+import { formatTimeAgo } from "@utils/validation/format-date";
 
 type Props = { summary: CollectionSummary; userID: string | null };
 
@@ -36,10 +36,6 @@ function CollectionSummary({ summary, userID }: Props) {
           )}
 
           <div className="flex gap-2 font-semibold text-xs mt-1 text-neutral-800">
-            <p>{formatDate(created_at)}</p>
-
-            <span>&#xb7;</span>
-
             {isPrivate && (
               <p className="flex gap-1 font-semibold">
                 Private
@@ -52,6 +48,9 @@ function CollectionSummary({ summary, userID }: Props) {
             <p>
               {film_count}&nbsp;{film_count === 1 ? "film" : "films"}
             </p>
+
+            <span>&#xb7;</span>
+            <p>{formatTimeAgo(created_at)}</p>
           </div>
 
           <CollectionToolbar

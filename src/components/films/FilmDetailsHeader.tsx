@@ -124,7 +124,7 @@ function FilmDetailsHeader(props: Props) {
     }
   }
   return (
-    <header className="h-24  grid grid-cols-1 lg:grid-cols-2">
+    <header className="h-20  grid grid-cols-1 lg:grid-cols-2">
       <div className="flex wrapper items-center justify-between ">
         {user ? (
           <ul className=" flex items-center gap-4  ">
