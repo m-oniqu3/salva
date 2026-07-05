@@ -32,7 +32,7 @@ function InfiniteScroll(props: Props) {
     // create observer instance
     const observer = new IntersectionObserver(handleIntersection, {
       root: null,
-      rootMargin: "100px",
+      rootMargin: "400px",
       threshold: 0,
     });
 
@@ -48,11 +48,12 @@ function InfiniteScroll(props: Props) {
     <>
       <>{children}</>
 
-      <div ref={observerElement} id="obs">
+      <div
+        ref={observerElement}
+        className="flex justify-center items-center h-10"
+      >
         {isLoadingMoreData && !isLoadingIntialData && (
-          <div className="flex justify-center items-center pt-20">
-            <LoadingIcon className="size-5" />
-          </div>
+          <LoadingIcon className="size-5 animate-spin" />
         )}
       </div>
     </>

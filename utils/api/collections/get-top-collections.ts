@@ -7,8 +7,16 @@ import { createClient } from "@utils/supabase/server";
 
 type GetTopCollectionsResponse = Result<Array<CollectionPreview> | null>;
 
-export async function getTopCollections(): GetTopCollectionsResponse {
+type Props = {
+  range: [number, number];
+};
+export async function getTopCollections(
+  props: Props,
+): GetTopCollectionsResponse {
   try {
+    const { range } = props;
+    const [page, end] = range;
+
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -20,13 +28,13 @@ export async function getTopCollections(): GetTopCollectionsResponse {
   `,
       )
       .eq("is_private", false)
-      .gt("film_count", 7)
+      // .gt("film_count", 7)
       // .gte(
       //   "created_at",
       //   new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
       // )
       .order("created_at", { ascending: false })
-      .limit(12);
+      .range(page, end);
 
     if (error) throw error;
 

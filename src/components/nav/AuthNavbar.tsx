@@ -22,7 +22,7 @@ type Props = {
   profile: Profile | null;
 };
 
-const links = ["discover"];
+const links = ["discover", "collections", "discuss"];
 
 function AuthNavbar({ profile }: Props) {
   const { openModal } = useModal();
@@ -55,7 +55,7 @@ function AuthNavbar({ profile }: Props) {
 
   return (
     // <div className="fixed">
-    <header className="flex items-center sticky top-0 left-0 h-24 z-10 bg-white w-full ">
+    <header className="flex items-center sticky top-0 left-0 h-28 z-10 bg-white w-full ">
       <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 lg:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/home" className="">
@@ -68,7 +68,7 @@ function AuthNavbar({ profile }: Props) {
                 <Link
                   key={link}
                   href={"/" + link}
-                  className="text-zinc-600 text-sml font-semibold capitalize hidden md:grid"
+                  className="text-neutral-600 text-sml font-semibold capitalize hidden md:grid"
                 >
                   {link}
                 </Link>
@@ -110,7 +110,7 @@ function AuthNavbar({ profile }: Props) {
                 </Button>
 
                 <Link href={"/films"}>
-                  <BookmarkIcon className="size-5" />
+                  <BookmarkIcon className="size-3.5" />
                 </Link>
 
                 {/* <div className="border-black border-[1.8px] rounded-full flex items-center justify-center size-7"> */}

@@ -275,34 +275,34 @@ export function LoadingIcon({ className }: IconProps) {
 
 export function BookmarkIcon({ className }: IconProps) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className={className}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
-      />
-    </svg>
-
     // <svg
     //   xmlns="http://www.w3.org/2000/svg"
-    //   width="13"
-    //   height="17"
-    //   viewBox="0 0 13 17"
+    //   fill="none"
+    //   viewBox="0 0 24 24"
+    //   strokeWidth={1.5}
+    //   stroke="currentColor"
     //   className={className}
     // >
     //   <path
-    //     d="M20249.5-13963.152l-6.5,6.152v-17h13v17Zm5.074,2.816v-12.2h-10.143v12.2l5.068-4.8Z"
-    //     transform="translate(-20242.998 13974)"
-    //     fill="currentColor"
-    //   ></path>
+    //     strokeLinecap="round"
+    //     strokeLinejoin="round"
+    //     d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
+    //   />
     // </svg>
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="13"
+      height="17"
+      viewBox="0 0 13 17"
+      className={className}
+    >
+      <path
+        d="M20249.5-13963.152l-6.5,6.152v-17h13v17Zm5.074,2.816v-12.2h-10.143v12.2l5.068-4.8Z"
+        transform="translate(-20242.998 13974)"
+        fill="currentColor"
+      ></path>
+    </svg>
   );
 }
 

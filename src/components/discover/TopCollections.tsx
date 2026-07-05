@@ -3,17 +3,35 @@
 import CollectionPreview from "@/components/collection/CollectionPreview";
 import ErrorState from "@/components/ErrorState";
 import { LoadingIcon } from "@/components/icons";
-import { useQuery } from "@tanstack/react-query";
+import InfiniteScroll from "@/components/InfiniteScroll";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getTopCollections } from "@utils/api/collections/get-top-collections";
+import { calculateRange } from "@utils/validation/paginate";
 
 function TopCollections() {
-  const { data, error, isLoading } = useQuery({
+  const {
+    data,
+    error,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["collections", "top"],
-    queryFn: async () => {
-      const { data, error } = await getTopCollections();
+
+    queryFn: async ({ pageParam }) => {
+      const { data, error } = await getTopCollections({
+        range: calculateRange(pageParam, 20),
+      });
 
       if (error) throw error;
       return data;
+    },
+    initialPageParam: 0,
+
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage?.length) return undefined;
+      return allPages.length;
     },
   });
 
@@ -36,17 +54,31 @@ function TopCollections() {
     );
   }
 
+  const collections = data?.pages
+    ? data.pages.flatMap((cur) => {
+        if (!cur) return [];
+        return cur;
+      })
+    : null;
   // console.log(data);
 
   return (
     <section className="flex flex-col gap-4">
-      <h3 className="font-medium">Collections</h3>
-
-      <div className="content-grid">
-        {data?.map((col) => (
-          <CollectionPreview key={col.collection.id} preview={col} showAvatar />
-        ))}
-      </div>
+      <InfiniteScroll
+        isLoadingIntialData={isLoading}
+        isLoadingMoreData={isFetchingNextPage}
+        fetchMoreData={() => hasNextPage && fetchNextPage()}
+      >
+        <div className="content-grid">
+          {collections?.map((col) => (
+            <CollectionPreview
+              key={col.collection.id}
+              preview={col}
+              showAvatar
+            />
+          ))}
+        </div>
+      </InfiniteScroll>
     </section>
   );
 }

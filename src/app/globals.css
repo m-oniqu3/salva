@@ -94,17 +94,18 @@ body {
   }
 
   .pages {
-    @apply flex flex-col gap-12 pb-20
+    @apply flex flex-col gap-8 pb-20
   }
 
   .content-grid {
+    @apply gap-8;
     display: grid;
-    gap: 1.5rem;
+
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    /* @media (min-width: 640px) {
-      gap: 1.5rem;
-    } */
+    @media (min-width: 640px) {
+      @apply gap-12;
+    }
 
     @media (min-width: 1024px) {
       grid-template-columns: repeat(3, minmax(0, 1fr));

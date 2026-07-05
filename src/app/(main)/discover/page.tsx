@@ -1,5 +1,4 @@
 import DiscoverFilms from "@/components/discover/DiscoverFilms";
-import TopCollections from "@/components/discover/TopCollections";
 import { UserMeta } from "@/types/user";
 import {
   dehydrate,
@@ -21,7 +20,7 @@ async function DiscoverPage() {
   const supabase = await createClient();
   const auth = await supabase.auth.getUser();
 
-  const [films, profile] = await Promise.all([
+  const [discover, profile] = await Promise.all([
     defaultDiscoverFilms({}),
     auth.data.user && getProfile({ key: "user_id", value: auth.data.user?.id }),
 
@@ -41,10 +40,7 @@ async function DiscoverPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="pages">
-        <TopCollections />
-        <DiscoverFilms defaultFilms={films} user={user} />
-      </div>
+      <DiscoverFilms defaultFilms={discover.films} user={user} />
     </HydrationBoundary>
   );
 }

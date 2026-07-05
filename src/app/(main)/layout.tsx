@@ -31,7 +31,7 @@ export default async function MainLayout({ children }: Props) {
   // if (!profile) redirect("/");
 
   return (
-    <div className="pages">
+    <div className="">
       <AuthNavbar profile={profile} />
       <main className="wrapper ">{children}</main>
     </div>

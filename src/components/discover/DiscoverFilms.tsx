@@ -4,9 +4,10 @@ import Button from "@/components/Button";
 import ErrorState from "@/components/ErrorState";
 import Film from "@/components/films/Film";
 import { CloseIcon, LoadingIcon } from "@/components/icons";
+import InfiniteScroll from "@/components/InfiniteScroll";
 import { TMDBFilm } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { defaultDiscoverFilms } from "@utils/api/films/discover-films-default";
 import { TMDB_GENRE_MAP } from "@utils/tmdb-genres";
 import { useState } from "react";
@@ -26,14 +27,57 @@ function DiscoverFilms(props: Props) {
   }
 
   const {
-    data: genreFilms,
+    data,
     isLoading,
     error,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["discover", selectedGenreKey],
-    queryFn: () => defaultDiscoverFilms({ genreKey: +selectedGenreKey }),
-    // enabled: !!selectedGenreKey,
+
+    queryFn: ({ pageParam }) =>
+      defaultDiscoverFilms({
+        genreKey: selectedGenreKey ? +selectedGenreKey : undefined,
+        page: pageParam,
+      }),
+
+    initialPageParam: 1,
+
+    getNextPageParam: (lastPage) =>
+      lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
+
+    // Skip the initial network request when there's no genre filter
+    // by seeding the cache with the server-fetched films.
+    initialData:
+      !selectedGenreKey && defaultFilms
+        ? {
+            pages: [{ films: defaultFilms, page: 1, totalPages: 2 }],
+            pageParams: [1],
+          }
+        : undefined,
   });
+
+  const films = data?.pages.flatMap((p) => p.films) ?? [];
+
+  console.log(films);
+
+  // useEffect(() => {
+  //   const node = loadMoreRef.current;
+  //   if (!node) return;
+
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+  //         fetchNextPage();
+  //       }
+  //     },
+  //     { rootMargin: "400px" },
+  //   );
+
+  //   observer.observe(node);
+  //   return () => observer.disconnect();
+  // }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (isLoading) {
     return (
@@ -43,22 +87,19 @@ function DiscoverFilms(props: Props) {
     );
   }
 
-  // todo: fix error msg
   if (error) {
     return (
       <ErrorState
-        heading="Playback error."
-        message="We hit a snag fetching your collections."
+        heading="Our projector stopped working."
+        message="We couldn't load any films right now. Try refreshing the page."
         className="error-state-wrapper"
       />
     );
   }
 
-  console.log(defaultFilms);
-
   return (
     <section className="pages">
-      <ul className="flex flex-wrap gap-8">
+      <ul className="flex flex-wrap gap-4">
         {Object.entries(TMDB_GENRE_MAP).map(([key, genre]) => {
           return (
             <li
@@ -82,21 +123,22 @@ function DiscoverFilms(props: Props) {
       </ul>
 
       <section className="flex flex-col gap-4">
-        <h3 className="font-medium">Films</h3>
-
-        {/* {selectedGenreKey} */}
-        {!selectedGenreKey ? (
-          <div className="content-grid">
-            {(defaultFilms ?? [])?.map((film) => {
-              return <Film key={film.id} film={film} user={user} />;
-            })}
-          </div>
-        ) : genreFilms && genreFilms?.length > 0 ? (
-          <div className="content-grid">
-            {genreFilms?.map((film) => {
-              return <Film key={film.id} film={film} user={user} />;
-            })}
-          </div>
+        {films.length > 0 ? (
+          <InfiniteScroll
+            isLoadingIntialData={isLoading}
+            isLoadingMoreData={isFetchingNextPage}
+            fetchMoreData={() => hasNextPage && fetchNextPage()}
+          >
+            <div className="content-grid">
+              {films.map((film) => (
+                <Film
+                  key={`${film.media_type}-${film.id}`}
+                  film={film}
+                  user={user}
+                />
+              ))}
+            </div>
+          </InfiniteScroll>
         ) : (
           <ErrorState
             heading="No matches for this genre right now."

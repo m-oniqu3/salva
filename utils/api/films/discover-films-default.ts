@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TMDBFilm } from "@/types/tmdb";
 
 const ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN;
@@ -5,20 +6,29 @@ const BASE_URL = "https://api.themoviedb.org/3";
 
 type Props = {
   genreKey?: number;
+  page?: number;
+};
+
+export type DiscoverFilmsResult = {
+  films: TMDBFilm[];
+  page: number;
+  totalPages: number;
 };
 
 export async function defaultDiscoverFilms(
   props: Props,
-): Promise<TMDBFilm[] | null> {
+): Promise<DiscoverFilmsResult> {
   const genreKey = props?.genreKey;
+  const page = props?.page ?? 1;
 
-  const genreAdditive = genreKey ? `?with_genres=${genreKey}` : "";
+  const params = new URLSearchParams({ page: String(page) });
+  if (genreKey) params.set("with_genres", String(genreKey));
 
   const [moviesRes, tvRes] = await Promise.all([
-    fetch(`${BASE_URL}/discover/movie${genreAdditive}`, {
+    fetch(`${BASE_URL}/discover/movie?${params.toString()}`, {
       headers: { Authorization: "Bearer " + ACCESS_TOKEN },
     }),
-    fetch(`${BASE_URL}/discover/tv${genreAdditive}`, {
+    fetch(`${BASE_URL}/discover/tv?${params.toString()}`, {
       headers: { Authorization: "Bearer " + ACCESS_TOKEN },
     }),
   ]);
@@ -26,10 +36,10 @@ export async function defaultDiscoverFilms(
   const movies = await moviesRes.json();
   const tv = await tvRes.json();
 
-  const films = Array(movies.results)
-    .concat(tv.results)
+  const films = ([] as any[])
+    .concat(movies.results ?? [])
+    .concat(tv.results ?? [])
     .reduce((acc: TMDBFilm[], cur) => {
-      // if (cur.media_type !== "movie" && cur.media_type !== "tv") return acc;
       if (!cur.poster_path) return acc;
 
       const mediaType = "title" in cur ? "movie" : "tv";
@@ -44,7 +54,9 @@ export async function defaultDiscoverFilms(
       return acc;
     }, []);
 
-  if (!films) return null;
+  // TMDB's movie/tv result counts differ, so take the smaller total_pages
+  // to guarantee both endpoints have data for every page we request.
+  const totalPages = Math.min(movies.total_pages ?? 1, tv.total_pages ?? 1);
 
-  return films;
+  return { films, page, totalPages };
 }
