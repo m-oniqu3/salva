@@ -23,7 +23,7 @@ function SearchLayout({ children }: Props) {
         key={link}
         href={`/search/${link}/${slug}`}
         onClick={() => setActiveLink(link)}
-        className={`p-3 h-9 rounded-full text-sml font-semibold cursor-pointer flex items-center justify-center capitalize opacity-50 ${
+        className={`p-3 h-9 rounded-full text-xs font-semibold cursor-pointer flex items-center justify-center capitalize opacity-50 ${
           activeLink === link ? "gray opacity-100" : ""
         }`}
       >

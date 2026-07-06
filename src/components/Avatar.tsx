@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HTMLAttributes } from "react";
 
@@ -20,7 +21,8 @@ function Avatar<T>(props: Props<T>) {
   }
 
   return (
-    <button
+    <Link
+      href={"/" + username}
       onClick={handleNavigation}
       className={`flex items-center justify-center overflow-hidden cursor-pointer ${className}`}
     >
@@ -39,10 +41,10 @@ function Avatar<T>(props: Props<T>) {
           className="size-full rounded-full flex items-center justify-center uppercase text-[#ffffff] bg-[#ff9a6e]"
           style={{ fontSize: "inherit" }}
         >
-          {name.at(0)}
+          {username.at(0)}
         </span>
       )}
-    </button>
+    </Link>
   );
 }
 

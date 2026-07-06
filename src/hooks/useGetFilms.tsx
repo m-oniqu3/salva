@@ -11,7 +11,7 @@ type Props = {
 };
 
 function useGetFilms(props: Props) {
-  const { userID, limit = 20, collectionID } = props;
+  const { userID, limit = 30, collectionID } = props;
 
   const query = useInfiniteQuery({
     queryKey: ["films", collectionID ?? ""],

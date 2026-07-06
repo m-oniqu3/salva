@@ -1,11 +1,7 @@
-import TopCollections from "@/components/discover/TopCollections";
+import DiscoverCollections from "@/components/discover/DiscoverCollections";
 
 function page() {
-  return (
-    <div>
-      <TopCollections />
-    </div>
-  );
+  return <DiscoverCollections />;
 }
 
 export default page;

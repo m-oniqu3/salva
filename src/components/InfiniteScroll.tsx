@@ -16,6 +16,9 @@ function InfiniteScroll(props: Props) {
     props;
 
   useEffect(() => {
+    const node = observerElement.current;
+    if (!node) return;
+
     // is element in view?
     function handleIntersection(entries: IntersectionObserverEntry[]) {
       entries.forEach((entry) => {
@@ -36,9 +39,7 @@ function InfiniteScroll(props: Props) {
       threshold: 0,
     });
 
-    if (observerElement.current) {
-      observer.observe(observerElement.current);
-    }
+    observer.observe(node);
 
     // cleanup function
     return () => observer.disconnect();
@@ -52,12 +53,31 @@ function InfiniteScroll(props: Props) {
         ref={observerElement}
         className="flex justify-center items-center h-10"
       >
-        {isLoadingMoreData && !isLoadingIntialData && (
-          <LoadingIcon className="size-5 animate-spin" />
-        )}
+        {isLoadingMoreData && <LoadingIcon className="size-5 animate-spin" />}
       </div>
     </>
   );
 }
 
 export default InfiniteScroll;
+
+/**
+ *   const loadMoreRef = useRef<HTMLDivElement>(null);
+ 
+   useEffect(() => {
+     const node = loadMoreRef.current;
+     if (!node) return;
+ 
+     const observer = new IntersectionObserver(
+       (entries) => {
+         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+           fetchNextPage();
+         }
+       },
+       { rootMargin: "400px" },
+     );
+ 
+     observer.observe(node);
+     return () => observer.disconnect();
+   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+ */

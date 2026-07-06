@@ -47,7 +47,7 @@ body {
 @layer components {
 
   .wrapper {
-    @apply w-11/12 mx-auto;
+    @apply w-[95%] mx-auto 2xl:w-[98%];
   }
 
   .text-sml {

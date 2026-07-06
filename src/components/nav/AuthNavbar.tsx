@@ -1,5 +1,6 @@
 "use client";
 
+import AuthButtons from "@/components/auth/AuthButtons";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import ProfileMenu from "@/components/context-menu/ProfileMenu";
@@ -22,7 +23,7 @@ type Props = {
   profile: Profile | null;
 };
 
-const links = ["discover", "collections", "discuss"];
+const links = ["discover", "collections"];
 
 function AuthNavbar({ profile }: Props) {
   const { openModal } = useModal();
@@ -55,7 +56,7 @@ function AuthNavbar({ profile }: Props) {
 
   return (
     // <div className="fixed">
-    <header className="flex items-center sticky top-0 left-0 h-28 z-10 bg-white w-full ">
+    <header className="flex items-center sticky top-0 left-0 h-24 z-10 bg-white w-full ">
       <nav className="wrapper grid grid-cols-[auto_1fr_auto] lg:grid-cols-3 items-center justify-between gap-8 lg:gap-6">
         <div className="flex items-center gap-4">
           <Link href="/home" className="">
@@ -68,7 +69,7 @@ function AuthNavbar({ profile }: Props) {
                 <Link
                   key={link}
                   href={"/" + link}
-                  className="text-neutral-600 text-sml font-semibold capitalize hidden md:grid"
+                  className="text-neutral-600 text-xs font-medium capitalize hidden md:grid"
                 >
                   {link}
                 </Link>
@@ -90,12 +91,7 @@ function AuthNavbar({ profile }: Props) {
             <MenuIcon className="size-5" />
           </button>
 
-          {!profile && (
-            <div className="hidden lg:flex items-center gap-4">
-              <Button>Log In</Button>
-              <Button className="bg-neutral-800 text-white">Sign Up</Button>
-            </div>
-          )}
+          {!profile && <AuthButtons />}
 
           {profile && (
             <>

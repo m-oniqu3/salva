@@ -85,7 +85,7 @@ function CreateCollection() {
           keys.map((key) => queryClient.invalidateQueries({ queryKey: key })),
         );
 
-        router.push("/" + username + "/" + slug);
+        //router.push("/" + username + "/" + slug);
 
         closeModal();
 

@@ -15,7 +15,7 @@ export type DiscoverFilmsResult = {
   totalPages: number;
 };
 
-export async function defaultDiscoverFilms(
+export async function discoverFilms(
   props: Props,
 ): Promise<DiscoverFilmsResult> {
   const genreKey = props?.genreKey;
@@ -56,7 +56,9 @@ export async function defaultDiscoverFilms(
 
   // TMDB's movie/tv result counts differ, so take the smaller total_pages
   // to guarantee both endpoints have data for every page we request.
-  const totalPages = Math.min(movies.total_pages ?? 1, tv.total_pages ?? 1);
+  // only the totalPages line changes
+  const totalPages =
+    Math.max(movies.total_pages ?? 0, tv.total_pages ?? 0) || 1;
 
   return { films, page, totalPages };
 }

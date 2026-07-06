@@ -32,13 +32,15 @@ function ProfileSummary({ profileSummary, authUserID }: Props) {
           avatar={avatar ? getAvatarURL(avatar) : ""}
           username={username}
           name={firstname || username}
-          className={"size-10 rounded-full text-lg lg:size-10"}
+          className={"size-10 rounded-full text-lg lg:size-20"}
         />
 
         <div className="flex flex-col gap-1">
-          <h2 className="font-bold text-lg m-0  text-neutral-800 ">
+          <h2 className="font-semibold text-base m-0 text-neutral-800 ">
             <span>{firstname ? `${firstname} ${lastname}` : username}</span>
           </h2>
+
+          <p className="text-neutral-600 leading-5 text-[13px]">{bio}</p>
 
           <div className="flex items-center gap-2">
             <p className="text-[13px] font-semibold text-neutral-600">
@@ -52,8 +54,6 @@ function ProfileSummary({ profileSummary, authUserID }: Props) {
               {collections_created === 1 ? "collection" : "collections"}
             </p>
           </div>
-
-          <p className="text-neutral-600 leading-5 text-[13px]">{bio}</p>
         </div>
 
         {isUserViewingSelf && isLoggedIn && (

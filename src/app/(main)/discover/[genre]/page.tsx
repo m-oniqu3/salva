@@ -1,45 +1,42 @@
-"use client";
+import DiscoverResults from "@/components/discover/DiscoverResults";
+import { UserMeta } from "@/types/user";
+import { discoverFilms } from "@utils/api/films/discover-films-default";
+import { getProfile } from "@utils/api/profile/get-profile";
+import { createClient } from "@utils/supabase/server";
+import { Suspense } from "react";
 
-import ErrorState from "@/components/ErrorState";
-import { LoadingIcon } from "@/components/icons";
-import { useQuery } from "@tanstack/react-query";
-import { defaultDiscoverFilms } from "@utils/api/films/discover-films-default";
-import { usePathname } from "next/navigation";
+type Props = {
+  params: Promise<{ genre: string }>;
+};
 
-function GenreFilms() {
-  const pathname = usePathname();
-  const genre = pathname.split("/").pop();
-  console.log("discover");
+async function DiscoverGenrePage({ params }: Props) {
+  const { genre } = await params;
+  const genreKey = Number(genre);
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["discover", "default"],
-    queryFn: defaultDiscoverFilms,
-  });
+  const supabase = await createClient();
+  const auth = await supabase.auth.getUser();
 
-  if (isLoading) {
-    return (
-      <div className="error-state-wrapper">
-        <LoadingIcon className="size-5 animate-spin" />
-      </div>
-    );
-  }
+  const [defaultFilms, profile] = await Promise.all([
+    discoverFilms({
+      genreKey: Number.isNaN(genreKey) ? undefined : genreKey,
+    }),
+    auth.data.user && getProfile({ key: "user_id", value: auth.data.user.id }),
+  ]);
 
-  // todo: fix error msg
-  if (error) {
-    return (
-      <ErrorState
-        heading="Playback error."
-        message="We hit a snag fetching your collections."
-        className="error-state-wrapper"
+  const user: UserMeta = profile?.data
+    ? { userID: profile.data.user_id, username: profile.data.username }
+    : null;
+
+  return (
+    <Suspense fallback={null}>
+      <DiscoverResults
+        key={genre}
+        defaultFilms={defaultFilms.films}
+        genreKey={genre}
+        user={user}
       />
-    );
-  }
-
-  console.log(data);
-
-  if (!genre) return <p>no genre</p>;
-
-  return <div>{genre}</div>;
+    </Suspense>
+  );
 }
 
-export default GenreFilms;
+export default DiscoverGenrePage;

@@ -28,6 +28,8 @@ function Films(props: Props) {
     collectionID: targetUser.collectionID,
   });
 
+  const isCollectionOwner = user?.userID === targetUser.userID;
+
   if (isLoading) {
     return (
       <div className="flex-center w-full">
@@ -41,7 +43,11 @@ function Films(props: Props) {
       <div className="error-state-wrapper">
         <ErrorState
           heading="Reel Jammed"
-          message="We couldn’t load your saved films. Try again in a moment."
+          message={
+            isCollectionOwner
+              ? "We couldn’t load your saved films. Try again in a moment."
+              : "Couldn't load films."
+          }
           buttonLabel="Try Again"
           onClick={refetch}
         />
@@ -54,7 +60,11 @@ function Films(props: Props) {
       <div className="error-state-wrapper">
         <ErrorState
           heading="Nothing in the Archives"
-          message="Your saved films will appear here once you start collecting."
+          message={
+            isCollectionOwner
+              ? "Saved films will appear here once you start collecting."
+              : "Nothing saved here yet."
+          }
         />
       </div>
     );

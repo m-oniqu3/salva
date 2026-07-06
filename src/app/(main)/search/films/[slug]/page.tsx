@@ -1,4 +1,4 @@
-import Film from "@/components/films/Film";
+import SearchFilms from "@/components/search/SearchFilms";
 import { UserMeta } from "@/types/user";
 import {
   dehydrate,
@@ -17,21 +17,26 @@ type Props = {
 
 async function page({ params }: Props) {
   const { slug } = await params;
-  const queryClient = new QueryClient();
 
   if (!slug) {
     console.log("No film present to search");
     redirect("/");
   }
 
+  const queryClient = new QueryClient();
   const supabase = await createClient();
   const auth = await supabase.auth.getUser();
 
-  const [films, profile] = await Promise.all([
-    searchFilms(slug),
+  const [, profile] = await Promise.all([
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["search", slug],
+      queryFn: ({ pageParam }) => searchFilms(slug, pageParam as number),
+      initialPageParam: 1,
+    }),
+
     auth.data.user && getProfile({ key: "user_id", value: auth.data.user?.id }),
 
-    await queryClient.prefetchQuery({
+    queryClient.prefetchQuery({
       queryKey: ["collection", "meta"],
       queryFn: async () => {
         const { data, error } = await getCollectionsMeta();
@@ -41,22 +46,13 @@ async function page({ params }: Props) {
     }),
   ]);
 
-  if (!films || films.length === 0) {
-    console.log("no films");
-    return <p>no films</p>;
-  }
-
   const user: UserMeta = profile?.data
     ? { userID: profile.data.user_id, username: profile.data.username }
     : null;
 
-  const rendered_films = films.map((film) => {
-    return <Film key={film.id} film={film} user={user} />;
-  });
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="content-grid">{rendered_films}</div>
+      <SearchFilms query={slug} user={user} />
     </HydrationBoundary>
   );
 }

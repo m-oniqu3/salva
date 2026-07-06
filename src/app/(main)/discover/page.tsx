@@ -1,4 +1,4 @@
-import DiscoverFilms from "@/components/discover/DiscoverFilms";
+import DiscoverResults from "@/components/discover/DiscoverResults";
 import { UserMeta } from "@/types/user";
 import {
   dehydrate,
@@ -6,7 +6,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
-import { defaultDiscoverFilms } from "@utils/api/films/discover-films-default";
+import { discoverFilms } from "@utils/api/films/discover-films-default";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 
@@ -21,7 +21,7 @@ async function DiscoverPage() {
   const auth = await supabase.auth.getUser();
 
   const [discover, profile] = await Promise.all([
-    defaultDiscoverFilms({}),
+    discoverFilms({}),
     auth.data.user && getProfile({ key: "user_id", value: auth.data.user?.id }),
 
     await queryClient.prefetchQuery({
@@ -40,7 +40,7 @@ async function DiscoverPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DiscoverFilms defaultFilms={discover.films} user={user} />
+      <DiscoverResults defaultFilms={discover.films} user={user} />
     </HydrationBoundary>
   );
 }

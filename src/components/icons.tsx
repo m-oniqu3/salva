@@ -193,7 +193,7 @@ export function AddIcon({ className }: IconProps) {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      strokeWidth={1.8}
+      strokeWidth={1.5}
       stroke="currentColor"
       className={className}
     >
@@ -615,26 +615,41 @@ export function EditIcon({ className }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      fill="none"
       viewBox="0 0 24 24"
-      width={24}
-      height={24}
+      strokeWidth={1.5}
       stroke="currentColor"
-      fill={"none"}
       className={className}
     >
       <path
-        d="M3.78181 16.3092L3 21L7.69086 20.2182C8.50544 20.0825 9.25725 19.6956 9.84119 19.1116L20.4198 8.53288C21.1934 7.75922 21.1934 6.5049 20.4197 5.73126L18.2687 3.58024C17.495 2.80658 16.2406 2.80659 15.4669 3.58027L4.88841 14.159C4.30447 14.7429 3.91757 15.4947 3.78181 16.3092Z"
-        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-      <path
-        d="M14 6L18 10"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
       />
     </svg>
+
+    // <svg
+    //   xmlns="http://www.w3.org/2000/svg"
+    //   viewBox="0 0 24 24"
+    //   width={24}
+    //   height={24}
+    //   stroke="currentColor"
+    //   fill={"none"}
+    //   className={className}
+    // >
+    //   <path
+    //     d="M3.78181 16.3092L3 21L7.69086 20.2182C8.50544 20.0825 9.25725 19.6956 9.84119 19.1116L20.4198 8.53288C21.1934 7.75922 21.1934 6.5049 20.4197 5.73126L18.2687 3.58024C17.495 2.80658 16.2406 2.80659 15.4669 3.58027L4.88841 14.159C4.30447 14.7429 3.91757 15.4947 3.78181 16.3092Z"
+    //     strokeWidth="1.8"
+    //     strokeLinecap="round"
+    //     strokeLinejoin="round"
+    //   />
+    //   <path
+    //     d="M14 6L18 10"
+    //     strokeWidth="1.8"
+    //     strokeLinecap="round"
+    //     strokeLinejoin="round"
+    //   />
+    // </svg>
   );
 }
 export function SolidLockClosedIcon({ className }: IconProps) {

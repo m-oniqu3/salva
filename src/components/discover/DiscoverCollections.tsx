@@ -8,7 +8,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getTopCollections } from "@utils/api/collections/get-top-collections";
 import { calculateRange } from "@utils/validation/paginate";
 
-function TopCollections() {
+function DiscoverCollections() {
   const {
     data,
     error,
@@ -17,7 +17,7 @@ function TopCollections() {
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: ["collections", "top"],
+    queryKey: ["collections", "discover"],
 
     queryFn: async ({ pageParam }) => {
       const { data, error } = await getTopCollections({
@@ -83,4 +83,4 @@ function TopCollections() {
   );
 }
 
-export default TopCollections;
+export default DiscoverCollections;
