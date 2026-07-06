@@ -4,35 +4,41 @@ import { LoadingIcon } from "@/components/icons";
 import React, { useEffect, useRef } from "react";
 
 type Props = {
-  isLoadingIntialData: boolean;
-  isLoadingMoreData: boolean;
-  fetchMoreData: () => void;
+  isLoading: boolean;
+  isFetchingNextPage: boolean;
+  hasNextPage: boolean;
+  fetchNextPage: () => void;
   children: React.ReactNode;
 };
 
 function InfiniteScroll(props: Props) {
+  const {
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    children,
+  } = props;
+
   const observerElement = useRef<HTMLDivElement | null>(null);
-  const { isLoadingIntialData, isLoadingMoreData, fetchMoreData, children } =
-    props;
 
   useEffect(() => {
     const node = observerElement.current;
     if (!node) return;
 
-    // is element in view?
     function handleIntersection(entries: IntersectionObserverEntry[]) {
       entries.forEach((entry) => {
         if (
           entry.isIntersecting &&
-          !isLoadingMoreData &&
-          !isLoadingIntialData
+          hasNextPage &&
+          !isFetchingNextPage &&
+          !isLoading
         ) {
-          fetchMoreData();
+          fetchNextPage();
         }
       });
     }
 
-    // create observer instance
     const observer = new IntersectionObserver(handleIntersection, {
       root: null,
       rootMargin: "400px",
@@ -41,9 +47,8 @@ function InfiniteScroll(props: Props) {
 
     observer.observe(node);
 
-    // cleanup function
     return () => observer.disconnect();
-  }, [fetchMoreData, isLoadingIntialData, isLoadingMoreData]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isLoading]);
 
   return (
     <>
@@ -51,33 +56,12 @@ function InfiniteScroll(props: Props) {
 
       <div
         ref={observerElement}
-        className="flex justify-center items-center h-10"
+        className="flex justify-center items-center h-20"
       >
-        {isLoadingMoreData && <LoadingIcon className="size-5 animate-spin" />}
+        {isFetchingNextPage && <LoadingIcon className="size-5 animate-spin" />}
       </div>
     </>
   );
 }
 
 export default InfiniteScroll;
-
-/**
- *   const loadMoreRef = useRef<HTMLDivElement>(null);
- 
-   useEffect(() => {
-     const node = loadMoreRef.current;
-     if (!node) return;
- 
-     const observer = new IntersectionObserver(
-       (entries) => {
-         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-           fetchNextPage();
-         }
-       },
-       { rootMargin: "400px" },
-     );
- 
-     observer.observe(node);
-     return () => observer.disconnect();
-   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
- */

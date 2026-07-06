@@ -83,9 +83,10 @@ function Collections(props: Props) {
 
   return (
     <InfiniteScroll
-      isLoadingIntialData={isLoading}
-      isLoadingMoreData={isFetchingNextPage}
-      fetchMoreData={() => hasNextPage && fetchNextPage()}
+      isLoading={isLoading}
+      isFetchingNextPage={isFetchingNextPage}
+      hasNextPage={!!hasNextPage}
+      fetchNextPage={fetchNextPage}
     >
       <div className="content-grid">
         {viewableCollections.map((col) => (

@@ -241,9 +241,10 @@ function CollectionCoverPicker() {
 
             {data && (
               <InfiniteScroll
-                isLoadingIntialData={isLoading}
-                isLoadingMoreData={isFetchingNextPage}
-                fetchMoreData={() => hasNextPage && fetchNextPage()}
+                isLoading={isLoading}
+                isFetchingNextPage={isFetchingNextPage}
+                hasNextPage={!!hasNextPage}
+                fetchNextPage={fetchNextPage}
               >
                 <div className="grid grid-cols-3 gap-1 ">
                   {data?.map((film) => {

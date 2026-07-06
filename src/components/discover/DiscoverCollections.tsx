@@ -65,9 +65,10 @@ function DiscoverCollections() {
   return (
     <section className="flex flex-col gap-4">
       <InfiniteScroll
-        isLoadingIntialData={isLoading}
-        isLoadingMoreData={isFetchingNextPage}
-        fetchMoreData={() => hasNextPage && fetchNextPage()}
+        isLoading={isLoading}
+        isFetchingNextPage={isFetchingNextPage}
+        hasNextPage={!!hasNextPage}
+        fetchNextPage={fetchNextPage}
       >
         <div className="content-grid">
           {collections?.map((col) => (

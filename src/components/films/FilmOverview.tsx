@@ -71,7 +71,7 @@ function FilmOverview(props: Props) {
   }
 
   return (
-    <section className="w-full h-[calc(100dvh-8rem)] relative  flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
+    <section className="w-full h-[calc(100dvh-6rem)] relative flex flex-col border-l border-gray-50/50 overflow-y-scroll no-scrollbar">
       <article className="flex flex-col gap-4 wrapper py-12 h-full overflow-y-scroll no-scrollbar">
         <p className="text-sml text-zinc-500">{formattedDate}</p>
 
@@ -83,6 +83,14 @@ function FilmOverview(props: Props) {
         <p className="text-sml leading-6">{film.overview}</p>
 
         <div className="flex flex-col gap-4 ">
+          <p className="text-sml">
+            Genres - &nbsp;
+            <span className="text-zinc-500">
+              {film.genres.map((g) => g.name).join(", ")}
+            </span>
+            .
+          </p>
+
           {credits.cast && (
             <p className="text-sml text-zinc-500">
               <span className="shrink-0 text-black">Cast - &nbsp;</span>

@@ -124,8 +124,8 @@ function FilmDetailsHeader(props: Props) {
     }
   }
   return (
-    <header className="h-20  grid grid-cols-1 lg:grid-cols-2">
-      <div className="flex wrapper items-center justify-between ">
+    <header className="h-24 grid grid-cols-1 lg:grid-cols-2">
+      <div className="flex wrapper items-center justify-between gap-4 pl-8 ">
         {user ? (
           <ul className=" flex items-center gap-4  ">
             {Object.entries(links).map(([link, handler]) => {
@@ -142,14 +142,12 @@ function FilmDetailsHeader(props: Props) {
             })}
           </ul>
         ) : (
-          <>
-            <div className=" flex items-center w-fit lg:invisible ">
-              <AuthButtons />
-            </div>
-          </>
+          <div className=" flex items-center w-fit lg:invisible ">
+            <AuthButtons />
+          </div>
         )}
 
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <button
             onClick={handleFilmDetailsModal}
             className={`lg:hidden cursor-pointer  text-neutral-800`}

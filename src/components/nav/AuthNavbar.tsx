@@ -78,7 +78,7 @@ function AuthNavbar({ profile }: Props) {
           </ul>
         </div>
 
-        <div className="max-w-lg mx-auto">
+        <div className="w-full max-w-2xl mx-auto">
           <Searchbar />
         </div>
 

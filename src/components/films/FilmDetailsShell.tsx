@@ -13,10 +13,11 @@ type Props = {
   data: FilmWithExtras<Movie | TVShow>;
   user: UserMeta;
   media_type: MediaType;
+  filmID: number; // new
 };
 
 function FilmDetailsShell(props: Props) {
-  const { data, user, media_type } = props;
+  const { data, user, media_type, filmID } = props;
 
   const router = useRouter();
   const similarFilmsRef = useRef<HTMLDivElement | null>(null);
@@ -47,7 +48,7 @@ function FilmDetailsShell(props: Props) {
 
   return (
     <div className="overflow-y-scroll h-full w-screen  z-50 ">
-      <div className=" top-8 fixed  left-5 z-50 ">
+      <div className="h-24 fixed top-0 grid place-items-center left-2 z-50 ">
         <button
           type="button"
           onClick={router.back}
@@ -65,7 +66,6 @@ function FilmDetailsShell(props: Props) {
         <FilmDetails
           film={data.film}
           credits={data.credits}
-          recommendations={data.recommendations}
           media_type={media_type}
           user={user}
           isIntersecting={isIntersecting}
@@ -78,10 +78,7 @@ function FilmDetailsShell(props: Props) {
         className="bg-white pb-20 absolute top-[110dvh] left-0 h-fit w-full z-20 "
       >
         <div ref={triggerRef} className="w-full" />
-        <SimilarFilms
-          films={data.recommendations.concat(data.similar)}
-          user={user}
-        />
+        <SimilarFilms media_type={media_type} filmID={filmID} user={user} />
       </div>
     </div>
   );

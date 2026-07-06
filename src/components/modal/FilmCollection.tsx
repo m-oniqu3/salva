@@ -179,25 +179,29 @@ function FilmCollection() {
         </div>
 
         <div className="flex flex-col gap-4 py-4 h-full overflow-y-scroll no-scrollbar ">
-          {
-            <SelectCollection
-              isLoading={collectionFilmsQuery.isLoading}
-              collections={filled}
-              selectCollection={toggle}
-              selectedIDs={selectedIDs}
-              sectionHeading="Saved in"
-            />
-          }
+          {search && (filled.length === 0 || available.length === 0) && (
+            <>
+              <p className="px-4 text-xs text-neutral-600 text-center">
+                No collections found. Create the collection above instead.
+              </p>
+            </>
+          )}
 
-          {
-            <SelectCollection
-              isLoading={collectionsMetaQuery.isLoading}
-              collections={available}
-              selectCollection={toggle}
-              selectedIDs={selectedIDs}
-              sectionHeading="Your collections"
-            />
-          }
+          <SelectCollection
+            isLoading={collectionFilmsQuery.isLoading}
+            collections={filled}
+            selectCollection={toggle}
+            selectedIDs={selectedIDs}
+            sectionHeading="Saved in"
+          />
+
+          <SelectCollection
+            isLoading={collectionsMetaQuery.isLoading}
+            collections={available}
+            selectCollection={toggle}
+            selectedIDs={selectedIDs}
+            sectionHeading="Your collections"
+          />
         </div>
 
         <div className="h-16 w-full p-4 flex items-center justify-end gap-4 border-t border-gray-50 shadow-xs absolute bottom-0 left-0 bg-white z-10">

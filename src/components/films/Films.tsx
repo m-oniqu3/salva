@@ -77,9 +77,10 @@ function Films(props: Props) {
 
   return (
     <InfiniteScroll
-      isLoadingIntialData={isLoading}
-      isLoadingMoreData={isFetchingNextPage}
-      fetchMoreData={() => hasNextPage && fetchNextPage()}
+      isLoading={isLoading}
+      isFetchingNextPage={isFetchingNextPage}
+      hasNextPage={!!hasNextPage}
+      fetchNextPage={fetchNextPage}
     >
       <div className="content-grid">{rendered_films}</div>
     </InfiniteScroll>

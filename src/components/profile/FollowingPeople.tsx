@@ -89,9 +89,10 @@ function FollowingPeople() {
 
   return (
     <InfiniteScroll
-      isLoadingIntialData={isLoading}
-      isLoadingMoreData={isFetchingNextPage}
-      fetchMoreData={() => hasNextPage && fetchNextPage()}
+      isLoading={isLoading}
+      isFetchingNextPage={isFetchingNextPage}
+      hasNextPage={!!hasNextPage}
+      fetchNextPage={fetchNextPage}
     >
       <ul className="list-none">{renderedFollowers}</ul>
     </InfiniteScroll>

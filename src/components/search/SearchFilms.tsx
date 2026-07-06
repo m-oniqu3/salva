@@ -64,9 +64,10 @@ function SearchFilms({ query, user }: Props) {
   return (
     <>
       <InfiniteScroll
-        isLoadingIntialData={isLoading}
-        isLoadingMoreData={isFetchingNextPage}
-        fetchMoreData={() => hasNextPage && fetchNextPage()}
+        isLoading={isLoading}
+        isFetchingNextPage={isFetchingNextPage}
+        hasNextPage={!!hasNextPage}
+        fetchNextPage={fetchNextPage}
       >
         <div className="content-grid">
           {films.map((film) => (

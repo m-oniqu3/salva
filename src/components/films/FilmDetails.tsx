@@ -3,7 +3,7 @@
 import FilmDetailsHeader from "@/components/films/FilmDetailsHeader";
 import FilmImage from "@/components/films/FilmImage";
 import FilmOverview from "@/components/films/FilmOverview";
-import { Credits, MediaType, Movie, TMDBFilm, TVShow } from "@/types/tmdb";
+import { Credits, MediaType, Movie, TVShow } from "@/types/tmdb";
 import { UserMeta } from "@/types/user";
 
 type Props = {
@@ -11,7 +11,6 @@ type Props = {
   media_type: MediaType;
   user: UserMeta;
   credits: Credits;
-  recommendations: TMDBFilm[];
   isIntersecting: boolean;
   onScrollToSection: () => void;
 };

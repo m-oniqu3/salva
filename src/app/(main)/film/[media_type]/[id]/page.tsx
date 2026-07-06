@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { getCollectionsMeta } from "@utils/api/collections/get-collections-meta";
 import { getFilmById } from "@utils/api/films/get-film-by-id";
+import { getSimilarFilms } from "@utils/api/films/get-similar-films";
 import { getProfile } from "@utils/api/profile/get-profile";
 import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -24,7 +25,8 @@ function isValidParams(media_type: MediaType, id: number) {
     redirect("/");
   }
 
-  const isValid = MediaTypes.includes(media_type) || isNaN(Number(id));
+  // const isValid = MediaTypes.includes(media_type) || isNaN(Number(id));
+  const isValid = MediaTypes.includes(media_type) && !isNaN(Number(id));
 
   if (isValid) return;
 
@@ -39,45 +41,49 @@ async function page({ params }: Props) {
   const { media_type, id } = await params;
   const queryClient = new QueryClient();
 
-  // Check if media type is valid
   isValidParams(media_type, id);
 
   const { data, error } = await getFilmById(media_type, id);
 
-  if (error) {
-    return <div>could not find film</div>;
-  }
-
-  if (!data) {
-    return <p>no film found</p>;
-  }
+  if (error) return <div>could not find film</div>;
+  if (!data) return <p>no film found</p>;
 
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
 
   let profile = null;
 
-  if (auth.user) {
-    const profilePromise = getProfile({
-      key: "user_id",
-      value: auth.user.id,
-    });
+  const prefetches = [
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["similar", media_type, id],
+      queryFn: ({ pageParam }) =>
+        getSimilarFilms(media_type, id, pageParam as number),
+      initialPageParam: 1,
+    }),
+  ];
 
-    const metaPromise = queryClient.prefetchQuery({
-      queryKey: ["collection", "meta"],
-      queryFn: async () => {
-        const { data, error } = await getCollectionsMeta();
-        if (error) throw error;
-        return data;
-      },
-    });
+  if (auth.user) {
+    const profilePromise = getProfile({ key: "user_id", value: auth.user.id });
+
+    prefetches.push(
+      queryClient.prefetchQuery({
+        queryKey: ["collection", "meta"],
+        queryFn: async () => {
+          const { data, error } = await getCollectionsMeta();
+          if (error) throw error;
+          return data;
+        },
+      }),
+    );
 
     const [{ data: profileData }] = await Promise.all([
       profilePromise,
-      metaPromise,
+      Promise.all(prefetches),
     ]);
 
-    if (data) profile = profileData;
+    profile = profileData;
+  } else {
+    await Promise.all(prefetches);
   }
 
   const user: UserMeta = profile
@@ -86,9 +92,13 @@ async function page({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <FilmDetailsShell data={data} user={user} media_type={media_type} />
+      <FilmDetailsShell
+        data={data}
+        user={user}
+        media_type={media_type}
+        filmID={id}
+      />
     </HydrationBoundary>
   );
 }
-
 export default page;
